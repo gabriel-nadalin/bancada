@@ -1,0 +1,37 @@
+BANCADA_DIR = /home/gabriel/bancada
+
+CC = gcc
+CFLAGS = -Wall -Wextra -O2 \
+         -I$(BANCADA_DIR)/re/include \
+         -I$(BANCADA_DIR)/baresip/include
+
+LDFLAGS = -L$(BANCADA_DIR)/baresip/build \
+          -L$(BANCADA_DIR)/re/build \
+          -Wl,-rpath,$(BANCADA_DIR)/re/build \
+          -lbaresip -lre -lpthread -lm -lssl -lcrypto
+
+.PHONY: all clean build_re build_baresip
+
+all: dial_and_play
+
+build_re:
+	$(MAKE) -C re
+
+build_baresip: build_re
+	cmake -B baresip/build -S baresip \
+		-DRE_INCLUDE_DIRS="$(BANCADA_DIR)/re/include;$(BANCADA_DIR)/rem/include" \
+		-DRE_LIBRARIES="$(BANCADA_DIR)/re/libre.a;$(BANCADA_DIR)/rem/librem.a" \
+		-DSTATIC=ON \
+		-DMODULES="account;aufile;g711;stdio"
+	cmake --build baresip/build -j
+
+dial_and_play: dial_and_play.o build_baresip
+	$(CC) -o $@ dial_and_play.o $(LDFLAGS)
+
+dial_and_play.o: dial_and_play.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	$(MAKE) -C re clean || true
+	rm -rf baresip/build
+	rm -f dial_and_play.o dial_and_play
