@@ -62,6 +62,8 @@ int main(void)
 
 	/* Disable jitter buffer for minimum latency */
 	cfg->avt.audio.jbtype = JBUF_OFF;
+	cfg->net.af = AF_INET;
+	str_ncpy(cfg->sip.local, "10.42.0.1:5060", sizeof(cfg->sip.local));
 
 	/*
 	 * Use the aufile module as audio source.
