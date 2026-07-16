@@ -12,7 +12,7 @@ LDFLAGS = -L$(BANCADA_DIR)/baresip/build \
 
 .PHONY: all clean build_re build_baresip
 
-all: dial_and_play
+all: dial_and_play rtp_bridge
 
 build_re:
 	$(MAKE) -C re
@@ -33,7 +33,10 @@ dial_and_play: dial_and_play.o build_baresip
 dial_and_play.o: dial_and_play.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+rtp_bridge: rtp_bridge.c build_re
+	$(CC) $(CFLAGS) -g -o $@ $< -L$(BANCADA_DIR)/re/build -Wl,-rpath,$(BANCADA_DIR)/re/build -lre -lm -lpthread
+
 clean:
 	$(MAKE) -C re clean || true
 	rm -rf baresip/build
-	rm -f dial_and_play.o dial_and_play
+	rm -f dial_and_play.o dial_and_play rtp_bridge
