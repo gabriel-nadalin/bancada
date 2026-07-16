@@ -19,10 +19,12 @@ build_re:
 
 build_baresip: build_re
 	cmake -B baresip/build -S baresip \
-		-DRE_INCLUDE_DIRS="$(BANCADA_DIR)/re/include;$(BANCADA_DIR)/rem/include" \
-		-DRE_LIBRARIES="$(BANCADA_DIR)/re/libre.a;$(BANCADA_DIR)/rem/librem.a" \
+		-DRE_INCLUDE_DIRS="$(BANCADA_DIR)/re/include" \
+		-DRE_LIBRARIES="$(BANCADA_DIR)/re/libre.a" \
 		-DSTATIC=ON \
-		-DMODULES="account;aufile;g711;stdio"
+		-DMODULES="account;aufile;ausine;g711;stdio" \
+		-DAPP_MODULES_DIR=$(BANCADA_DIR)/modules \
+		-DAPP_MODULES="auburst;audelay"
 	cmake --build baresip/build -j
 
 dial_and_play: dial_and_play.o build_baresip

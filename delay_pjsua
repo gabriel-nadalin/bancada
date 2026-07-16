@@ -1,0 +1,20 @@
+#!/bin/bash
+
+rlwrap pjsua \
+    --id "sip:12@10.42.0.1" \
+    --null-audio \
+    --play-file /tmp/auburst_tx.wav \
+    --auto-play \
+    --auto-play-hangup \
+    --rec-file /tmp/received_pjsua.wav \
+    --auto-rec \
+    --no-vad \
+    --jb-max-size=0 \
+    --capture-lat=5 \
+    --playback-lat=5 \
+    --quality=1 \
+    --ptime=10 \
+    --dis-codec PCMU \
+    --clock-rate 8000 \
+    --ec-tail 0 \
+    "sip:11@10.42.0.102:5062;transport=udp"
