@@ -5,4 +5,4 @@
     --src-mod "auburst" \
     --src-dev "1000,100,500" \
     --play-mod "aufile" \
-    --play-dev "/tmp/received_baresip.wav"
+    --play-dev "./audios/baresip_rx.wav"

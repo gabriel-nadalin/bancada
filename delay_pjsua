@@ -3,10 +3,10 @@
 rlwrap pjsua \
     --id "sip:12@10.42.0.1" \
     --null-audio \
-    --play-file /tmp/auburst_tx.wav \
+    --play-file ./audios/auburst_tx.wav \
     --auto-play \
     --auto-play-hangup \
-    --rec-file /tmp/received_pjsua.wav \
+    --rec-file ./audios/pjsua_rx.wav \
     --auto-rec \
     --no-vad \
     --jb-max-size=0 \

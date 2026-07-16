@@ -4,7 +4,6 @@
 #include <baresip.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #define AMPLITUDE 0.5f
 #define PI 3.14159265358979323846
@@ -23,43 +22,7 @@ struct ausrc_st {
     unsigned burst_ms;
     unsigned period_ms;
     uint64_t frame;
-    FILE *wav;
 };
-
-/* --- destructor --- */
-static void wav_close(struct ausrc_st *st) {
-    if (!st->wav) return;
-    uint32_t data_sz = (uint32_t)ftell(st->wav) - 44;
-    fseek(st->wav, 4, SEEK_SET);
-    uint32_t riff_sz = 36 + data_sz;
-    fwrite(&riff_sz, 4, 1, st->wav);
-    fseek(st->wav, 40, SEEK_SET);
-    fwrite(&data_sz, 4, 1, st->wav);
-    fclose(st->wav);
-    st->wav = NULL;
-}
-
-static void wav_init(struct ausrc_st *st, uint32_t srate, uint8_t ch) {
-    st->wav = fopen("/tmp/auburst_tx.wav", "wb");
-    if (!st->wav) return;
-    uint16_t fmt = 1, nch = ch, bps = 16;
-    uint32_t sr = srate, br = sr * nch * bps / 8;
-    uint16_t blk = nch * bps / 8;
-    fwrite("RIFF", 4, 1, st->wav);
-    uint32_t tmp = 0;
-    fwrite(&tmp, 4, 1, st->wav);
-    fwrite("WAVE", 4, 1, st->wav);
-    fwrite("fmt ", 4, 1, st->wav);
-    tmp = 16; fwrite(&tmp, 4, 1, st->wav);
-    fwrite(&fmt, 2, 1, st->wav);
-    fwrite(&nch, 2, 1, st->wav);
-    fwrite(&sr, 4, 1, st->wav);
-    fwrite(&br, 4, 1, st->wav);
-    fwrite(&blk, 2, 1, st->wav);
-    fwrite(&bps, 2, 1, st->wav);
-    fwrite("data", 4, 1, st->wav);
-    fwrite(&tmp, 4, 1, st->wav);
-}
 
 static void destructor(void *arg) {
     struct ausrc_st *st = arg;
@@ -67,7 +30,6 @@ static void destructor(void *arg) {
         re_atomic_rlx_set(&st->run, false);
         thrd_join(st->thread, NULL);
     }
-    wav_close(st);
 }
 
 /* --- thread: generates bursts of sine + silence --- */
@@ -96,8 +58,6 @@ static int play_thread(void *arg) {
             sampv[i] = val;
         }
         st->frame += st->sampc / st->prm.ch;
-        if (st->wav)
-            fwrite(sampv, sizeof(int16_t), st->sampc, st->wav);
         st->rh(&af, st->arg);
         ts += st->ptime;
     }
@@ -120,7 +80,6 @@ static int alloc_handler(struct ausrc_st **stp, const struct ausrc *as,
     if (!st->period_ms) st->period_ms = st->burst_ms * 2;
     st->ptime = prm->ptime ? prm->ptime : 10;
     st->sampc = prm->srate * prm->ch * st->ptime / 1000;
-    wav_init(st, prm->srate, prm->ch);
     re_atomic_rlx_set(&st->run, true);
     int err = thread_create_name(&st->thread, "auburst", play_thread, st);
     if (err) { re_atomic_rlx_set(&st->run, false); mem_deref(st); return err; }
