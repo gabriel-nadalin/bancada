@@ -1,8 +1,0 @@
-#!/bin/bash
-
-./dial_and_play \
-    --peer "sip:11@10.42.0.102:5062;transport=udp" \
-    --src-mod "auburst" \
-    --src-dev "1000,100,500" \
-    --play-mod "aufile" \
-    --play-dev "./audios/baresip_rx.wav"

@@ -181,23 +181,7 @@ int main(int argc, char *argv[])
 		goto out;
 	}
 
-	err = module_load(".", "ausine");
-	if (err) {
-		warning("dial_and_play: failed to load ausine (%m)\n", err);
-		goto out;
-	}
 
-	err = module_load(".", "auburst");
-	if (err) {
-		warning("dial_and_play: failed to load auburst (%m)\n", err);
-		goto out;
-	}
-
-	err = module_load(".", "audelay");
-	if (err) {
-		warning("dial_and_play: failed to load audelay (%m)\n", err);
-		goto out;
-	}
 
 	/*
 	 * Create a registrar-less SIP account.

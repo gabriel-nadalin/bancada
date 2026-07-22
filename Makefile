@@ -12,25 +12,25 @@ LDFLAGS = -L$(BANCADA_DIR)/baresip/build \
 
 .PHONY: all clean build_re build_baresip
 
-all: dial_and_play rtp_bridge
+all: baresip_play rtp_bridge
 
 build_re:
 	$(MAKE) -C re
 
 build_baresip: build_re
-	cmake -B baresip/build -S baresip \
-		-DRE_INCLUDE_DIRS="$(BANCADA_DIR)/re/include" \
-		-DRE_LIBRARIES="$(BANCADA_DIR)/re/libre.a" \
-		-DSTATIC=ON \
-		-DMODULES="account;aufile;ausine;g711;stdio" \
-		-DAPP_MODULES_DIR=$(BANCADA_DIR)/modules \
-		-DAPP_MODULES="auburst;audelay"
+	@if [ ! -d baresip/build ]; then \
+		cmake -B baresip/build -S baresip \
+			-DRE_INCLUDE_DIRS="$(BANCADA_DIR)/re/include" \
+			-DRE_LIBRARIES="$(BANCADA_DIR)/re/libre.a" \
+			-DSTATIC=ON \
+			-DMODULES="account;aufile;g711;stdio"; \
+	fi
 	cmake --build baresip/build -j
 
-dial_and_play: dial_and_play.o build_baresip
-	$(CC) -o $@ dial_and_play.o $(LDFLAGS)
+baresip_play: baresip_play.o build_baresip
+	$(CC) -o $@ baresip_play.o $(LDFLAGS)
 
-dial_and_play.o: dial_and_play.c
+baresip_play.o: baresip_play.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 rtp_bridge: rtp_bridge.c build_re
@@ -39,4 +39,4 @@ rtp_bridge: rtp_bridge.c build_re
 clean:
 	$(MAKE) -C re clean || true
 	rm -rf baresip/build
-	rm -f dial_and_play.o dial_and_play rtp_bridge
+	rm -f baresip_play.o baresip_play rtp_bridge
