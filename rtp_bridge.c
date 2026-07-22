@@ -16,7 +16,7 @@
 
 #define DEFAULT_LOCAL_IP "10.42.0.1"
 #define DEFAULT_RTP_PORT 4000
-#define DEFAULT_PTIME   20
+#define DEFAULT_PTIME   10
 #define DEFAULT_PEER_URI "sip:11@10.42.0.102:5062;transport=udp"
 
 static struct sip *sip;
@@ -99,7 +99,7 @@ static void encode_and_send(const int16_t *samples) {
 }
 
 /*
- * 20 ms pacing timer: drains exactly one frame per tick, taken from the
+ * pacing timer: drains exactly one frame per tick, taken from the
  * WAV file or from the stdin accumulation buffer.  Rescheduled against an
  * absolute time base so processing time does not accumulate drift; if we
  * fall more than one frame behind, the schedule is resynced instead of

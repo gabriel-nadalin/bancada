@@ -52,22 +52,16 @@ def pattern_sample(idx, freq, burst_ms, period_ms):
     return 0
 
 
-def burst_starts(dur_ms, warmup_ms, period_ms):
-    t = warmup_ms
-    while t < dur_ms:
-        yield t
-        t += period_ms
-
-
 # ---------------------------------------------------------------- detector
 
 class GoertzelDetector:
-    """Goertzel power normalized by total window energy,
-    with hangover-based onset detection"""
+    """Absolute Goertzel power at target frequency, threshold auto-calibrated
+    from TX burst amplitude, with hangover-based onset detection"""
 
-    def __init__(self, freq, thresh=0.25, hangover_win=3):
+    def __init__(self, freq, thresh=0.02, hangover_win=3):
         self.coeff = 2.0 * math.cos(2.0 * math.pi * freq / SRATE)
-        self.thresh = thresh
+        N = SRATE * WINDOW_MS // 1000
+        self.abs_thresh = thresh * (AMP * N / 2.0) ** 2
         self.hangover_win = hangover_win
         self.active = False
         self.below = 0
@@ -76,18 +70,14 @@ class GoertzelDetector:
 
     def feed(self, samples):
         """feed one WINDOW_MS window of int samples; return True if onset"""
-        nf = len(samples)
         s1 = s2 = 0.0
-        sum_sq = 0
         for x in samples:
             s0 = x + self.coeff * s1 - s2
             s2 = s1
             s1 = s0
-            sum_sq += x * x
         power = max(0.0, s2 * s2 + s1 * s1 - self.coeff * s1 * s2)
-        norm = (2.0 * power) / (sum_sq * nf) if sum_sq > 0 and nf > 0 else 0.0
         onset = False
-        if norm > self.thresh:
+        if power > self.abs_thresh:
             if not self.active:
                 self.active = True
                 self.onsets_ms.append(self._clock_ms)
@@ -146,8 +136,8 @@ def cmd_gen(a):
     w.setframerate(SRATE)
     w.writeframes(bytes(buf))
     w.close()
-    starts = list(burst_starts(a.dur * 1000, 0, a.period))
-    print(f"{a.tx_wav}: {a.dur} s, {len(starts)} bursts "
+    n_bursts = a.dur * 1000 // a.period
+    print(f"{a.tx_wav}: {a.dur} s, {n_bursts} bursts "
           f"({a.freq} Hz, {a.burst} ms every {a.period} ms), "
           f"first at 0 ms", file=sys.stderr)
 
@@ -213,10 +203,7 @@ def cmd_live(a):
         """waveform sample; silence until warmup, then burst pattern"""
         if idx < warmup_samp:
             return 0
-        j = idx - warmup_samp
-        if j % period_samp < 8 * a.burst:
-            return int(AMP * math.sin(2.0 * math.pi * a.freq * j / SRATE))
-        return 0
+        return pattern_sample(idx - warmup_samp, a.freq, a.burst, a.period)
 
     t0 = time.monotonic()
     clock_ms = 0
@@ -317,29 +304,26 @@ def cmd_live(a):
 
 # ---------------------------------------------------------------- run (orchestration)
 
-def _ensure_tx_wav(freq, burst, period, dur=30):
+def _ensure_tx_wav(freq, burst, period, dur=15):
     if not os.path.exists(TX_WAV):
         print(f"generating {TX_WAV} ...", file=sys.stderr)
-        subprocess.check_call([sys.argv[0], "gen", TX_WAV,
-                               "--dur", str(dur),
-                               "--freq", str(freq),
-                               "--burst", str(burst),
-                               "--period", str(period)])
+        ns = argparse.Namespace(
+            tx_wav=TX_WAV, dur=dur, freq=freq,
+            burst=burst, period=period)
+        cmd_gen(ns)
 
 
 def _run_common(sp):
     sp.add_argument("--tx-wav", default=TX_WAV)
     sp.add_argument("--rx-wav", default=None)
     sp.add_argument("--peer", default=None)
-    sp.add_argument("--dur", type=int, default=30)
-    sp.add_argument("--ptime", type=int, default=20)
 
 
 def _run_analyze(a, rx):
-    subprocess.check_call(
-        [sys.argv[0], "analyze", a.tx_wav, rx,
-         "--freq", str(a.freq), "--thresh", str(a.thresh),
-         "--burst", str(a.burst), "--period", str(a.period)])
+    ns = argparse.Namespace(
+        tx_wav=a.tx_wav, rx_wav=rx, freq=a.freq,
+        thresh=a.thresh, burst=a.burst, period=a.period, csv=None)
+    cmd_analyze(ns)
 
 
 def cmd_run_baresip(a):
@@ -385,15 +369,16 @@ def cmd_run_pjsua(a):
 def cmd_run_bridge(a):
     if a.live:
         _ensure_tx_wav(a.freq, a.burst, a.period, a.dur)
-        bridge_cmd = shlex.join(
+        bridge_cmd = shlex.split(
             [os.path.join(HERE, "rtp_bridge"),
              "-p", a.peer, "-t", str(a.ptime)])
-        live_argv = [sys.argv[0], "live", "--cmd", bridge_cmd,
-                     "--dur", str(a.dur), "--ptime", str(a.ptime),
-                     "--freq", str(a.freq), "--thresh", str(a.thresh),
-                     "--burst", str(a.burst), "--period", str(a.period)]
-        print(f"+ {shlex.join(live_argv)}", file=sys.stderr)
-        subprocess.check_call(live_argv)
+        print(f"+ {bridge_cmd}", file=sys.stderr)
+        ns = argparse.Namespace(
+            cmd=bridge_cmd, dur=a.dur, ptime=a.ptime,
+            freq=a.freq, thresh=a.thresh,
+            burst=a.burst, period=a.period,
+            warmup=1.0, rec=None)
+        cmd_live(ns)
     else:
         _ensure_tx_wav(a.freq, a.burst, a.period, a.dur)
         rx = a.rx_wav or os.path.join(AUDIOS, "bridge_rx.wav")
@@ -403,6 +388,83 @@ def cmd_run_bridge(a):
         print(f"+ {shlex.join(cmd)}", file=sys.stderr)
         subprocess.check_call(cmd)
         _run_analyze(a, rx)
+
+
+def cmd_run_slmodem(a):
+    """Orchestrate slmodem_bridge + rtp_bridge for modem-over-RTP."""
+    import threading
+
+    slm_path = os.path.join(HERE, "slmodem_bridge")
+    rtp_path = os.path.join(HERE, "rtp_bridge")
+
+    if not os.path.exists(slm_path):
+        print(f"error: {slm_path} not built; run 'make slmodem_bridge'",
+              file=sys.stderr)
+        sys.exit(1)
+
+    rtp_cmd = [rtp_path, "-p", a.peer, "-t", str(a.ptime)]
+    slm_cmd = [slm_path, "-m", a.slmodem_mode]
+
+    print(f"+ {shlex.join(rtp_cmd)}", file=sys.stderr)
+    print(f"+ {shlex.join(slm_cmd)}", file=sys.stderr)
+
+    rtp = subprocess.Popen(
+        rtp_cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        bufsize=0,
+    )
+    slm = subprocess.Popen(
+        slm_cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        bufsize=0,
+    )
+
+    def pump(src, dst, name):
+        try:
+            while True:
+                chunk = src.read(8192)
+                if not chunk:
+                    break
+                dst.write(chunk)
+                dst.flush()
+        except Exception as e:
+            print(f"pump {name}: {e}", file=sys.stderr)
+
+    def echo(src, prefix):
+        try:
+            for line in src:
+                text = line.decode("utf-8", errors="replace").rstrip()
+                print(f"[{prefix}] {text}", file=sys.stderr)
+        except Exception:
+            pass
+
+    t1 = threading.Thread(target=pump, args=(slm.stdout, rtp.stdin, "slm->rtp"),
+                          daemon=True)
+    t2 = threading.Thread(target=pump, args=(rtp.stdout, slm.stdin, "rtp->slm"),
+                          daemon=True)
+    t3 = threading.Thread(target=echo, args=(slm.stderr, "slm"), daemon=True)
+    t4 = threading.Thread(target=echo, args=(rtp.stderr, "rtp"), daemon=True)
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+
+    try:
+        while rtp.poll() is None and slm.poll() is None:
+            time.sleep(0.5)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        for p in (rtp, slm):
+            try:
+                p.terminate()
+                p.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                p.kill()
 
 
 def main():
@@ -418,12 +480,15 @@ def main():
                         help="burst length in ms (default 100)")
         sp.add_argument("--period", type=int, default=500,
                         help="burst period in ms (default 500)")
-        sp.add_argument("--thresh", type=float, default=0.25,
-                        help="Goertzel norm threshold (default 0.25)")
+        sp.add_argument("--thresh", type=float, default=0.02,
+                        help="threshold as fraction of TX burst power (default 0.02)")
+        sp.add_argument("--dur", type=int, default=15,
+                        help="duration in seconds (default 15)")
+        sp.add_argument("--ptime", type=int, default=10,
+                        help="frame size in ms (default 10)")
 
     g = sub.add_parser("gen", help="create TX burst wav")
     g.add_argument("tx_wav")
-    g.add_argument("--dur", type=int, default=30, help="seconds (default 30)")
     common(g)
     g.set_defaults(fn=cmd_gen)
 
@@ -437,11 +502,8 @@ def main():
     li = sub.add_parser("live", help="live benchmark of a PCM-pipe command")
     li.add_argument("--cmd", required=True,
                     help="command to run, e.g. './rtp_bridge -p sip:...'")
-    li.add_argument("--dur", type=int, default=30)
     li.add_argument("--warmup", type=float, default=1.0,
                     help="seconds of silence before first burst")
-    li.add_argument("--ptime", type=int, default=20,
-                    help="frame size in ms (match the tool; default 20)")
     li.add_argument("--rec", help="record received PCM to wav")
     common(li)
     li.set_defaults(fn=cmd_live)
@@ -450,7 +512,7 @@ def main():
     ru = sub.add_parser("run", help="run a full benchmark with a tool")
     rsub = ru.add_subparsers(dest="tool", required=True)
 
-    bp = rsub.add_parser("baresip", help="run dial_and_play benchmark")
+    bp = rsub.add_parser("baresip", help="run baresip_play benchmark")
     _run_common(bp)
     common(bp)
     bp.set_defaults(fn=cmd_run_baresip, peer="sip:11@10.42.0.102:5062;transport=udp")
@@ -460,7 +522,7 @@ def main():
     pp.add_argument("--auto-answer", action="store_true",
                     help="auto-answer incoming calls")
     common(pp)
-    pp.set_defaults(fn=cmd_run_pjsua, peer="sip:11@10.42.0.102:5062;transport=udp", ptime=10)
+    pp.set_defaults(fn=cmd_run_pjsua, peer="sip:11@10.42.0.102:5062;transport=udp")
 
     bpr = rsub.add_parser("bridge", help="run rtp_bridge benchmark")
     _run_common(bpr)
@@ -468,6 +530,14 @@ def main():
                      help="live stdin/stdout mode vs file-based")
     common(bpr)
     bpr.set_defaults(fn=cmd_run_bridge, peer="sip:11@10.42.0.102:5062;transport=udp")
+
+    sp = rsub.add_parser("slmodem", help="run slmodem_bridge + rtp_bridge")
+    _run_common(sp)
+    sp.add_argument("--slmodem-mode", default="orig",
+                    choices=["orig", "ans"],
+                    help="slmodem mode: orig (default) or ans")
+    common(sp)
+    sp.set_defaults(fn=cmd_run_slmodem, peer="sip:11@10.42.0.102:5062;transport=udp")
 
     a = p.parse_args()
     a.fn(a)

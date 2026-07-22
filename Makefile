@@ -10,9 +10,18 @@ LDFLAGS = -L$(BANCADA_DIR)/baresip/build \
           -Wl,-rpath,$(BANCADA_DIR)/re/build \
           -lbaresip -lre -lpthread -lm -lssl -lcrypto
 
-.PHONY: all clean build_re build_baresip
+SLMODEM_DIR = $(BANCADA_DIR)/slmodem-2.9.11-20110321/modem
+SLMODEM_OBJS = $(SLMODEM_DIR)/modem.o $(SLMODEM_DIR)/modem_datafile.o \
+               $(SLMODEM_DIR)/modem_at.o $(SLMODEM_DIR)/modem_timer.o \
+               $(SLMODEM_DIR)/modem_pack.o $(SLMODEM_DIR)/modem_ec.o \
+               $(SLMODEM_DIR)/modem_comp.o $(SLMODEM_DIR)/modem_param.o \
+               $(SLMODEM_DIR)/modem_debug.o $(SLMODEM_DIR)/homolog_data.o \
+               $(SLMODEM_DIR)/dp_sinus.o $(SLMODEM_DIR)/dp_dummy.o \
+               $(SLMODEM_DIR)/sysdep_common.o $(SLMODEM_DIR)/dsplibs.o
 
-all: baresip_play rtp_bridge
+.PHONY: all clean build_re build_baresip build_slmodem
+
+all: baresip_play rtp_bridge slmodem_bridge
 
 build_re:
 	$(MAKE) -C re
@@ -36,7 +45,15 @@ baresip_play.o: baresip_play.c
 rtp_bridge: rtp_bridge.c build_re
 	$(CC) $(CFLAGS) -g -o $@ $< -L$(BANCADA_DIR)/re/build -Wl,-rpath,$(BANCADA_DIR)/re/build -lre -lm -lpthread
 
+build_slmodem:
+	$(MAKE) -C $(SLMODEM_DIR)
+
+slmodem_bridge: slmodem_bridge.c build_slmodem
+	$(CC) -m32 -Wall -g -O2 -I$(SLMODEM_DIR) -o $@ $< $(SLMODEM_OBJS) \
+		/usr/lib/i386-linux-gnu/libsamplerate.so.0 -lm -lpthread
+
 clean:
 	$(MAKE) -C re clean || true
+	$(MAKE) -C $(SLMODEM_DIR) clean || true
 	rm -rf baresip/build
-	rm -f baresip_play.o baresip_play rtp_bridge
+	rm -f baresip_play.o baresip_play rtp_bridge slmodem_bridge

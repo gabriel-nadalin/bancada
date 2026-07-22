@@ -1,7 +1,4 @@
 #include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <getopt.h>
 #include <re.h>
 #include <baresip.h>
@@ -23,11 +20,11 @@ static void event_handler(enum bevent_ev ev,
 	switch (ev) {
 
 	case BEVENT_CALL_ESTABLISHED:
-		info("dial_and_play: Call established!\n");
+		info("baresip_play: Call established!\n");
 		break;
 
 	case BEVENT_CALL_CLOSED:
-		info("dial_and_play: Call closed (%s)\n",
+		info("baresip_play: Call closed (%s)\n",
 		     bevent_get_text(event));
 		re_cancel();
 		break;
@@ -111,14 +108,14 @@ int main(int argc, char *argv[])
 	/* Initialize libre event loop and networking stack */
 	err = libre_init();
 	if (err) {
-		warning("dial_and_play: libre_init failed (%m)\n", err);
+		warning("baresip_play: libre_init failed (%m)\n", err);
 		return err;
 	}
 
 	/* Load default baresip configuration */
 	err = conf_configure();
 	if (err) {
-		warning("dial_and_play: conf_configure failed (%m)\n", err);
+		warning("baresip_play: conf_configure failed (%m)\n", err);
 		goto out;
 	}
 
@@ -152,7 +149,7 @@ int main(int argc, char *argv[])
 	/* Initialize baresip core */
 	err = baresip_init(cfg);
 	if (err) {
-		warning("dial_and_play: baresip_init failed (%m)\n", err);
+		warning("baresip_play: baresip_init failed (%m)\n", err);
 		goto out;
 	}
 
@@ -164,24 +161,22 @@ int main(int argc, char *argv[])
 	/* Register for call events */
 	err = bevent_register(event_handler, NULL);
 	if (err) {
-		warning("dial_and_play: bevent_register failed (%m)\n", err);
+		warning("baresip_play: bevent_register failed (%m)\n", err);
 		goto out;
 	}
 
 	/* Load required modules */
 	err = module_load(".", "aufile");
 	if (err) {
-		warning("dial_and_play: failed to load aufile (%m)\n", err);
+		warning("baresip_play: failed to load aufile (%m)\n", err);
 		goto out;
 	}
 
 	err = module_load(".", "g711");
 	if (err) {
-		warning("dial_and_play: failed to load g711 (%m)\n", err);
+		warning("baresip_play: failed to load g711 (%m)\n", err);
 		goto out;
 	}
-
-
 
 	/*
 	 * Create a registrar-less SIP account.
@@ -192,11 +187,11 @@ int main(int argc, char *argv[])
 	err = ua_alloc(&ua,
 		       "<sip:12@10.42.0.1>;regint=0;ptime=10");
 	if (err) {
-		warning("dial_and_play: ua_alloc failed (%m)\n", err);
+		warning("baresip_play: ua_alloc failed (%m)\n", err);
 		goto out;
 	}
 
-	info("dial_and_play: Dialing %s ...\n", peer);
+	info("baresip_play: Dialing %s ...\n", peer);
 
 	err = ua_connect(
 		ua,
@@ -207,7 +202,7 @@ int main(int argc, char *argv[])
 	);
 
 	if (err) {
-		warning("dial_and_play: ua_connect failed (%m)\n", err);
+		warning("baresip_play: ua_connect failed (%m)\n", err);
 		goto out;
 	}
 
@@ -215,7 +210,7 @@ int main(int argc, char *argv[])
 	err = re_main(signal_handler);
 
 	if (err) {
-		warning("dial_and_play: re_main exited (%m)\n", err);
+		warning("baresip_play: re_main exited (%m)\n", err);
 	}
 
 out:
