@@ -97,7 +97,29 @@ Then run `make slmodem_bridge` on the hardware box.
 
 ## Hardware box prerequisites
 
-- 32-bit toolchain: `gcc-multilib` or `gcc -m32` plus 32-bit libc.
-- 32-bit `libsamplerate`: on Debian/Ubuntu, `libsamplerate0:i386`.
+### Arch Linux
+
+Enable the `[multilib]` repository in `/etc/pacman.conf`, then:
+
+```bash
+sudo pacman -Syu
+sudo pacman -S lib32-glibc lib32-gcc-libs lib32-libsamplerate
+```
+
+- `lib32-glibc` provides `gnu/stubs-32.h`.
+- `lib32-gcc-libs` provides 32-bit `libgcc_s.so.1`.
+- `lib32-libsamplerate` provides 32-bit `libsamplerate.so.0` in `/usr/lib32/`.
+
+### Debian/Ubuntu
+
+```bash
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install gcc-multilib libc6-dev-i386 libsamplerate0:i386
+```
+
+### Both
+
 - The slmodem source tree (`slmodem-2.9.11-20110321/`) must be present,
   including the `modem_main.c` build fix.
+- The Makefile auto-detects the 32-bit libsamplerate path on both distros.

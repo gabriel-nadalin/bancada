@@ -6,14 +6,13 @@ bursts:
 
   gen      create a TX wav with the burst pattern
   analyze  compare TX and RX wavs, report per-burst delay + stats
-  live     real-time benchmark of a command with stdin/stdout PCM pipes
   run      orchestrate a full benchmark with baresip, pjsua, or rtp_bridge
 
 Examples
   # Run a full benchmark with any tool:
   burstbench.py run baresip [--peer sip:...]
   burstbench.py run pjsua   [--peer sip:...]
-  burstbench.py run bridge  [--peer sip:...] [--live]
+  burstbench.py run bridge  [--peer sip:...]
 
   # Or manually (same thing):
   burstbench.py gen audios/bench_tx.wav
@@ -24,9 +23,7 @@ Examples
 import argparse
 import math
 import os
-import select
 import shlex
-import signal
 import subprocess
 import sys
 import time
@@ -52,45 +49,6 @@ def pattern_sample(idx, freq, burst_ms, period_ms):
     return 0
 
 
-# ---------------------------------------------------------------- detector
-
-class GoertzelDetector:
-    """Absolute Goertzel power at target frequency, threshold auto-calibrated
-    from TX burst amplitude, with hangover-based onset detection"""
-
-    def __init__(self, freq, thresh=0.02, hangover_win=3):
-        self.coeff = 2.0 * math.cos(2.0 * math.pi * freq / SRATE)
-        N = SRATE * WINDOW_MS // 1000
-        self.abs_thresh = thresh * (AMP * N / 2.0) ** 2
-        self.hangover_win = hangover_win
-        self.active = False
-        self.below = 0
-        self.onsets_ms = []
-        self._clock_ms = 0
-
-    def feed(self, samples):
-        """feed one WINDOW_MS window of int samples; return True if onset"""
-        s1 = s2 = 0.0
-        for x in samples:
-            s0 = x + self.coeff * s1 - s2
-            s2 = s1
-            s1 = s0
-        power = max(0.0, s2 * s2 + s1 * s1 - self.coeff * s1 * s2)
-        onset = False
-        if power > self.abs_thresh:
-            if not self.active:
-                self.active = True
-                self.onsets_ms.append(self._clock_ms)
-                onset = True
-            self.below = 0
-        elif self.active:
-            self.below += 1
-            if self.below >= self.hangover_win:
-                self.active = False
-        self._clock_ms += WINDOW_MS
-        return onset
-
-
 def read_wav(path):
     w = wave.open(path, "rb")
     try:
@@ -104,12 +62,63 @@ def read_wav(path):
         w.close()
 
 
-def detect_onsets(pcm_bytes, freq, thresh):
-    det = GoertzelDetector(freq, thresh)
-    wsz = SRATE * WINDOW_MS // 1000 * 2          # window size in bytes
-    for off in range(0, len(pcm_bytes) - wsz + 1, wsz):
-        det.feed(memoryview(pcm_bytes)[off:off + wsz].cast("h"))
-    return det.onsets_ms
+
+def detect_bursts_cadence(pcm_bytes, freq, cadence=(10, 40)):
+    """Detect bursts using cadence-matched cross-correlation.
+
+    Computes the Goertzel envelope, then applies a matched filter
+    ``[+1/ons, -1/offs]`` over one burst period.  This yields
+    ``mean(on_power) - mean(off_power)``, which cancels any constant
+    baseline (e.g. ringback harmonic leakage at the target frequency)
+    and measures only the burst energy *above* the local average.
+
+    Returns list of burst onset times (milliseconds).
+    """
+    powers = goertzel_envelope(pcm_bytes, freq)
+    ons, offs = cadence
+    period = ons + offs
+    if len(powers) < period:
+        return []
+
+    # Pad with zeros so the trailing off-windows of the last burst don't
+    # fall past the end of the envelope.  Without this, a burst whose
+    # start window is within `period` of the file end is invisible.
+    powers = list(powers) + [0.0] * (period - 1)
+
+    coef_on = 1.0 / ons
+    coef_off = -1.0 / offs
+
+    # Running-sum cross-correlation: O(N) with O(1) per window.
+    on_sum = sum(powers[:ons])
+    off_sum = sum(powers[ons:period])
+    scores = [on_sum * coef_on + off_sum * coef_off]
+    for i in range(1, len(powers) - period + 1):
+        on_sum += powers[i + ons - 1] - powers[i - 1]
+        off_sum += powers[i + period - 1] - powers[i + ons - 1]
+        scores.append(on_sum * coef_on + off_sum * coef_off)
+
+    max_score = max(scores)
+    if max_score <= 0:
+        return []
+
+    thresh = max_score * 0.25
+
+    # Peak-pick: find local maxima above threshold, skip one period ahead
+    # after each hit (the cadence is fixed, so this avoids redundant
+    # descending-slope peaks from the same burst).
+    peaks = []
+    i = 0
+    while i < len(scores):
+        if scores[i] > thresh:
+            peak = i
+            while peak + 1 < len(scores) and scores[peak + 1] > scores[peak]:
+                peak += 1
+            peaks.append(peak)
+            i = peak + period
+        else:
+            i += 1
+
+    return [w * WINDOW_MS for w in peaks]
 
 
 def summary(delays):
@@ -120,6 +129,50 @@ def summary(delays):
     var = sum((d - mean) ** 2 for d in delays) / n
     return (f"n={n} mean={mean:.1f} ms min={min(delays):.1f} ms "
             f"max={max(delays):.1f} ms stdev={math.sqrt(var):.1f} ms")
+
+
+def goertzel_envelope(pcm_bytes, freq):
+    """Goertzel power for each 10 ms window (the detection envelope)."""
+    N = SRATE * WINDOW_MS // 1000
+    wsz = N * 2
+    coeff = 2.0 * math.cos(2.0 * math.pi * freq / SRATE)
+    powers = []
+    for off in range(0, len(pcm_bytes) - wsz + 1, wsz):
+        s1 = s2 = 0.0
+        for x in memoryview(pcm_bytes)[off:off + wsz].cast("h"):
+            s0 = x + coeff * s1 - s2
+            s2 = s1
+            s1 = s0
+        powers.append(max(0.0, s2 * s2 + s1 * s1 - coeff * s1 * s2))
+    return powers
+
+
+def estimate_delay(tx_env, rx_env, max_ms=500):
+    """Pipeline delay (ms) via cross-correlation of Goertzel envelopes.
+
+    Positive result = RX is delayed relative to TX.  The search is
+    limited to ±``max_ms`` — this is the *pipeline* delay, not the
+    absolute offset of the first burst in the recording.
+    """
+    n = min(len(tx_env), len(rx_env))
+    max_k = max_ms // WINDOW_MS
+    best_corr = -1.0
+    best_k = 0
+    for k in range(-max_k, max_k + 1):
+        if k >= 0:
+            length = n - k
+            if length < 50:
+                continue
+            corr = sum(tx_env[i] * rx_env[i + k] for i in range(length))
+        else:
+            length = n + k
+            if length < 50:
+                continue
+            corr = sum(tx_env[-k + i] * rx_env[i] for i in range(length))
+        if corr > best_corr:
+            best_corr = corr
+            best_k = k
+    return best_k * WINDOW_MS
 
 
 # ---------------------------------------------------------------- commands
@@ -143,163 +196,68 @@ def cmd_gen(a):
 
 
 def cmd_analyze(a):
-    tx = detect_onsets(read_wav(a.tx_wav), a.freq, a.thresh)
-    rx = detect_onsets(read_wav(a.rx_wav), a.freq, a.thresh)
-    print(f"tx bursts: {len(tx)}  rx bursts: {len(rx)}")
+    tx_pcm = read_wav(a.tx_wav)
+    rx_pcm = read_wav(a.rx_wav)
 
-    delays = []
+    tx = detect_bursts_cadence(tx_pcm, a.freq)
+    rx = detect_bursts_cadence(rx_pcm, a.freq)
+    print(f"tx bursts: {len(tx)}  rx bursts: {len(rx)}"
+          "  (cadence cross-correlation)")
+
+    # Pipeline delay via cross-correlation of Goertzel envelopes.
+    tx_env = goertzel_envelope(tx_pcm, a.freq)
+    rx_env = goertzel_envelope(rx_pcm, a.freq)
+    pipeline_delay = estimate_delay(tx_env, rx_env, max(500, a.period * 2))
+    print(f"pipeline delay: {pipeline_delay} ms"
+          "  (cross-correlation of Goertzel envelope)")
+
+    # Per-burst: pair each TX burst with the closest RX burst at
+    # expected position (tx + pipeline_delay ± margin).
+    margin = a.period // 3  # ~167 ms — generous to catch all
+    missed = 0
     rows = []
-    for i, t in enumerate(tx):
-        if i < len(rx):
-            d = rx[i] - t
-            delays.append(d)
-            rows.append((i, t, rx[i], d))
+    used = [False] * len(rx)
+    for t in tx:
+        expected = t + pipeline_delay
+        match = None
+        for j, r in enumerate(rx):
+            if used[j]:
+                continue
+            if abs(r - expected) <= margin:
+                if match is None or abs(r - expected) < abs(match[1] - expected):
+                    match = (j, r)
+        if match is not None:
+            j, r = match
+            used[j] = True
+            delay = r - t
+            rows.append((t, r, delay))
         else:
-            rows.append((i, t, None, None))
-    for i, t, r, d in rows:
-        if d is None:
-            print(f"burst {i:3d}: tx={t:7d} ms  rx=   ---   MISSING")
-        else:
-            print(f"burst {i:3d}: tx={t:7d} ms  rx={r:7d} ms  delay={d} ms")
-    missing = len(tx) - len(delays)
-    print(f"\ndelay: {summary(delays)}" +
-          (f"  missing={missing}" if missing else ""))
-    print("note: includes each tool's constant pipeline start offset;"
-          " compare stats between tools, not absolute zero")
+            rows.append((t, None, None))
+            missed += 1
+
+    # Print per-burst table
+    n_cols = 3 + 3 * (len(rows) > 15)
+    for i, (t, r, delay) in enumerate(rows):
+        r_str = f"{r} ms" if r is not None else "---    "
+        d_str = f"delay={delay} ms" if delay is not None else "MISSING"
+        print(f"burst {i:3d}: tx={t:>7} ms  rx={r_str:>8}  {d_str}")
+
+    found = len(tx) - missed
+    print(f"\nresult: pipeline delay = {pipeline_delay} ms"
+          f"  (of {len(tx)} bursts: {found} received, {missed} missing)")
+
+    if missed > len(tx) // 4:
+        print("warning: >25% of bursts missing", file=sys.stderr)
+
     if a.csv:
         with open(a.csv, "w") as f:
             f.write("burst,tx_ms,rx_ms,delay_ms\n")
-            for i, t, r, d in rows:
-                f.write(f"{i},{t},{'' if r is None else r},"
-                        f"{'' if d is None else d}\n")
+            for i, (t, r, d) in enumerate(rows):
+                f.write(f"{i},{t},{r if r is not None else ''},"
+                       f"{d if d is not None else ''}\n")
         print(f"wrote {a.csv}")
-    if missing:
+    if missed:
         sys.exit(2)
-
-
-def cmd_live(a):
-    argv = shlex.split(a.cmd)
-    print(f"live: spawning: {argv}", file=sys.stderr)
-    child = subprocess.Popen(argv, stdin=subprocess.PIPE,
-                             stdout=subprocess.PIPE, stderr=None)
-    os.set_blocking(child.stdout.fileno(), False)
-
-    frame_bytes = 16 * a.ptime                  # 8k s16 -> 16 bytes/ms
-    frame_sampc = 8 * a.ptime
-    win_bytes = 160                             # 10 ms
-    dur_ms = a.dur * 1000
-    warmup_ms = int(a.warmup * 1000)
-    warmup_samp = 8 * warmup_ms
-    period_samp = 8 * a.period
-
-    det = GoertzelDetector(a.freq, a.thresh)
-    rx_buf = bytearray()
-    rx_wav = bytearray() if a.rec else None
-
-    tx_starts = []                              # (start_ms, paired)
-    rtts = []
-
-    def pump_sample(idx):
-        """waveform sample; silence until warmup, then burst pattern"""
-        if idx < warmup_samp:
-            return 0
-        return pattern_sample(idx - warmup_samp, a.freq, a.burst, a.period)
-
-    t0 = time.monotonic()
-    clock_ms = 0
-    sample_idx = 0
-    next_tick = t0
-
-    try:
-        while clock_ms < dur_ms:
-            # drain child stdout until the next 20ms tick is due
-            while True:
-                now = time.monotonic()
-                wait = next_tick - now
-                if wait <= 0:
-                    break
-                r, _, _ = select.select([child.stdout], [], [], wait)
-                if not r:
-                    break
-                chunk = os.read(child.stdout.fileno(), 65536)
-                if not chunk:
-                    clock_ms = dur_ms            # child closed: finish
-                    break
-                chunk_t_ms = (time.monotonic() - t0) * 1000.0
-                rx_buf.extend(chunk)
-                if rx_wav is not None:
-                    rx_wav.extend(chunk)
-                while len(rx_buf) >= win_bytes:
-                    win = bytes(rx_buf[:win_bytes])
-                    del rx_buf[:win_bytes]
-                    if det.feed(memoryview(win).cast("h")):
-                        # date the onset (start of triggering window) by
-                        # wall-clock: chunk arrival minus the audio time
-                        # still buffered after this window
-                        onset = (chunk_t_ms
-                                 - len(rx_buf) / 16.0 - WINDOW_MS)
-                        # pair with oldest unpaired burst start
-                        for j, (bs, used) in enumerate(tx_starts):
-                            if not used and onset >= bs:
-                                tx_starts[j] = (bs, True)
-                                rtt = onset - bs
-                                rtts.append(rtt)
-                                print(f"burst {len(rtts):3d}: "
-                                      f"tx={bs:6d} ms  rx={onset:7.1f} ms"
-                                      f"  RTT={rtt:.1f} ms")
-                                break
-            if clock_ms >= dur_ms:
-                break
-
-            # write exactly one frame per tick
-            frame = memoryview(bytearray(frame_bytes)).cast("h")
-            for k in range(frame_sampc):
-                frame[k] = pump_sample(sample_idx + k)
-            try:
-                child.stdin.write(frame.tobytes())
-                child.stdin.flush()
-            except BrokenPipeError:
-                print("live: child closed stdin", file=sys.stderr)
-                break
-            # record the tx time of any burst starting inside this frame
-            k_next = (max(0, sample_idx - warmup_samp + period_samp - 1)
-                      // period_samp)
-            sk = warmup_samp + k_next * period_samp
-            if sample_idx <= sk < sample_idx + frame_sampc:
-                tx_starts.append((clock_ms + (sk - sample_idx) // 8, False))
-            sample_idx += frame_sampc
-            clock_ms += a.ptime
-            next_tick += a.ptime / 1000.0
-    except KeyboardInterrupt:
-        pass
-    finally:
-        try:
-            child.stdin.close()
-        except Exception:
-            pass
-        try:
-            child.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            child.send_signal(signal.SIGINT)
-            try:
-                child.wait(timeout=3)
-            except subprocess.TimeoutExpired:
-                child.kill()
-
-    missing = sum(1 for _, used in tx_starts if not used)
-    print(f"\nlive RTT: {summary(rtts)}" +
-          (f"  missing={missing}" if missing else ""))
-    if a.rec:
-        w = wave.open(a.rec, "wb")
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(SRATE)
-        w.writeframes(bytes(rx_wav))
-        w.close()
-        print(f"wrote {a.rec} ({len(rx_wav)} bytes)")
-    if child.returncode not in (0, None):
-        print(f"warning: child exited with {child.returncode}",
-              file=sys.stderr)
 
 
 # ---------------------------------------------------------------- run (orchestration)
@@ -322,7 +280,7 @@ def _run_common(sp):
 def _run_analyze(a, rx):
     ns = argparse.Namespace(
         tx_wav=a.tx_wav, rx_wav=rx, freq=a.freq,
-        thresh=a.thresh, burst=a.burst, period=a.period, csv=None)
+        burst=a.burst, period=a.period, csv=None)
     cmd_analyze(ns)
 
 
@@ -362,32 +320,31 @@ def cmd_run_pjsua(a):
     if a.auto_answer:
         cmd += ["--auto-answer", "200"]
     print(f"+ {shlex.join(cmd)}", file=sys.stderr)
-    subprocess.check_call(cmd)
+    proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
+    # pjsua hangs up after play-file finishes (--auto-play-hangup)
+    # but doesn't exit — send 'q' to quit after a safety margin.
+    import threading, time
+    def _quit():
+        time.sleep(a.dur + 5)
+        try:
+            proc.stdin.write(b"q\n")
+            proc.stdin.flush()
+        except BrokenPipeError:
+            pass
+    threading.Thread(target=_quit, daemon=True).start()
+    proc.wait()
     _run_analyze(a, rx)
 
 
 def cmd_run_bridge(a):
-    if a.live:
-        _ensure_tx_wav(a.freq, a.burst, a.period, a.dur)
-        bridge_cmd = shlex.split(
-            [os.path.join(HERE, "rtp_bridge"),
-             "-p", a.peer, "-t", str(a.ptime)])
-        print(f"+ {bridge_cmd}", file=sys.stderr)
-        ns = argparse.Namespace(
-            cmd=bridge_cmd, dur=a.dur, ptime=a.ptime,
-            freq=a.freq, thresh=a.thresh,
-            burst=a.burst, period=a.period,
-            warmup=1.0, rec=None)
-        cmd_live(ns)
-    else:
-        _ensure_tx_wav(a.freq, a.burst, a.period, a.dur)
-        rx = a.rx_wav or os.path.join(AUDIOS, "bridge_rx.wav")
-        cmd = [os.path.join(HERE, "rtp_bridge"),
-               "-p", a.peer, "-i", a.tx_wav, "-o", rx,
-               "-t", str(a.ptime)]
-        print(f"+ {shlex.join(cmd)}", file=sys.stderr)
-        subprocess.check_call(cmd)
-        _run_analyze(a, rx)
+    _ensure_tx_wav(a.freq, a.burst, a.period, a.dur)
+    rx = a.rx_wav or os.path.join(AUDIOS, "bridge_rx.wav")
+    cmd = [os.path.join(HERE, "rtp_bridge"),
+           "-p", a.peer, "-i", a.tx_wav, "-o", rx,
+           "-t", str(a.ptime)]
+    print(f"+ {shlex.join(cmd)}", file=sys.stderr)
+    subprocess.check_call(cmd)
+    _run_analyze(a, rx)
 
 
 def cmd_run_slmodem(a):
@@ -403,7 +360,9 @@ def cmd_run_slmodem(a):
         sys.exit(1)
 
     rtp_cmd = [rtp_path, "-p", a.peer, "-t", str(a.ptime)]
-    slm_cmd = [slm_path, "-m", a.slmodem_mode]
+    slm_cmd = [slm_path, "-m", a.slmodem_mode, "-M", str(a.modulation)]
+    if getattr(a, "record", None):
+        slm_cmd += ["-r", a.record]
 
     print(f"+ {shlex.join(rtp_cmd)}", file=sys.stderr)
     print(f"+ {shlex.join(slm_cmd)}", file=sys.stderr)
@@ -480,10 +439,8 @@ def main():
                         help="burst length in ms (default 100)")
         sp.add_argument("--period", type=int, default=500,
                         help="burst period in ms (default 500)")
-        sp.add_argument("--thresh", type=float, default=0.02,
-                        help="threshold as fraction of TX burst power (default 0.02)")
-        sp.add_argument("--dur", type=int, default=15,
-                        help="duration in seconds (default 15)")
+        sp.add_argument("--dur", type=int, default=10,
+                        help="duration in seconds (default 10)")
         sp.add_argument("--ptime", type=int, default=10,
                         help="frame size in ms (default 10)")
 
@@ -499,14 +456,6 @@ def main():
     common(an)
     an.set_defaults(fn=cmd_analyze)
 
-    li = sub.add_parser("live", help="live benchmark of a PCM-pipe command")
-    li.add_argument("--cmd", required=True,
-                    help="command to run, e.g. './rtp_bridge -p sip:...'")
-    li.add_argument("--warmup", type=float, default=1.0,
-                    help="seconds of silence before first burst")
-    li.add_argument("--rec", help="record received PCM to wav")
-    common(li)
-    li.set_defaults(fn=cmd_live)
 
     # run (orchestration)
     ru = sub.add_parser("run", help="run a full benchmark with a tool")
@@ -526,8 +475,6 @@ def main():
 
     bpr = rsub.add_parser("bridge", help="run rtp_bridge benchmark")
     _run_common(bpr)
-    bpr.add_argument("--live", action="store_true",
-                     help="live stdin/stdout mode vs file-based")
     common(bpr)
     bpr.set_defaults(fn=cmd_run_bridge, peer="sip:11@10.42.0.102:5062;transport=udp")
 
@@ -536,6 +483,9 @@ def main():
     sp.add_argument("--slmodem-mode", default="orig",
                     choices=["orig", "ans"],
                     help="slmodem mode: orig (default) or ans")
+    sp.add_argument("--record", help="record slmodem RX audio to WAV")
+    sp.add_argument("-M", "--modulation", type=int, default=122,
+                    help="SREG_DP value (22=V.22 1200bps, 122=V.22bis 2400bps, 32=V.32)")
     common(sp)
     sp.set_defaults(fn=cmd_run_slmodem, peer="sip:11@10.42.0.102:5062;transport=udp")
 

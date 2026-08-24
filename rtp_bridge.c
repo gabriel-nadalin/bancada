@@ -41,6 +41,7 @@ static int  frame_sampc = SRATE * DEFAULT_PTIME / 1000;
 static int  frame_bytes = 2 * (SRATE * DEFAULT_PTIME / 1000);
 
 static uint8_t  pt = 8;
+static uint8_t  rx_pt;                        /* adopted peer RX PT (0=none) */
 static uint16_t rtp_seq;
 static uint32_t rtp_ts;
 static uint32_t rtp_ssrc;
@@ -56,6 +57,8 @@ static int16_t  rx_samples[RX_MAX_SAMPC];
 static uint16_t rx_last_seq;
 static bool     rx_seq_valid;
 static unsigned rx_pt_drops;
+static unsigned rx_ctl_drops;
+static unsigned tx_idle_ticks;
 
 static void stdin_handler(int flags, void *arg);
 
@@ -145,6 +148,13 @@ static void tx_tick(void *arg) {
             re_cancel();
         }
     }
+    else {
+        /* stdin dry this tick: no packet is sent, which the far modem
+         * sees as a carrier hole (retrain trigger).  Count these. */
+        if (++tx_idle_ticks == 1 || tx_idle_ticks % 200 == 0)
+            re_fprintf(stderr, "rtp: TX tick skipped, stdin dry"
+                       " (%u times)\n", tx_idle_ticks);
+    }
 }
 
 /*
@@ -231,11 +241,49 @@ static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
         paylen -= padlen;
     }
 
-    if (pkt_pt != pt) {
-        if (++rx_pt_drops == 1)
-            re_fprintf(stderr, "RTP: dropping packets with pt=%u"
-                               " (expecting %u)\n", pkt_pt, pt);
-        return;
+    if (pkt_pt != pt && pkt_pt != rx_pt) {
+        /* In-band control events (e.g. Cisco-style named signaling events,
+         * modem-passthrough handshake) arrive as short packets on a
+         * dynamic PT inside the same RTP stream.  They carry no audio —
+         * skip them instead of decoding the bytes into PCM. */
+        if (paylen < 8) {
+            if (++rx_ctl_drops == 1)
+                re_fprintf(stderr, "RTP: in-band control event pt=%u"
+                                   " len=%zu ignored\n", pkt_pt, paylen);
+            return;
+        }
+        if (rx_pt == 0) {
+            /* The peer carries its (modem) audio on a different payload
+             * type than the negotiated one (common for integrated modems
+             * that only switch the audio PT).  Adopt the observed PT so
+             * we don't drop the data packets. */
+            rx_pt = pkt_pt;
+            /* Diagnostics: payload size/bytes distinguish G.711 (80 B @
+             * 10 ms) from uncompressed L16 (160 B @ 10 ms); the seq delta
+             * tells whether this is the same stream relabeled or a
+             * separate one. */
+            re_fprintf(stderr, "RTP: adopting peer payload pt=%u"
+                       " (negotiated %u) len=%zu seq=%u prev_seq=%u",
+                       pkt_pt, pt, paylen, seq,
+                       (unsigned)(rx_seq_valid ? rx_last_seq : 0));
+            if (paylen >= 8) {
+                re_fprintf(stderr, " bytes: %02x %02x %02x %02x"
+                                   " %02x %02x %02x %02x\n",
+                           p[hdrlen + 0], p[hdrlen + 1], p[hdrlen + 2],
+                           p[hdrlen + 3], p[hdrlen + 4], p[hdrlen + 5],
+                           p[hdrlen + 6], p[hdrlen + 7]);
+            }
+            else {
+                re_fprintf(stderr, " (payload too short)\n");
+            }
+        }
+        else {
+            if (++rx_pt_drops == 1)
+                re_fprintf(stderr, "RTP: dropping packets with pt=%u"
+                                   " (expecting %u)\n", pkt_pt,
+                           (unsigned)rx_pt);
+            return;
+        }
     }
 
     if (rx_seq_valid) {
@@ -419,8 +467,8 @@ static int sdp_setup(void) {
     if (err)
         return err;
     sdp_media_set_ldir(m, SDP_SENDRECV);
-    err = sdp_format_add(NULL, m, false, "8", "PCMA", SRATE, 1,
-                         NULL, NULL, NULL, false, NULL);
+	err = sdp_format_add(NULL, m, false, "8", "PCMA", SRATE, 1,
+	                     NULL, NULL, NULL, false, NULL);
     if (err)
         return err;
     sdp_media_set_lattr(m, false, "ptime", "%u", ptime);
@@ -468,6 +516,7 @@ static void estab_handler(const struct sip_msg *msg, void *arg) {
     sa_cpy(&peer_rtp, sdp_media_raddr(rm));
     sa_set_port(&peer_rtp, sdp_media_rport(rm));
     pt = rfmt->pt;
+    rx_pt = 0;                        /* re-adopt peer PT for this session */
     re_fprintf(stderr, "Peer RTP: %J pt=%u\n", &peer_rtp, pt);
 
 out:

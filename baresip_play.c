@@ -1,8 +1,64 @@
 #include <stdint.h>
 #include <getopt.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <re.h>
 #include <baresip.h>
+static void hangup_handler(void *arg);
+static struct tmr hangup_tmr;
+static unsigned playback_dur = 15;
 
+
+/** Read WAV duration in seconds from the data chunk. */
+static double wav_duration_sec(const char *path)
+{
+	FILE *f = fopen(path, "rb");
+	if (!f) return 0.0;
+
+	char hdr[12];
+	if (fread(hdr, 1, 12, f) != 12
+	    || memcmp(hdr, "RIFF", 4) != 0
+	    || memcmp(hdr + 8, "WAVE", 4) != 0) {
+		fclose(f);
+		return 0.0;
+	}
+
+	int sr = 0;
+	uint32_t data_sz = 0;
+	char chunk_id[4];
+
+	while (fread(chunk_id, 1, 4, f) == 4) {
+		uint32_t sz;
+		if (fread(&sz, 4, 1, f) != 1) break;
+
+		if (memcmp(chunk_id, "fmt ", 4) == 0) {
+			uint16_t fmt;  (void)fmt;
+			uint16_t ch;
+			fread(&fmt, 2, 1, f);
+			fread(&ch,  2, 1, f);
+			fread(&sr,  4, 1, f);
+			fseek(f, sz - 8, SEEK_CUR);
+		}
+		else if (memcmp(chunk_id, "data", 4) == 0) {
+			data_sz = sz;
+			break;
+		}
+		else {
+			fseek(f, sz, SEEK_CUR);
+		}
+	}
+
+	fclose(f);
+	if (sr <= 0 || data_sz < 4) return 0.0;
+	return (double)data_sz / 2.0 / (double)sr;
+}
+
+static void hangup_handler(void *arg)
+{
+	(void)arg;
+	info("baresip_play: playback duration reached\n");
+	re_cancel();
+}
 
 static void signal_handler(int sig)
 {
@@ -21,6 +77,9 @@ static void event_handler(enum bevent_ev ev,
 
 	case BEVENT_CALL_ESTABLISHED:
 		info("baresip_play: Call established!\n");
+		tmr_start(&hangup_tmr,
+			  (uint64_t)(playback_dur + 3) * 1000,
+			  hangup_handler, NULL);
 		break;
 
 	case BEVENT_CALL_CLOSED:
@@ -61,10 +120,9 @@ int main(int argc, char *argv[])
 	int err;
 	const char *peer    = "sip:13@10.42.0.102:5062;transport=udp";
 	const char *src_mod  = "aufile";
-	const char *src_dev  = "duvet.wav";
 	const char *play_mod = "aufile";
 	const char *play_dev = "/dev/null";
-
+	const char *src_dev  = "duvet.wav";
 	static const struct option longopts[] = {
 		{"peer",     required_argument, NULL, 'p'},
 		{"src-mod",  required_argument, NULL, 'm'},
@@ -74,7 +132,6 @@ int main(int argc, char *argv[])
 		{"help",     no_argument,       NULL, 'h'},
 		{NULL, 0, NULL, 0}
 	};
-
 	for (;;) {
 		int c = getopt_long(argc, argv, "p:m:d:M:D:h", longopts, NULL);
 		if (c == -1)
@@ -96,13 +153,18 @@ int main(int argc, char *argv[])
 		case 'D':
 			play_dev = optarg;
 			break;
-		case 'h':
-			usage(argv[0]);
-			return 0;
 		default:
 			usage(argv[0]);
 			return 1;
 		}
+	}
+
+	/* Auto-detect playback duration from the source WAV. */
+	{
+		double dur = wav_duration_sec(src_dev);
+		if (dur > 0.0)
+			playback_dur = (unsigned)(dur + 0.5);
+		info("baresip_play: source duration = %u s\n", playback_dur);
 	}
 
 	/* Initialize libre event loop and networking stack */

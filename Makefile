@@ -48,9 +48,11 @@ rtp_bridge: rtp_bridge.c build_re
 build_slmodem:
 	$(MAKE) -C $(SLMODEM_DIR)
 
+SLM_LIBSAMPLERATE := $(shell find /usr/lib/i386-linux-gnu /usr/lib32 -name 'libsamplerate.so*' 2>/dev/null | head -1)
+
 slmodem_bridge: slmodem_bridge.c build_slmodem
 	$(CC) -m32 -Wall -g -O2 -I$(SLMODEM_DIR) -o $@ $< $(SLMODEM_OBJS) \
-		/usr/lib/i386-linux-gnu/libsamplerate.so.0 -lm -lpthread
+		$(SLM_LIBSAMPLERATE) -lm -lpthread
 
 clean:
 	$(MAKE) -C re clean || true
