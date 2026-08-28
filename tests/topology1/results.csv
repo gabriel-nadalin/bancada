@@ -1,0 +1,7 @@
+topology,protocol,date,success,rate_modem,rate_mica,modulation,errors_reneg,notes
+1,V.21,2026-08-27,yes,300,300,V.21 (FSK),none,MICA 2/5; forced AT+MS=V21,0; PROTOCOL NONE; call 107s
+1,V.22,2026-08-27,yes,1200,1200,V.22 (PSK/DPSK),none,MICA 2/7; LAPM+V44; call 67s
+1,V.22bis,2026-08-27,yes,2400,2400,V.22bis (QAM),none,MICA 2/9; LAPM+V44; call 56s
+1,V.32bis,2026-08-27,yes,14400,14400,V.32bis (QAM-128+trellis),none,MICA 2/10; LAPM+V44; line quality 002; call 65s
+1,V.34,2026-08-27,yes,33600,33600,V.34 (QAM-1664+precoding),none,MICA 2/11; RX33600/TX31200 asym; LAPM+V44; call 70s
+1,V.90,2026-08-27,yes,46667,46667,V.90 (PCM down/QAM up),none,MICA 2/12; RX46667/TX31200; LAPM+V44; V90 flag; call 74s

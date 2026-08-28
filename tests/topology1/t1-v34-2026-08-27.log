@@ -1,0 +1,86 @@
+================================================================================
+TOPOLOGY 1 TEST - V.34
+Date/time: 2026-08-28 00:02
+================================================================================
+
+-- PATH ------------------------------------------------------------------
+Modem:        /dev/ttyACM2  (Conexant CX93010)
+FXS port:     0/1/<n>
+2911 E1:      0/0/0  (pri-group timeslots 1-10,16)
+AS5300 E1:    E1 1  (pri-group timeslots 1-31; MICA slot 2)
+MICA port:    2/11
+Dialed number: ATD42
+
+-- MODEM CONFIG ----------------------------------------------------------
+AT&FE1V1Q0X4W2
+OK
+AT+MS=V34,0
+OK
+
+-- MODEM SESSION (AT) ----------------------------------------------------
+AT+MS=V34,0
+OK
+atd42
+CONNECT 33600
++++
+OK
+ath
+OK
+at&v1
+TERMINATION REASON.......... LOCAL REQUEST
+LAST TX rate................ 31200 BPS
+HIGHEST TX rate............. 31200 BPS
+LAST RX rate................ 33600 BPS
+HIGHEST RX rate............. 33600 BPS
+PROTOCOL.................... LAPM
+COMPRESSION................. V44
+Line QUALITY................ 017
+Rx LEVEL.................... 017
+Highest Rx State............ 67
+Highest TX State............ 67
+EQM Sum..................... 0013
+RBS Pattern................. 00
+Rate Drop................... FF
+Digital Loss................ None
+Local Rtrn Count............ 00
+Remote Rtrn Count........... 00
+OK
+
+-- AS5300 EVIDENCE -------------------------------------------------------
+show caller
+  Line           User               Service       Time      Time
+  tty 132        -                  TTY           00:00:08  00:00:00
+
+debug modem csm
+VDEV_ALLOCATE: 2/11 is allocated
+EVENT_FROM_ISDN: DEV_INCALL at slot 2, port 11
+Mica Modem(2/11): Call Setup
+Mica Modem(2/11): Went offhook
+EVENT_FROM_ISDN: DEV_CONNECTED at slot 2, port 11
+Mica Modem(2/11): Link Initiate
+Mica Modem(2/11): State Transition to Connect
+Mica Modem(2/11): State Transition to V8bis Exchange
+Mica Modem(2/11): State Transition to Link
+Mica Modem(2/11): State Transition to Ranging
+Mica Modem(2/11): State Transition to Half Duplex Train
+Mica Modem(2/11): State Transition to Trainup
+Mica Modem(2/11): State Transition to EC Negotiating
+Mica Modem(2/11): State Transition to Steady State
+%ISDN-6-CONNECT: Interface Serial0:0 connected to 11
+(call lasted 70 seconds; terminated by intentional +++/ATH)
+
+show modem
+* 2/11   00:00:43       1      0      0      0       0        0       0    100%
+
+-- RESULT ----------------------------------------------------------------
+Success:            yes
+Negotiated rate:    33600 bps downstream / 31200 bps upstream
+Modulation:         V.34 (QAM-1664 + pre-coding)
+Errors/renegotiation: none (Local/Remote Rtrn Count = 00; Rate Drop = FF)
+Notes:              Forced via AT+MS=V34,0. Asymmetric V.34 negotiation
+                    (RX 33600 / TX 31200) - normal V.34 line-probing behavior,
+                    not a failure. PROTOCOL LAPM (V.42 EC) + COMPRESSION V44.
+                    csm trace shows V.34-specific training: Ranging ->
+                    Half Duplex Train -> Trainup. TERMINATION LOCAL REQUEST.
+
+================================================================================

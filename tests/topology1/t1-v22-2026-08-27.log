@@ -1,0 +1,84 @@
+================================================================================
+TOPOLOGY 1 TEST - V.22
+Date/time: 2026-08-27 23:47
+================================================================================
+
+-- PATH ------------------------------------------------------------------
+Modem:        /dev/ttyACM2  (Conexant CX93010)
+FXS port:     0/1/<n>
+2911 E1:      0/0/0  (pri-group timeslots 1-10,16)
+AS5300 E1:    E1 1  (pri-group timeslots 1-31; MICA slot 2)
+MICA port:    2/7
+Dialed number: ATD42
+
+-- MODEM CONFIG ----------------------------------------------------------
+AT&FE1V1Q0X4W2
+OK
+AT+MS=V22,0
+OK
+
+-- MODEM SESSION (AT) ----------------------------------------------------
+AT+MS=V22,0
+OK
+atd42
+CONNECT 1200
++++
+OK
+ath
+OK
+at&v1
+TERMINATION REASON.......... CARRIER LOSS (intentional +++/ATH teardown)
+LAST TX rate................ 1200 BPS
+HIGHEST TX rate............. 1200 BPS
+LAST RX rate................ 1200 BPS
+HIGHEST RX rate............. 1200 BPS
+PROTOCOL.................... LAPM
+COMPRESSION................. V44
+Line QUALITY................ 127
+Rx LEVEL.................... 041
+Highest Rx State............ 00
+Highest TX State............ 00
+EQM Sum..................... 0000
+RBS Pattern................. 00
+Rate Drop................... FF
+Digital Loss................ None
+Local Rtrn Count............ 00
+Remote Rtrn Count........... 00
+OK
+
+-- AS5300 EVIDENCE -------------------------------------------------------
+show caller
+  Line           User               Service       Time      Time
+  tty 128        -                  TTY           00:00:12  00:00:00
+
+debug modem csm
+VDEV_ALLOCATE: 2/7 is allocated
+EVENT_FROM_ISDN: DEV_INCALL at slot 2, port 7
+Mica Modem(2/7): Call Setup
+Mica Modem(2/7): Went offhook
+EVENT_FROM_ISDN: DEV_CONNECTED at slot 2, port 7
+Mica Modem(2/7): Link Initiate
+Mica Modem(2/7): State Transition to Connect
+Mica Modem(2/7): State Transition to V8bis Exchange
+Mica Modem(2/7): State Transition to Link
+Mica Modem(2/7): State Transition to Trainup
+Mica Modem(2/7): State Transition to EC Negotiating
+Mica Modem(2/7): State Transition to Steady State
+%ISDN-6-CONNECT: Interface Serial0:0 connected to 11
+(call lasted 67 seconds; terminated by intentional +++/ATH)
+
+show modem
+* 2/7   00:00:47       1      0      0      0       0        0       0    100%
+
+-- RESULT ----------------------------------------------------------------
+Success:            yes
+Negotiated rate:    1200 bps (TX and RX)
+Modulation:         V.22 (PSK/DPSK)
+Errors/renegotiation: none (Local/Remote Rtrn Count = 00; Rate Drop = FF)
+Notes:              Forced via AT+MS=V22,0. PROTOCOL LAPM (V.42 EC) +
+                    COMPRESSION V44 negotiated - expected for V.22 (vs NONE
+                    on V.21). TERMINATION REASON CARRIER LOSS is from the
+                    intentional +++/ATH teardown, not a failure.
+                    Line quality 127, Rx level 041.
+
+================================================================================

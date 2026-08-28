@@ -1,0 +1,87 @@
+================================================================================
+TOPOLOGY 1 TEST - V.21
+Date/time: 2026-08-27 23:36
+================================================================================
+
+-- PATH ------------------------------------------------------------------
+Modem:        /dev/ttyACM2  (Conexant CX93010)
+FXS port:     0/1/1
+2911 E1:      0/0/0  (pri-group timeslots 1-10,16)
+AS5300 E1:    E1 1  (pri-group timeslots 1-10,16)
+MICA port:    2/5
+Dialed number: ATD42
+
+-- MODEM CONFIG ----------------------------------------------------------
+AT&FE1V1Q0X4W2
+OK
+AT+MS=V21,0
+OK
+
+-- MODEM SESSION (AT) ----------------------------------------------------
+at
+OK
+AT+MS=V21,0
+OK
+atd42
+CONNECT
++++
+OK
+ath
+OK
+at&v1
+TERMINATION REASON.......... LOCAL REQUEST
+LAST TX rate................ 300 BPS
+HIGHEST TX rate............. 300 BPS
+LAST RX rate................ 300 BPS
+HIGHEST RX rate............. 300 BPS
+PROTOCOL.................... NONE
+COMPRESSION................. N/A
+Line QUALITY................ 000
+Rx LEVEL.................... 011
+Highest Rx State............ 00
+Highest TX State............ 00
+EQM Sum..................... 0000
+RBS Pattern................. 00
+Rate Drop................... FF
+Digital Loss................ None
+Local Rtrn Count............ 00
+Remote Rtrn Count........... 00
+OK
+
+-- AS5300 EVIDENCE -------------------------------------------------------
+show caller
+  Line           User               Service       Time      Time
+  tty 126        -                  TTY           00:00:20  00:00:00
+
+debug modem csm
+VDEV_ALLOCATE: 2/5 is allocated
+EVENT_FROM_ISDN: DEV_INCALL at slot 2, port 5
+CSM_PROC_IDLE: CSM_EVENT_ISDN_CALL at slot 2, port 5
+Mica Modem(2/5): Call Setup
+Mica Modem(2/5): State Transition to Call Setup
+Mica Modem(2/5): Went offhook
+EVENT_FROM_ISDN: DEV_CONNECTED at slot 2, port 5
+Mica Modem(2/5): Link Initiate
+Mica Modem(2/5): State Transition to Connect
+Mica Modem(2/5): State Transition to V8bis Exchange
+Mica Modem(2/5): State Transition to Link
+Mica Modem(2/5): State Transition to Trainup
+Mica Modem(2/5): State Transition to EC Negotiating
+Mica Modem(2/5): State Transition to Steady State
+%ISDN-6-CONNECT: Interface Serial0:0 connected to 11
+(call lasted 107 seconds; terminated by local +++/ATH)
+
+show modem
+* 2/5   00:01:24       1      0      0      0       0        0       0    100%
+
+-- RESULT ----------------------------------------------------------------
+Success:            yes
+Negotiated rate:    300 bps (TX and RX)
+Modulation:         V.21 (FSK)
+Errors/renegotiation: none (Local/Remote Rtrn Count = 00; Rate Drop = FF)
+Notes:              Forced via AT+MS=V21,0. PROTOCOL NONE + no compression
+                    expected at V.21 (no V.42 EC). Line quality 000, Rx level 011.
+                    Validates full path: hardmodem -> FXS -> 2911 PRI -> E1
+                    -> AS5300 PRI -> MICA 2/5.
+
+================================================================================

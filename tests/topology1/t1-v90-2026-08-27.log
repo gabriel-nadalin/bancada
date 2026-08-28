@@ -1,0 +1,89 @@
+================================================================================
+TOPOLOGY 1 TEST - V.90  (PRIMARY TARGET)
+Date/time: 2026-08-28 00:06
+================================================================================
+
+-- PATH ------------------------------------------------------------------
+Modem:        /dev/ttyACM2  (Conexant CX93010)
+FXS port:     0/1/<n>
+2911 E1:      0/0/0  (pri-group timeslots 1-10,16)
+AS5300 E1:    E1 1  (pri-group timeslots 1-31; MICA slot 2)
+MICA port:    2/12
+Dialed number: ATD42
+
+-- MODEM CONFIG ----------------------------------------------------------
+AT&FE1V1Q0X4W2
+OK
+AT+MS=V90,0
+OK
+
+-- MODEM SESSION (AT) ----------------------------------------------------
+AT+MS=V90,0
+OK
+atd42
+CONNECT 46667
++++
+OK
+ath
+OK
+at&v1
+TERMINATION REASON.......... LOCAL REQUEST
+LAST TX rate................ 31200 BPS
+HIGHEST TX rate............. 31200 BPS
+LAST RX rate................ 46667 BPS
+HIGHEST RX rate............. 46667 BPS
+PROTOCOL.................... LAPM
+COMPRESSION................. V44
+Line QUALITY................ 042
+Rx LEVEL.................... 013
+Highest Rx State............ 67
+Highest TX State............ 67
+EQM Sum..................... 00BC
+RBS Pattern................. 00
+Rate Drop................... FF
+Digital Loss................ 2000
+Local Rtrn Count............ 00
+Remote Rtrn Count........... 00
+V90
+
+-- AS5300 EVIDENCE -------------------------------------------------------
+show caller
+  Line           User               Service       Time      Time
+  tty 133        -                  TTY           00:00:30  00:00:00
+
+debug modem csm
+VDEV_ALLOCATE: 2/12 is allocated
+EVENT_FROM_ISDN: DEV_INCALL at slot 2, port 12
+Mica Modem(2/12): Call Setup
+Mica Modem(2/12): Went offhook
+EVENT_FROM_ISDN: DEV_CONNECTED at slot 2, port 12
+Mica Modem(2/12): Link Initiate
+Mica Modem(2/12): State Transition to Connect
+Mica Modem(2/12): State Transition to V8bis Exchange
+Mica Modem(2/12): State Transition to Link
+Mica Modem(2/12): State Transition to Ranging
+Mica Modem(2/12): State Transition to Half Duplex Train
+Mica Modem(2/12): State Transition to Trainup
+Mica Modem(2/12): State Transition to EC Negotiating
+Mica Modem(2/12): State Transition to Steady State
+%ISDN-6-CONNECT: Interface Serial0:0 connected to 11
+(call lasted 74 seconds; terminated by intentional +++/ATH)
+
+show modem
+* 2/12   00:00:54       1      0      0      0       0        0       0    100%
+
+-- RESULT ----------------------------------------------------------------
+Success:            yes
+Negotiated rate:    46667 bps downstream / 31200 bps upstream
+Modulation:         V.90 (PCM downstream / QAM upstream)
+Errors/renegotiation: none (Local/Remote Rtrn Count = 00; Rate Drop = FF)
+Notes:              PRIMARY TARGET ACHIEVED. Forced via AT+MS=V90,0.
+                    at&v1 ends with explicit "V90" modulation flag. RX 46667
+                    (> V.34 ceiling 33600) confirms real V.90 PCM downstream
+                    over the digital E1 server side - the capability that
+                    requires a RAS and cannot be emulated with conventional
+                    modems. TX 31200 (V.90 upstream, QAM, <=33600). LAPM+V44.
+                    Digital Loss 2000 (V.90 PCM path parameter). Training:
+                    Ranging -> Half Duplex Train -> Trainup (V.90/V.34-style).
+
+================================================================================
