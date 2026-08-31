@@ -16,6 +16,8 @@
 
 #include <rem_g711.h>
 
+#define AUDIO_BLOCK_SAMPLES 80 /* 10 ms at 8 kHz, matching slmodem_bridge. */
+
 struct options {
 	const char *dchan;
 	const char *called;
@@ -281,18 +283,23 @@ static int open_bchan(int channel)
 {
 	struct dahdi_params params;
 	int fd;
-	int flags;
+	int blocksize = AUDIO_BLOCK_SAMPLES;
 
 	if (channel <= 0)
 		return -1;
 
-	fd = open("/dev/dahdi/channel", O_RDWR | O_NONBLOCK);
+	fd = open("/dev/dahdi/channel", O_RDWR);
 	if (fd < 0) {
 		perror("/dev/dahdi/channel");
 		return -1;
 	}
 	if (ioctl(fd, DAHDI_SPECIFY, &channel) < 0) {
 		perror("DAHDI_SPECIFY");
+		close(fd);
+		return -1;
+	}
+	if (ioctl(fd, DAHDI_SET_BLOCKSIZE, &blocksize) < 0) {
+		perror("DAHDI_SET_BLOCKSIZE");
 		close(fd);
 		return -1;
 	}
@@ -303,15 +310,8 @@ static int open_bchan(int channel)
 		close(fd);
 		return -1;
 	}
-	log_line("INFO", "B-channel %d open sigtype=%d (expect %d Clear)",
-		channel, params.sigtype, DAHDI_SIG_CLEAR);
-
-	flags = fcntl(fd, F_GETFL, 0);
-	if (flags < 0 || fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0) {
-		perror("fcntl O_NONBLOCK");
-		close(fd);
-		return -1;
-	}
+	log_line("INFO", "B-channel %d open sigtype=%d (expect %d Clear), blocksize=%d",
+		channel, params.sigtype, DAHDI_SIG_CLEAR, blocksize);
 
 	return fd;
 }
