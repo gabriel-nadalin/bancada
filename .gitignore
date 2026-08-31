@@ -1,0 +1,22 @@
+# ---- vendor / third-party ----
+# re/ and baresip/ are git submodules (see .gitmodules).
+slmodem-*
+
+# ---- python ----
+__pycache__/
+*.pyc
+
+# ---- build outputs ----
+*.o
+rtp_bridge
+slmodem_bridge
+baresip_play
+pri_call
+
+# ---- generated / audio artifacts ----
+*.wav
+*.pcap
+debug.wav
+
+# ---- tooling ----
+.vscode/

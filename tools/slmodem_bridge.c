@@ -239,6 +239,9 @@ static void usage(const char *name)
 		"  -d, --dial CMD     AT dial command (default: ATX3D\\r)\n"
 		"  -r, --record FILE  Record RX audio to WAV file\n"
 		"  -M MOD             SREG_DP modulation value (default: 122)\n"
+		"  -e, --early-dial   In orig mode, dial at startup (before the\n"
+		"                     audio path is established) so the modem is\n"
+		"                     already listening when the call cuts through\n"
 		"  -h, --help         Show this help\n"
 		"\n"
 		"Audio I/O:\n"
@@ -260,10 +263,11 @@ int main(int argc, char *argv[])
 	char pty_name[64];
 	int dial_sent = 0;
 	int modulation = 122;
+	int early_dial = 0;
 	const char *rec_path = NULL;
 	FILE *rec_fp = NULL;
 
-	while ((opt = getopt(argc, argv, "m:d:r:M:h")) != -1) {
+	while ((opt = getopt(argc, argv, "m:d:r:M:eh")) != -1) {
 		switch (opt) {
 		case 'm':
 			mode = optarg;
@@ -276,6 +280,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'M':
 			modulation = atoi(optarg);
+			break;
+		case 'e':
+			early_dial = 1;
 			break;
 		case 'h':
 		default:
@@ -322,7 +329,7 @@ int main(int argc, char *argv[])
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
 
-	modem_debug_level = 1;
+	modem_debug_level = 3;
 	modem_debug_init("bridge");
 
 	dp_dummy_init();
@@ -357,6 +364,18 @@ int main(int argc, char *argv[])
 	if (strcmp(mode, "ans") == 0) {
 		const char *ata = "ATA\r";
 		modem_write(g_modem, ata, strlen(ata));
+	}
+	/* Early dial: originate now so the modem is already listening when the
+	 * audio path cuts through. The RAS's V8bis happens before the B-channel
+	 * connects, so a post-connect originate is too late to participate. */
+	if (early_dial && strcmp(mode, "orig") == 0) {
+		dial_sent = 1;
+		fprintf(stderr, "Early dial (before audio path)...\n");
+		char buf[64];
+		int len = snprintf(buf, sizeof(buf),
+		                   "ATS32=%d\rAT%%C0\r", modulation);
+		modem_write(g_modem, buf, len);
+		modem_write(g_modem, dial_cmd, (int)strlen(dial_cmd));
 	}
 
 	/* Set stdin/stdout to binary and non-blocking where helpful. */
