@@ -13,7 +13,9 @@ import sys
 
 from ..paths import TOOLS_DIR, PRI_CALL
 from .. import process
-from ._base import ModemCaller, add_opt
+from ._base import (ModemCaller, add_data_probe_args, add_opt,
+                    add_slmodem_timing_args, make_data_probe,
+                    resolve_slmodem_timing, resolve_v32bis_retrain_snr)
 
 
 class SlmodemE1Caller(ModemCaller):
@@ -26,15 +28,16 @@ class SlmodemE1Caller(ModemCaller):
         add_opt(sp, "--tx-record", help="record slmodem TX audio to WAV")
         add_opt(sp, "-M", "--modulation", type=int, default=90,
                 help="SREG_DP modulation value "
-                     "(21=V.21, 122=V.22bis, 132=V.32bis, 34=V.34, 90=V.90)")
+                     "(21=V.21, 22=V.22, 23=V.23, 122=V.22bis, 132=V.32bis, "
+                     "34=V.34, 90=V.90)")
         add_opt(sp, "--debug-level", type=int, default=1,
                 help="slmodem debug verbosity (default 1)")
-        add_opt(sp, "--io-delay", type=int, default=240,
-                help="local audio I/O delay in 9.6 kHz samples (default 240)")
+        add_slmodem_timing_args(sp)
         add_opt(sp, "-b", "--bchannel", type=int, default=2,
                 help="preferred B-channel (default 2)")
         add_opt(sp, "--called", default="-",
                 help="called number, or '-' for empty (default '-')")
+        add_data_probe_args(sp)
 
     def run_modem(self, opts):
         slm_path = os.path.join(TOOLS_DIR, "slmodem_bridge")
@@ -47,8 +50,14 @@ class SlmodemE1Caller(ModemCaller):
                   file=sys.stderr)
             sys.exit(1)
 
+        modem_rate, io_delay, max_rate = resolve_slmodem_timing(opts)
         slm_cmd = [slm_path, "-m", "orig", "-M", str(opts.modulation),
-                   "-v", str(opts.debug_level), "-D", str(opts.io_delay), "-e"]
+                   "-v", str(opts.debug_level), "-D", str(io_delay),
+                   "-S", str(modem_rate), "-e"]
+        if max_rate is not None:
+            slm_cmd += ["-R", str(max_rate)]
+        if opts.modulation == 132:
+            slm_cmd += ["-N", str(resolve_v32bis_retrain_snr(opts, 13))]
         if getattr(opts, "record", None):
             slm_cmd += ["-r", opts.record]
         if getattr(opts, "tx_record", None):
@@ -62,5 +71,9 @@ class SlmodemE1Caller(ModemCaller):
         print(f"+ {shlex.join(pct_cmd)}", file=sys.stderr)
 
         # slm.stdout (modem TX) -> pct.stdin; pct.stdout (RX) -> slm.stdin.
-        slm, pct = process.spawn_pump_pair(slm_cmd, pct_cmd, "slm", "pct")
-        process.wait_cleanup(slm, pct)
+        probe = make_data_probe(opts)
+        slm, pct = process.spawn_pump_pair(
+            slm_cmd, pct_cmd, "slm", "pct",
+            a_stderr_observer=probe.observe_modem_stderr)
+        probe.start()
+        process.wait_cleanup(slm, pct, completion=probe)

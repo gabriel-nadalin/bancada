@@ -31,12 +31,15 @@
 #include <modem.h>
 #include <modem_debug.h>
 
-#define NET_RATE     8000
-#define MODEM_RATE   9600
-#define PTIME_MS     10
-#define NET_SAMPC    (NET_RATE   * PTIME_MS / 1000)   /* 80 */
-#define MODEM_SAMPC  (MODEM_RATE * PTIME_MS / 1000)   /* 96 */
+extern int16_t SnrToRetrainTable[6];
+
+#define NET_RATE         8000
+#define MODEM_RATE_MAX   9600
+#define PTIME_MS         10
+#define NET_SAMPC        (NET_RATE * PTIME_MS / 1000)       /* 80 */
+#define MODEM_SAMPC_MAX  (MODEM_RATE_MAX * PTIME_MS / 1000) /* 96 */
 #define DEFAULT_IO_DELAY 240
+#define DEFAULT_V32BIS_RETRAIN_SNR 13
 
 /* slmodem init/exit externals */
 extern unsigned int modem_debug_level;
@@ -64,6 +67,14 @@ static struct modem *g_modem;
 static int g_pty;
 static int g_running = 1;
 static int g_io_delay = DEFAULT_IO_DELAY;
+static int g_modem_rate = MODEM_RATE_MAX;
+static int g_max_rate;
+static int g_v32bis_retrain_snr = DEFAULT_V32BIS_RETRAIN_SNR;
+
+static int modem_sampc(void)
+{
+	return g_modem_rate * PTIME_MS / 1000;
+}
 
 static void signal_handler(int sig)
 {
@@ -98,6 +109,10 @@ static int bridge_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
 	case MDMCTL_SETFRAGMENT:  return 0;
 	case MDMCTL_SPEAKERVOL:   return 0;
 	case MDMCTL_CODECTYPE:    return CODEC_UNKNOWN;
+	/* IODELAY is the local capture/playback skew in native-rate samples,
+	 * not the network round-trip time.  For VPCM, 240 at 9.6 kHz becomes
+	 * the DSP's nominal 244 after its internal +4; the queue-free 8 kHz
+	 * bridge reports zero to V.32/V.32bis. */
 	case MDMCTL_IODELAY:      return g_io_delay;
 	default:                  return -2;
 	}
@@ -115,7 +130,7 @@ static struct modem_driver bridge_driver = {
 #ifdef USE_LIBSAMPLERATE
 
 /* Optional comparison path using libsamplerate's streaming sinc filter. */
-#define RESAMPLE_MAX  (MODEM_SAMPC > NET_SAMPC ? MODEM_SAMPC : NET_SAMPC)
+#define RESAMPLE_MAX  MODEM_SAMPC_MAX
 
 static SRC_STATE *src_to_modem;
 static SRC_STATE *src_to_net;
@@ -167,6 +182,11 @@ static int resampler_init(void)
 {
 	int err = 0;
 
+	if (g_modem_rate == NET_RATE) {
+		fprintf(stderr, "Resampler: bypassed (native 8 kHz data pump)\n");
+		return 0;
+	}
+
 	src_to_modem = src_new(SRC_SINC_BEST_QUALITY, 1, &err);
 	if (!src_to_modem) {
 		fprintf(stderr, "resample: src_new(net->modem): %s\n",
@@ -187,18 +207,28 @@ static int resampler_init(void)
 
 static int resample_to_modem(int16_t *input, int16_t *output)
 {
+	if (g_modem_rate == NET_RATE) {
+		memcpy(output, input, sizeof(input[0]) * NET_SAMPC);
+		return NET_SAMPC;
+	}
 	return resample_emit(src_to_modem,
-		(double)MODEM_RATE / (double)NET_RATE,
+		(double)g_modem_rate / (double)NET_RATE,
 		input, NET_SAMPC, to_modem_acc, &to_modem_acc_n,
-		MODEM_SAMPC, output);
+		modem_sampc(), output);
 }
 
 static int resample_to_net(int16_t *input, int input_count, int16_t *output)
 {
+	if (input_count <= 0)
+		return 0;
+	if (g_modem_rate == NET_RATE) {
+		memcpy(output, input, sizeof(input[0]) * (size_t)input_count);
+		return input_count;
+	}
 	return resample_emit(src_to_net,
-		(double)NET_RATE / (double)MODEM_RATE,
+		(double)NET_RATE / (double)g_modem_rate,
 		input, input_count, to_net_acc, &to_net_acc_n,
-		input_count * NET_RATE / MODEM_RATE, output);
+		input_count * NET_RATE / g_modem_rate, output);
 }
 
 static void resampler_destroy(void)
@@ -219,6 +249,10 @@ static struct RcFixedHandle *src_to_net;
 
 static int resampler_init(void)
 {
+	if (g_modem_rate == NET_RATE) {
+		fprintf(stderr, "Resampler: bypassed (native 8 kHz data pump)\n");
+		return 0;
+	}
 	src_to_modem = RcFixed_Create(RC_8K_TO_9_6K);
 	if (!src_to_modem) {
 		fprintf(stderr, "resample: RcFixed_Create(net->modem) failed\n");
@@ -248,12 +282,22 @@ static int resample_fixed(struct RcFixedHandle *state,
 
 static int resample_to_modem(int16_t *input, int16_t *output)
 {
+	if (g_modem_rate == NET_RATE) {
+		memcpy(output, input, sizeof(input[0]) * NET_SAMPC);
+		return NET_SAMPC;
+	}
 	return resample_fixed(src_to_modem, input, NET_SAMPC,
-		output, MODEM_SAMPC);
+		output, (unsigned int)modem_sampc());
 }
 
 static int resample_to_net(int16_t *input, int input_count, int16_t *output)
 {
+	if (input_count <= 0)
+		return 0;
+	if (g_modem_rate == NET_RATE) {
+		memcpy(output, input, sizeof(input[0]) * (size_t)input_count);
+		return input_count;
+	}
 	return resample_fixed(src_to_net, input, (unsigned int)input_count,
 		output, NET_SAMPC);
 }
@@ -404,7 +448,13 @@ static void usage(const char *name)
 		"  -T, --tx-record FILE  Record TX audio to WAV file\n"
 		"  -M MOD             SREG_DP modulation value (default: 122)\n"
 		"  -v LEVEL           Debug verbosity (default: 1)\n"
-		"  -D SAMPLES         Local audio I/O delay at 9.6 kHz (default: 240)\n"
+		"  -D SAMPLES         Local audio I/O delay in native-rate samples\n"
+		"                     (default: 240)\n"
+		"  -S RATE            Native data-pump rate: 8000 or 9600 Hz\n"
+		"                     (default: 9600)\n"
+		"  -R BITRATE         Cap the data-pump rate (300 through 56000 bit/s)\n"
+		"  -N DB              V.32bis local retrain SNR threshold (0 through 40)\n"
+		"                     (default: 13)\n"
 		"  -e, --early-dial   In orig mode, dial at startup (before the\n"
 		"                     audio path is established) so the modem is\n"
 		"                     already listening when the call cuts through\n"
@@ -436,7 +486,7 @@ int main(int argc, char *argv[])
 	const char *txrec_path = NULL;
 	FILE *txrec_fp = NULL;
 
-	while ((opt = getopt(argc, argv, "m:d:r:T:M:v:D:eh")) != -1) {
+	while ((opt = getopt(argc, argv, "m:d:r:T:M:v:D:S:R:N:eh")) != -1) {
 		switch (opt) {
 		case 'm':
 			mode = optarg;
@@ -467,6 +517,32 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			break;
+		case 'S':
+			g_modem_rate = atoi(optarg);
+			if (g_modem_rate != NET_RATE &&
+			    g_modem_rate != MODEM_RATE_MAX) {
+				fprintf(stderr, "Invalid modem rate '%s'.\n", optarg);
+				return 1;
+			}
+			break;
+		case 'R':
+			g_max_rate = atoi(optarg);
+			if (g_max_rate < MODEM_MIN_RATE ||
+			    g_max_rate > MODEM_MAX_RATE) {
+				fprintf(stderr, "Invalid maximum rate '%s'.\n", optarg);
+				return 1;
+			}
+			break;
+		case 'N':
+			g_v32bis_retrain_snr = atoi(optarg);
+			if (g_v32bis_retrain_snr < 0 ||
+			    g_v32bis_retrain_snr > 40) {
+				fprintf(stderr,
+					"Invalid V.32bis retrain threshold '%s'.\n",
+					optarg);
+				return 1;
+			}
+			break;
 		case 'e':
 			early_dial = 1;
 			break;
@@ -482,6 +558,17 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	if (modulation == 132) {
+		/* The stock 12/14.4 kbit/s thresholds (20/24 dB) interpret a
+		 * repeatable, short estimator dip on G.711 bridge paths as line
+		 * degradation.  End-to-end RAS traffic remains valid during the
+		 * dip.  Retain local SNR protection at an established lower-rate
+		 * threshold; far-end retrain requests use a separate control path. */
+		SnrToRetrainTable[4] = g_v32bis_retrain_snr;
+		SnrToRetrainTable[5] = g_v32bis_retrain_snr;
+		fprintf(stderr, "V.32bis retrain SNR threshold: %d dB\n",
+			g_v32bis_retrain_snr);
+	}
 	if (rec_path) {
 		rec_fp = open_wav(rec_path, "RX");
 		if (!rec_fp)
@@ -516,6 +603,10 @@ int main(int argc, char *argv[])
 	}
 	g_modem->name = "slmodem_bridge";
 	g_modem->dev_name = "slmodem_bridge";
+	g_modem->srate = (unsigned int)g_modem_rate;
+	g_modem->frag = (unsigned int)(g_modem_rate / 200);
+	if (g_max_rate)
+		g_modem->max_rate = (unsigned int)g_max_rate;
 
 	g_pty = pty_open(pty_name, sizeof(pty_name));
 	if (g_pty < 0) {
@@ -526,8 +617,11 @@ int main(int argc, char *argv[])
 
 	fprintf(stderr, "PTY: %s\n", pty_name);
 	fprintf(stderr, "Mode: %s\n", mode);
+	fprintf(stderr, "Native data-pump rate: %d Hz\n", g_modem_rate);
 	fprintf(stderr, "I/O delay: %d samples at %d Hz\n",
-		g_io_delay, MODEM_RATE);
+		g_io_delay, g_modem_rate);
+	if (g_max_rate)
+		fprintf(stderr, "Maximum data rate: %d bit/s\n", g_max_rate);
 
 	/* In answer mode, just go off-hook so we can detect remote caller. */
 	if (strcmp(mode, "ans") == 0) {
@@ -556,8 +650,10 @@ int main(int argc, char *argv[])
 	int16_t net_tx[NET_SAMPC];
 	int16_t net_in[NET_SAMPC * 2];
 	int net_in_n = 0;
-	int16_t modem_rx[MODEM_SAMPC];
-	int16_t modem_tx[MODEM_SAMPC];
+	int16_t modem_rx[MODEM_SAMPC_MAX];
+	int16_t modem_tx[MODEM_SAMPC_MAX];
+	unsigned int reported_tx_rate = 0;
+	unsigned int reported_rx_rate = 0;
 
 	while (g_running) {
 		struct timeval tv;
@@ -597,7 +693,7 @@ int main(int argc, char *argv[])
 
 		while (net_in_n >= NET_SAMPC) {
 			int converted;
-			int modem_count = MODEM_SAMPC;
+			int modem_count = modem_sampc();
 			int modem_offset = 0;
 
 			memcpy(net_rx, net_in, sizeof(net_rx));
@@ -630,10 +726,10 @@ int main(int argc, char *argv[])
 			converted = resample_to_modem(net_rx, modem_rx);
 			if (converted == 0)
 				continue;
-			if (converted != MODEM_SAMPC) {
+			if (converted != modem_sampc()) {
 				fprintf(stderr,
 					"resample: expected %d modem samples, got %d\n",
-					MODEM_SAMPC, converted);
+					modem_sampc(), converted);
 				g_running = 0;
 				break;
 			}
@@ -658,8 +754,36 @@ int main(int argc, char *argv[])
 			if (modem_count == 0)
 				continue;
 
-			modem_process(g_modem, modem_rx + modem_offset, modem_tx,
-				modem_count);
+			/* The original device loop calls modem_process() once per
+			 * five-millisecond modem fragment.  Keep that boundary here as
+			 * well: modem_process() advances sample timers only after the
+			 * complete call, even though its data-pump layer can internally
+			 * split a larger buffer. */
+			{
+				int processed = 0;
+
+				while (processed < modem_count) {
+					int fragment = modem_count - processed;
+
+					if (fragment > (int)g_modem->frag)
+						fragment = (int)g_modem->frag;
+					modem_process(g_modem,
+						modem_rx + modem_offset + processed,
+						modem_tx + processed, fragment);
+					processed += fragment;
+
+					if (g_modem->tx_rate && g_modem->rx_rate &&
+					    (g_modem->tx_rate != reported_tx_rate ||
+					     g_modem->rx_rate != reported_rx_rate)) {
+						reported_tx_rate = g_modem->tx_rate;
+						reported_rx_rate = g_modem->rx_rate;
+						fprintf(stderr,
+							"Current data rate: TX=%u RX=%u bit/s\n",
+							reported_tx_rate,
+							reported_rx_rate);
+					}
+				}
+			}
 
 			converted = resample_to_net(modem_tx, modem_count, net_tx);
 			if (converted < 0) {
@@ -677,8 +801,8 @@ int main(int argc, char *argv[])
 			while (g_modem->update_delay > 0) {
 				int add = g_modem->update_delay;
 
-				if (add > MODEM_SAMPC)
-					add = MODEM_SAMPC;
+				if (add > modem_sampc())
+					add = modem_sampc();
 				memset(modem_tx, 0, (size_t)add * sizeof(modem_tx[0]));
 				converted = resample_to_net(modem_tx, add, net_tx);
 				if (converted <= 0 ||
@@ -699,7 +823,12 @@ int main(int argc, char *argv[])
 			char buf[256];
 			n = read(g_pty, buf, sizeof(buf));
 			if (n > 0) {
-				modem_write(g_modem, buf, (int)n);
+				int accepted = modem_write(g_modem, buf, (int)n);
+
+				if (modem_debug_level > 1)
+					fprintf(stderr,
+						"PTY input: read %zd byte(s), modem accepted %d\n",
+						n, accepted);
 			}
 		}
 	}
