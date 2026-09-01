@@ -11,7 +11,6 @@
 #define SRATE       8000
 #define MAX_PTIME   120                       /* ms per RTP packet (upper) */
 #define MAX_FRAME_SZ    (SRATE * MAX_PTIME / 1000)
-#define TX_BUF_SZ   (SRATE * 2 / 5)           /* 400 ms of stdin audio */
 #define RX_MAX_SAMPC 4096                     /* max samples decoded/packet */
 
 #define DEFAULT_LOCAL_IP "10.42.0.1"
@@ -48,17 +47,14 @@ static uint32_t rtp_ssrc;
 static bool     call_active;
 static bool     tx_marker = true;
 
-static uint8_t  tx_buf[TX_BUF_SZ];
+static int16_t  tx_samples[MAX_FRAME_SZ];
 static size_t   tx_len;
-static unsigned stdin_drops;
-static bool     stdin_eof;
 
 static int16_t  rx_samples[RX_MAX_SAMPC];
 static uint16_t rx_last_seq;
 static bool     rx_seq_valid;
 static unsigned rx_pt_drops;
 static unsigned rx_ctl_drops;
-static unsigned tx_idle_ticks;
 
 static void stdin_handler(int flags, void *arg);
 
@@ -101,13 +97,8 @@ static void encode_and_send(const int16_t *samples) {
     send_rtp(pcma, (size_t)frame_sampc);
 }
 
-/*
- * pacing timer: drains exactly one frame per tick, taken from the
- * WAV file or from the stdin accumulation buffer.  Rescheduled against an
- * absolute time base so processing time does not accumulate drift; if we
- * fall more than one frame behind, the schedule is resynced instead of
- * bursting catch-up packets.
- */
+/* Pace WAV playback against an absolute clock so processing time does not
+ * accumulate drift.  Live stdin is already paced by the received RTP stream. */
 static void tx_tick(void *arg) {
     (void)arg;
     uint64_t now = tmr_jiffies();
@@ -117,76 +108,39 @@ static void tx_tick(void *arg) {
         tx_next += (uint64_t)ptime;
     tmr_start(&tx_tmr, tx_next > now ? tx_next - now : 1, tx_tick, NULL);
 
-    if (!wav_fp && stdin_eof && tx_len < (size_t)frame_bytes) {
-        /* stdin closed and remaining buffered audio drained: hang up */
+    int16_t samples[MAX_FRAME_SZ];
+    size_t n = fread(samples, 2, (size_t)frame_sampc, wav_fp);
+    if (n == 0) {
+        re_fprintf(stderr, "WAV: EOF, hanging up\n");
         re_cancel();
         return;
     }
-
-    int16_t samples[MAX_FRAME_SZ];
-    if (wav_fp) {
-        size_t n = fread(samples, 2, (size_t)frame_sampc, wav_fp);
-        if (n == 0) {
-            re_fprintf(stderr, "WAV: EOF, hanging up\n");
-            re_cancel();
-            return;
-        }
-        for (size_t i = n; i < (size_t)frame_sampc; i++)
-            samples[i] = 0;
-        encode_and_send(samples);
-    }
-    else if (tx_len >= (size_t)frame_bytes) {
-        memcpy(samples, tx_buf, (size_t)frame_bytes);
-        tx_len -= (size_t)frame_bytes;
-        if (tx_len)
-            memmove(tx_buf, tx_buf + frame_bytes, tx_len);
-        encode_and_send(samples);
-        /* buffer was full and stdin unwatched: resume reading */
-        if (!stdin_watcher && !stdin_eof &&
-            fd_listen(&stdin_watcher, 0, FD_READ, stdin_handler, NULL)) {
-            re_fprintf(stderr, "Failed to re-watch stdin\n");
-            re_cancel();
-        }
-    }
-    else {
-        /* stdin dry this tick: no packet is sent, which the far modem
-         * sees as a carrier hole (retrain trigger).  Count these. */
-        if (++tx_idle_ticks == 1 || tx_idle_ticks % 200 == 0)
-            re_fprintf(stderr, "rtp: TX tick skipped, stdin dry"
-                       " (%u times)\n", tx_idle_ticks);
-    }
+    for (size_t i = n; i < (size_t)frame_sampc; i++)
+        samples[i] = 0;
+    encode_and_send(samples);
 }
 
 /*
- * stdin only refills the accumulation buffer; the pacing timer consumes
- * it.  When the buffer is full, stdin is unwatched (back-pressure) so a
- * regular file or fast pipe cannot spin the event loop.
+ * Each live output frame is produced by slmodem in response to one received
+ * RTP frame.  Sending it immediately preserves that clock, avoids drift
+ * between two independent timers and adds no queueing delay.
  */
 static void stdin_handler(int flags, void *arg) {
     (void)flags;
     (void)arg;
-    size_t space = sizeof(tx_buf) - tx_len;
-    if (!space) {
-        uint8_t scratch[512];
-        (void)read(0, scratch, sizeof(scratch));
-        stdin_watcher = fd_close(stdin_watcher);
-        if (++stdin_drops % 50 == 1)
-            re_fprintf(stderr, "stdin: TX buffer full, dropping audio"
-                               " (%u times)\n", stdin_drops);
-        return;
-    }
-    ssize_t n = read(0, tx_buf + tx_len, space);
+    size_t space = (size_t)frame_bytes - tx_len;
+    ssize_t n = read(0, (uint8_t *)tx_samples + tx_len, space);
     if (n <= 0) {
         re_fprintf(stderr, "stdin: %s, hanging up\n", n == 0 ? "EOF" : "error");
         stdin_watcher = fd_close(stdin_watcher);
-        stdin_eof = true;
-        if (tx_len == 0)
-            re_cancel();
+        re_cancel();
         return;
     }
     tx_len += (size_t)n;
-    if (tx_len == sizeof(tx_buf))
-        stdin_watcher = fd_close(stdin_watcher);
+    if (tx_len == (size_t)frame_bytes) {
+        encode_and_send(tx_samples);
+        tx_len = 0;
+    }
 }
 
 static int write_all(int fd, const void *buf, size_t n) {
@@ -202,6 +156,19 @@ static int write_all(int fd, const void *buf, size_t n) {
         n -= (size_t)w;
     }
     return 0;
+}
+
+static bool accept_rx_sequence(uint16_t seq) {
+    if (rx_seq_valid) {
+        int16_t diff = (int16_t)(seq - rx_last_seq);
+        if (diff <= 0)
+            return false;                         /* duplicate/reordered */
+        if (diff > 1)
+            re_fprintf(stderr, "RTP: gap of %d packet(s)\n", diff - 1);
+    }
+    rx_last_seq = seq;
+    rx_seq_valid = true;
+    return true;
 }
 
 static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
@@ -247,6 +214,8 @@ static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
          * dynamic PT inside the same RTP stream.  They carry no audio —
          * skip them instead of decoding the bytes into PCM. */
         if (paylen < 8) {
+            if (!accept_rx_sequence(seq))
+                return;
             if (++rx_ctl_drops == 1)
                 re_fprintf(stderr, "RTP: in-band control event pt=%u"
                                    " len=%zu ignored\n", pkt_pt, paylen);
@@ -286,15 +255,8 @@ static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
         }
     }
 
-    if (rx_seq_valid) {
-        int16_t diff = (int16_t)(seq - rx_last_seq);
-        if (diff <= 0)
-            return;                               /* duplicate/reordered */
-        if (diff > 1)
-            re_fprintf(stderr, "RTP: gap of %d packet(s)\n", diff - 1);
-    }
-    rx_last_seq = seq;
-    rx_seq_valid = true;
+    if (!accept_rx_sequence(seq))
+        return;
 
     if (paylen > RX_MAX_SAMPC) {
         re_fprintf(stderr, "RTP: oversized payload (%zu bytes),"
@@ -435,10 +397,10 @@ static void wav_out_close(void) {
 static void start_media(void) {
     call_active = true;
     tx_marker = true;
-    tx_next = tmr_jiffies() + (uint64_t)ptime;
-    tmr_start(&tx_tmr, (uint64_t)ptime, tx_tick, NULL);
 
     if (wav_fp) {
+        tx_next = tmr_jiffies() + (uint64_t)ptime;
+        tmr_start(&tx_tmr, (uint64_t)ptime, tx_tick, NULL);
         re_fprintf(stderr, "Streaming WAV file\n");
     }
     else {
@@ -481,6 +443,34 @@ static int desc_handler(struct mbuf **descp, const struct sa *src,
     (void)dst;
     (void)arg;
     return sdp_encode(descp, sdp_sess, true);
+}
+
+/* Accept an in-dialog SDP offer.  Modem-aware gateways use a re-INVITE when
+ * they detect ANSam/NSE so they can switch the call to transparent G.711. */
+static int offer_handler(struct mbuf **descp, const struct sip_msg *msg,
+                         void *arg) {
+    (void)arg;
+
+    if (!mbuf_get_left(msg->mb))
+        return sdp_encode(descp, sdp_sess, true);
+
+    int err = sdp_decode(sdp_sess, msg->mb, true);
+    if (err)
+        return err;
+
+    struct le *le = list_head(sdp_session_medial(sdp_sess, false));
+    struct sdp_media *rm = le ? le->data : NULL;
+    if (!rm || !sdp_media_rport(rm) ||
+        !sa_isset(sdp_media_raddr(rm), SA_ADDR) ||
+        !sdp_media_rformat(rm, "PCMA"))
+        return ENOTSUP;
+
+    sa_cpy(&peer_rtp, sdp_media_raddr(rm));
+    sa_set_port(&peer_rtp, sdp_media_rport(rm));
+    re_fprintf(stderr, "SIP: accepting re-INVITE with PCMA at %J\n",
+               &peer_rtp);
+
+    return sdp_encode(descp, sdp_sess, false);
 }
 
 static int answer_handler(const struct sip_msg *msg, void *arg) {
@@ -702,7 +692,7 @@ int main(int argc, char *argv[]) {
                           NULL, NULL, false,
                           NULL,
                           desc_handler,
-                          NULL, answer_handler,
+                          offer_handler, answer_handler,
                           progr_handler,
                           estab_handler,
                           NULL, NULL,
