@@ -23,6 +23,7 @@ class SlmodemSipCaller(ModemCaller):
         add_opt(sp, "--slmodem-mode", default="orig", choices=["orig", "ans"],
                 help="slmodem mode: orig (default) or ans")
         add_opt(sp, "--record", help="record slmodem RX audio to WAV")
+        add_opt(sp, "--tx-record", help="record slmodem TX audio to WAV")
         add_opt(sp, "-M", "--modulation", type=int, default=122,
                 help="SREG_DP modulation value "
                      "(21=V.21, 122=V.22bis, 132=V.32bis, 34=V.34, 90=V.90)")
@@ -42,6 +43,8 @@ class SlmodemSipCaller(ModemCaller):
         slm_cmd = [slm_path, "-m", opts.slmodem_mode, "-M", str(opts.modulation)]
         if getattr(opts, "record", None):
             slm_cmd += ["-r", opts.record]
+        if getattr(opts, "tx_record", None):
+            slm_cmd += ["-T", opts.tx_record]
 
         print(f"+ {shlex.join(rtp_cmd)}", file=sys.stderr)
         print(f"+ {shlex.join(slm_cmd)}", file=sys.stderr)

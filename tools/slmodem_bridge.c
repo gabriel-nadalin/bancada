@@ -24,7 +24,9 @@
 #include <sys/select.h>
 #include <sys/time.h>
 
+#ifdef USE_LIBSAMPLERATE
 #include <samplerate.h>
+#endif
 
 #include <modem.h>
 #include <modem_debug.h>
@@ -43,6 +45,19 @@ extern int  dp_sinus_init(void);
 extern void dp_sinus_exit(void);
 extern int  prop_dp_init(void);
 extern void prop_dp_exit(void);
+
+#ifndef USE_LIBSAMPLERATE
+/* Fixed-rate converters exported by the vendor DSP object. */
+struct RcFixedHandle;
+extern struct RcFixedHandle *RcFixed_Create(int ratio_code);
+extern void RcFixed_Delete(struct RcFixedHandle *handle);
+extern void RcFixed_Resample(struct RcFixedHandle *handle,
+	int16_t *in_samples, unsigned int in_count,
+	uint16_t *out_samples, unsigned int *out_count);
+
+#define RC_8K_TO_9_6K 2
+#define RC_9_6K_TO_8K 3
+#endif
 
 static struct modem *g_modem;
 static int g_pty;
@@ -95,26 +110,56 @@ static struct modem_driver bridge_driver = {
 
 /* ------------------------------------------------------------------ resample */
 
-/*
- * 8 kHz <-> 9.6 kHz streaming resampler via libsamplerate.
- *
- * The modem DSP (slmodem) runs at its native 9.6 kHz (MODEM_RATE); the
- * network side is standard 8 kHz telephony.  We bridge the two with a
- * proper windowed-sinc resampler (SRC_SINC_BEST_QUALITY) instead of the
- * previous linear interpolation: the linear kernel has a weak (~20 dB)
- * stopband and rolls the passband, both of which eat equalizer/DQPSK
- * margin on V.22bis/V.32.
- *
- * libsamplerate is streaming: internal filter latency means the first
- * frame may short-produce.  We therefore accumulate per-direction output
- * and emit a complete DSP frame (MODEM_SAMPC) / network frame (NET_SAMPC)
- * only when enough samples are buffered, preserving the frame cadence.
- */
+#ifdef USE_LIBSAMPLERATE
 
+/* Optional comparison path using libsamplerate's streaming sinc filter. */
 #define RESAMPLE_MAX  (MODEM_SAMPC > NET_SAMPC ? MODEM_SAMPC : NET_SAMPC)
 
-static SRC_STATE *src_to_modem;   /* 8k  -> 9.6k (network -> modem DSP)  */
-static SRC_STATE *src_to_net;     /* 9.6k -> 8k  (modem DSP -> network)  */
+static SRC_STATE *src_to_modem;
+static SRC_STATE *src_to_net;
+static float to_modem_acc[3 * RESAMPLE_MAX];
+static float to_net_acc[3 * RESAMPLE_MAX];
+static int to_modem_acc_n;
+static int to_net_acc_n;
+
+static int resample_emit(SRC_STATE *st, double ratio,
+			 const int16_t *in, int in_cnt,
+			 float *acc, int *acc_n, int want,
+			 int16_t *block)
+{
+	float fin[RESAMPLE_MAX];
+	float fout[RESAMPLE_MAX * 3];
+	SRC_DATA d;
+	int have = *acc_n;
+	int i;
+
+	for (i = 0; i < in_cnt; i++)
+		fin[i] = in[i] / 32768.0f;
+
+	d.data_in = fin;
+	d.data_out = fout;
+	d.input_frames = in_cnt;
+	d.output_frames = (long)(sizeof(fout) / sizeof(fout[0]));
+	d.src_ratio = ratio;
+	d.end_of_input = 0;
+
+	if (src_process(st, &d) != 0)
+		return -1;
+
+	for (i = 0; i < d.output_frames_gen &&
+	     have < (int)(sizeof(fout) / sizeof(fout[0])); i++)
+		acc[have++] = fout[i];
+
+	if (have < want) {
+		*acc_n = have;
+		return 0;
+	}
+	for (i = 0; i < want; i++)
+		block[i] = (int16_t)(acc[i] * 32767.0f + 0.5f);
+	memmove(acc, acc + want, (size_t)(have - want) * sizeof(float));
+	*acc_n = have - want;
+	return 1;
+}
 
 static int resampler_init(void)
 {
@@ -134,59 +179,99 @@ static int resampler_init(void)
 		src_to_modem = NULL;
 		return -1;
 	}
+	fprintf(stderr, "Resampler: libsamplerate\n");
 	return 0;
 }
 
-
-
-/*
- * Feed one frame of int16 samples through a resampler state.  Produced
- * output is appended to the caller's accumulator; when a complete
- * `want`-sample block is available it is written (int16) into `block` and
- * the remainder stays buffered.  Returns 1 if a block was emitted.
- *
- * When `end_of_input` is set the state is flushed (tail drained) — this is
- * only used at shutdown.
- */
-static int resample_emit(SRC_STATE *st, double ratio,
-                         const int16_t *in, int in_cnt,
-                         float *acc, int *acc_n, int want,
-                         int16_t *block, int end_of_input)
+static int resample_to_modem(int16_t *input, int16_t *output)
 {
-	float fin[RESAMPLE_MAX];
-	float fout[RESAMPLE_MAX * 3];
-	SRC_DATA d;
-	int have = *acc_n;
-	int i;
+	return resample_emit(src_to_modem,
+		(double)MODEM_RATE / (double)NET_RATE,
+		input, NET_SAMPC, to_modem_acc, &to_modem_acc_n,
+		MODEM_SAMPC, output);
+}
 
-	for (i = 0; i < in_cnt; i++)
-		fin[i] = in[i] / 32768.0f;
+static int resample_to_net(int16_t *input, int16_t *output)
+{
+	return resample_emit(src_to_net,
+		(double)NET_RATE / (double)MODEM_RATE,
+		input, MODEM_SAMPC, to_net_acc, &to_net_acc_n,
+		NET_SAMPC, output);
+}
 
-	d.data_in	= fin;
-	d.data_out	= fout;
-	d.input_frames	= in_cnt;
-	d.output_frames	= (long)(sizeof(fout) / sizeof(fout[0]));
-	d.src_ratio	= ratio;
-	d.end_of_input	= end_of_input;
+static void resampler_destroy(void)
+{
+	if (src_to_net)
+		src_delete(src_to_net);
+	if (src_to_modem)
+		src_delete(src_to_modem);
+	src_to_net = NULL;
+	src_to_modem = NULL;
+}
 
-	src_process(st, &d);
+#else
 
-	{
-		int out_cap = (int)(sizeof(fout) / sizeof(fout[0]));
-		for (i = 0; i < d.output_frames_gen && have < out_cap; i++)
-			acc[have++] = fout[i];
+/* Default path: fixed-point converters paired with the proprietary DSP. */
+static struct RcFixedHandle *src_to_modem;
+static struct RcFixedHandle *src_to_net;
+
+static int resampler_init(void)
+{
+	src_to_modem = RcFixed_Create(RC_8K_TO_9_6K);
+	if (!src_to_modem) {
+		fprintf(stderr, "resample: RcFixed_Create(net->modem) failed\n");
+		return -1;
 	}
-
-	if (have >= want) {
-		for (i = 0; i < want; i++)
-			block[i] = (int16_t)(acc[i] * 32767.0f + 0.5f);
-		memmove(acc, acc + want, (size_t)(have - want) * sizeof(float));
-		*acc_n = have - want;
-		return 1;
+	src_to_net = RcFixed_Create(RC_9_6K_TO_8K);
+	if (!src_to_net) {
+		fprintf(stderr, "resample: RcFixed_Create(modem->net) failed\n");
+		RcFixed_Delete(src_to_modem);
+		src_to_modem = NULL;
+		return -1;
 	}
-	*acc_n = have;
+	fprintf(stderr, "Resampler: dsplibs RcFixed\n");
 	return 0;
 }
+
+static int resample_fixed(struct RcFixedHandle *state,
+			  int16_t *input, unsigned int input_count,
+			  int16_t *output, unsigned int output_count)
+{
+	unsigned int produced = output_count;
+
+	RcFixed_Resample(state, input, input_count,
+		(uint16_t *)output, &produced);
+	if (produced != output_count) {
+		fprintf(stderr, "resample: expected %u samples, got %u\n",
+			output_count, produced);
+		return -1;
+	}
+	return 1;
+}
+
+static int resample_to_modem(int16_t *input, int16_t *output)
+{
+	return resample_fixed(src_to_modem, input, NET_SAMPC,
+		output, MODEM_SAMPC);
+}
+
+static int resample_to_net(int16_t *input, int16_t *output)
+{
+	return resample_fixed(src_to_net, input, MODEM_SAMPC,
+		output, NET_SAMPC);
+}
+
+static void resampler_destroy(void)
+{
+	if (src_to_net)
+		RcFixed_Delete(src_to_net);
+	if (src_to_modem)
+		RcFixed_Delete(src_to_modem);
+	src_to_net = NULL;
+	src_to_modem = NULL;
+}
+
+#endif
 
 /* ------------------------------------------------------------------ pty */
 
@@ -229,6 +314,59 @@ static int pty_open(char *name, size_t name_len)
 
 /* ------------------------------------------------------------------ main */
 
+static FILE *open_wav(const char *path, const char *label)
+{
+	struct {
+		char riff[4];
+		uint32_t flen;
+		char wave[4];
+		char fmt[4];
+		uint32_t chunk;
+		uint16_t pcm;
+		uint16_t ch;
+		uint32_t srate;
+		uint32_t bps;
+		uint16_t align;
+		uint16_t bpsamp;
+		char dat[4];
+		uint32_t dlen;
+	} hdr = {
+		{'R','I','F','F'}, 36, {'W','A','V','E'},
+		{'f','m','t',' '}, 16, 1, 1, 8000, 16000, 2, 16,
+		{'d','a','t','a'}, 0
+	};
+	FILE *fp = fopen(path, "wb");
+
+	if (!fp) {
+		fprintf(stderr, "Failed to open %s\n", path);
+		return NULL;
+	}
+	fwrite(&hdr, sizeof(hdr), 1, fp);
+	fprintf(stderr, "Recording %s audio to %s\n", label, path);
+	return fp;
+}
+
+static void close_wav(FILE *fp, const char *label)
+{
+	long data_len = ftell(fp);
+
+	if (data_len > 44) {
+		uint32_t flen;
+		uint32_t dlen;
+
+		data_len -= 44;
+		flen = 36 + (uint32_t)data_len;
+		dlen = (uint32_t)data_len;
+		fseek(fp, 4, SEEK_SET);
+		fwrite(&flen, 4, 1, fp);
+		fseek(fp, 40, SEEK_SET);
+		fwrite(&dlen, 4, 1, fp);
+	}
+	fprintf(stderr, "%s recording saved (%ld bytes of audio)\n",
+		label, data_len > 0 ? data_len : 0L);
+	fclose(fp);
+}
+
 static void usage(const char *name)
 {
 	fprintf(stderr,
@@ -238,6 +376,7 @@ static void usage(const char *name)
 		"  -m, --mode MODE    Modem mode: orig (default) or ans\n"
 		"  -d, --dial CMD     AT dial command (default: ATX3D\\r)\n"
 		"  -r, --record FILE  Record RX audio to WAV file\n"
+		"  -T, --tx-record FILE  Record TX audio to WAV file\n"
 		"  -M MOD             SREG_DP modulation value (default: 122)\n"
 		"  -e, --early-dial   In orig mode, dial at startup (before the\n"
 		"                     audio path is established) so the modem is\n"
@@ -266,8 +405,10 @@ int main(int argc, char *argv[])
 	int early_dial = 0;
 	const char *rec_path = NULL;
 	FILE *rec_fp = NULL;
+	const char *txrec_path = NULL;
+	FILE *txrec_fp = NULL;
 
-	while ((opt = getopt(argc, argv, "m:d:r:M:eh")) != -1) {
+	while ((opt = getopt(argc, argv, "m:d:r:T:M:eh")) != -1) {
 		switch (opt) {
 		case 'm':
 			mode = optarg;
@@ -277,6 +418,9 @@ int main(int argc, char *argv[])
 			break;
 		case 'r':
 			rec_path = optarg;
+			break;
+		case 'T':
+			txrec_path = optarg;
 			break;
 		case 'M':
 			modulation = atoi(optarg);
@@ -297,33 +441,14 @@ int main(int argc, char *argv[])
 	}
 
 	if (rec_path) {
-		/* Write WAV header (placeholder), fix up at exit */
-		struct {
-			char  riff[4];
-			uint32_t flen;
-			char  wave[4];
-			char  fmt[4];
-			uint32_t chunk;
-			uint16_t pcm;
-			uint16_t ch;
-			uint32_t srate;
-			uint32_t bps;
-			uint16_t align;
-			uint16_t bpsamp;
-			char  dat[4];
-			uint32_t dlen;
-		} hdr = {
-			{'R','I','F','F'}, 36, {'W','A','V','E'},
-			{'f','m','t',' '}, 16, 1, 1, 8000, 16000, 2, 16,
-			{'d','a','t','a'}, 0
-		};
-		rec_fp = fopen(rec_path, "wb");
-		if (!rec_fp) {
-			fprintf(stderr, "Failed to open %s\n", rec_path);
+		rec_fp = open_wav(rec_path, "RX");
+		if (!rec_fp)
 			return 1;
-		}
-		fwrite(&hdr, sizeof(hdr), 1, rec_fp);
-		fprintf(stderr, "Recording RX audio to %s\n", rec_path);
+	}
+	if (txrec_path) {
+		txrec_fp = open_wav(txrec_path, "TX");
+		if (!txrec_fp)
+			return 1;
 	}
 
 	signal(SIGINT, signal_handler);
@@ -385,12 +510,10 @@ int main(int argc, char *argv[])
 
 	int16_t net_rx[NET_SAMPC];
 	int16_t net_tx[NET_SAMPC];
+	int16_t net_in[NET_SAMPC * 2];
+	int net_in_n = 0;
 	int16_t modem_rx[MODEM_SAMPC];
 	int16_t modem_tx[MODEM_SAMPC];
-	float tx_acc[3 * RESAMPLE_MAX];
-	float rx_acc[3 * RESAMPLE_MAX];
-	int tx_acc_n = 0;
-	int rx_acc_n = 0;
 
 	while (g_running) {
 		struct timeval tv;
@@ -406,18 +529,36 @@ int main(int argc, char *argv[])
 
 		select(g_pty + 1, &rset, NULL, NULL, &tv);
 
-		/* --- read network PCM from stdin --- */
-		n = read(STDIN_FILENO, net_rx, sizeof(net_rx));
-		if (n < 0 && errno != EAGAIN) {
-			fprintf(stderr, "stdin read error: %s\n", strerror(errno));
-			break;
-		}
-		if (n == 0) {
-			fprintf(stderr, "stdin EOF\n");
-			break;
+		/* Accumulate pipe reads so a short read cannot discard PCM. */
+		{
+			int16_t input[NET_SAMPC];
+			int samples;
+			int i;
+
+			n = read(STDIN_FILENO, input, sizeof(input));
+			if (n < 0 && errno != EAGAIN) {
+				fprintf(stderr, "stdin read error: %s\n",
+					strerror(errno));
+				break;
+			}
+			if (n == 0) {
+				fprintf(stderr, "stdin EOF\n");
+				break;
+			}
+			samples = n > 0 ? (int)n / 2 : 0;
+			for (i = 0; i < samples &&
+			     net_in_n < (int)(sizeof(net_in) / sizeof(net_in[0])); i++)
+				net_in[net_in_n++] = input[i];
 		}
 
-		if (n == sizeof(net_rx)) {
+		while (net_in_n >= NET_SAMPC) {
+			int converted;
+
+			memcpy(net_rx, net_in, sizeof(net_rx));
+			memmove(net_in, net_in + NET_SAMPC,
+				(size_t)(net_in_n - NET_SAMPC) * sizeof(net_in[0]));
+			net_in_n -= NET_SAMPC;
+
 			/* --- auto-dial on first received audio frame --- */
 			if (!dial_sent && strcmp(mode, "orig") == 0) {
 				dial_sent = 1;
@@ -440,41 +581,44 @@ int main(int argc, char *argv[])
 			if (rec_fp)
 				fwrite(net_rx, 2, NET_SAMPC, rec_fp);
 
-			/* --- 8k -> 9.6k (SRC); feed the modem one DSP frame --- */
-			if (resample_emit(src_to_modem,
-			                  (double)MODEM_RATE / (double)NET_RATE,
-			                  net_rx, NET_SAMPC,
-			                  tx_acc, &tx_acc_n, MODEM_SAMPC,
-			                  modem_rx, 0)) {
+			converted = resample_to_modem(net_rx, modem_rx);
+			if (converted < 0) {
+				g_running = 0;
+				break;
+			}
+			if (converted == 0)
+				continue;
 
-				/* --- run modem DSP --- */
-				modem_process(g_modem, modem_rx, modem_tx,
-				              MODEM_SAMPC);
+			modem_process(g_modem, modem_rx, modem_tx, MODEM_SAMPC);
 
-				/* --- 9.6k -> 8k (SRC); emit one network frame if ready --- */
-				if (resample_emit(src_to_net,
-				                  (double)NET_RATE / (double)MODEM_RATE,
-				                  modem_tx, MODEM_SAMPC,
-				                  rx_acc, &rx_acc_n, NET_SAMPC,
-				                  net_tx, 0)) {
-					/* --- write network PCM to stdout --- */
-					size_t out_bytes = NET_SAMPC * sizeof(int16_t);
-					size_t written = 0;
-					while (written < out_bytes) {
-						n = write(STDOUT_FILENO,
-						          (char *)net_tx + written,
-						          out_bytes - written);
-						if (n < 0) {
-							if (errno == EAGAIN)
-								continue;
-							fprintf(stderr,
-							        "stdout write error: %s\n",
-							        strerror(errno));
-							g_running = 0;
-							break;
-						}
-						written += (size_t)n;
+			converted = resample_to_net(modem_tx, net_tx);
+			if (converted < 0) {
+				g_running = 0;
+				break;
+			}
+			if (converted == 0)
+				continue;
+
+			if (txrec_fp)
+				fwrite(net_tx, 2, NET_SAMPC, txrec_fp);
+
+			{
+				size_t out_bytes = sizeof(net_tx);
+				size_t written = 0;
+
+				while (written < out_bytes) {
+					n = write(STDOUT_FILENO,
+						(char *)net_tx + written,
+						out_bytes - written);
+					if (n < 0) {
+						if (errno == EAGAIN)
+							continue;
+						fprintf(stderr, "stdout write error: %s\n",
+							strerror(errno));
+						g_running = 0;
+						break;
 					}
+					written += (size_t)n;
 				}
 			}
 		}
@@ -491,44 +635,17 @@ int main(int argc, char *argv[])
 
 	fprintf(stderr, "shutting down...\n");
 
-	/* Best-effort drain of the modem->net filter tail so the final
-	 * partial frame isn't dropped; release both resampler states. */
-	if (src_to_net) {
-		int16_t tail[NET_SAMPC];
-		(void)resample_emit(src_to_net,
-		                    (double)NET_RATE / (double)MODEM_RATE,
-		                    NULL, 0, rx_acc, &rx_acc_n, NET_SAMPC,
-		                    tail, 1);
-		if (rx_acc_n >= NET_SAMPC)
-			write(STDOUT_FILENO, tail, (size_t)NET_SAMPC * 2);
-		src_delete(src_to_net);
-		src_to_net = NULL;
-	}
-	if (src_to_modem) {
-		src_delete(src_to_modem);
-		src_to_modem = NULL;
-	}
+	resampler_destroy();
 
 	modem_delete(g_modem);
 	dp_dummy_exit();
 	dp_sinus_exit();
 	prop_dp_exit();
 
-	if (rec_fp) {
-		long data_len = ftell(rec_fp);
-		if (data_len > 44) {
-			data_len -= 44;
-			fseek(rec_fp, 4, SEEK_SET);
-			uint32_t flen = 36 + (uint32_t)data_len;
-			fwrite(&flen, 4, 1, rec_fp);
-			fseek(rec_fp, 40, SEEK_SET);
-			uint32_t dlen = (uint32_t)data_len;
-			fwrite(&dlen, 4, 1, rec_fp);
-		}
-		fprintf(stderr, "Recording saved (%ld bytes of audio)\n",
-			data_len > 0 ? data_len : 0L);
-		fclose(rec_fp);
-	}
+	if (rec_fp)
+		close_wav(rec_fp, "RX");
+	if (txrec_fp)
+		close_wav(txrec_fp, "TX");
 
 	return 0;
 }

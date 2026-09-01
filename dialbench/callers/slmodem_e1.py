@@ -23,6 +23,7 @@ class SlmodemE1Caller(ModemCaller):
     @staticmethod
     def add_args(sp):
         add_opt(sp, "--record", help="record slmodem RX audio to WAV")
+        add_opt(sp, "--tx-record", help="record slmodem TX audio to WAV")
         add_opt(sp, "-M", "--modulation", type=int, default=90,
                 help="SREG_DP modulation value "
                      "(21=V.21, 122=V.22bis, 132=V.32bis, 34=V.34, 90=V.90)")
@@ -45,6 +46,8 @@ class SlmodemE1Caller(ModemCaller):
         slm_cmd = [slm_path, "-m", "orig", "-M", str(opts.modulation), "-e"]
         if getattr(opts, "record", None):
             slm_cmd += ["-r", opts.record]
+        if getattr(opts, "tx_record", None):
+            slm_cmd += ["-T", opts.tx_record]
 
         # pri_call needs root for /dev/dahdi; sudo prompts on the tty.
         pct_cmd = ["sudo", PRI_CALL, "-A", "-b", str(opts.bchannel),

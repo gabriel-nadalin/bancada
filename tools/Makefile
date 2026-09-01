@@ -12,7 +12,7 @@ CFLAGS = -Wall -Wextra -O2 \
 
 LDFLAGS = -L$(REPO_DIR)/baresip/build \
           -L$(REPO_DIR)/re/build \
-          -Wl,-rpath,$(REPO_DIR)/re/build \
+          -Wl,-rpath,'$$ORIGIN/../re/build' \
           -lbaresip -lre -lpthread -lm -lssl -lcrypto
 
 SLMODEM_DIR = $(REPO_DIR)/slmodem-2.9.11-20110321/modem
@@ -48,16 +48,22 @@ baresip_play.o: baresip_play.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 rtp_bridge: rtp_bridge.c build_re
-	$(CC) $(CFLAGS) -g -o $@ $< -L$(REPO_DIR)/re/build -Wl,-rpath,$(REPO_DIR)/re/build -lre -lm -lpthread
+	$(CC) $(CFLAGS) -g -o $@ $< -L$(REPO_DIR)/re/build -Wl,-rpath,'$$ORIGIN/../re/build' -lre -lm -lpthread
 
 build_slmodem:
 	$(MAKE) -C $(SLMODEM_DIR)
 
-SLM_LIBSAMPLERATE := $(shell find /usr/lib/i386-linux-gnu /usr/lib32 -name 'libsamplerate.so*' 2>/dev/null | head -1)
+# RcFixed from dsplibs.o is the default low-latency resampler.  Set
+# SLMODEM_USE_LIBSAMPLERATE=1 to build the comparison/fallback path.
+SLMODEM_USE_LIBSAMPLERATE ?= 0
+ifeq ($(SLMODEM_USE_LIBSAMPLERATE),1)
+SLM_RESAMPLER_CFLAGS := -DUSE_LIBSAMPLERATE
+SLM_RESAMPLER_LIBS := $(shell find /usr/lib/i386-linux-gnu /usr/lib32 -name 'libsamplerate.so*' 2>/dev/null | head -1)
+endif
 
 slmodem_bridge: slmodem_bridge.c build_slmodem
-	$(CC) -m32 -Wall -g -O2 -I$(SLMODEM_DIR) -o $@ $< $(SLMODEM_OBJS) \
-		$(SLM_LIBSAMPLERATE) -lm -lpthread
+	$(CC) -m32 -Wall -g -O2 $(SLM_RESAMPLER_CFLAGS) -I$(SLMODEM_DIR) \
+		-o $@ $< $(SLMODEM_OBJS) $(SLM_RESAMPLER_LIBS) -lm -lpthread
 
 # pri_call (DAHDI/libpri E1 call + B-channel bridge) needs libpri and re's
 # g711.c; it is 64-bit like rtp_bridge/baresip_play (not -m32).
