@@ -27,6 +27,10 @@ class SlmodemSipCaller(ModemCaller):
         add_opt(sp, "-M", "--modulation", type=int, default=122,
                 help="SREG_DP modulation value "
                      "(21=V.21, 122=V.22bis, 132=V.32bis, 34=V.34, 90=V.90)")
+        add_opt(sp, "--debug-level", type=int, default=1,
+                help="slmodem debug verbosity (default 1)")
+        add_opt(sp, "--io-delay", type=int, default=240,
+                help="local audio I/O delay in 9.6 kHz samples (default 240)")
         add_opt(sp, "--ptime", type=int, default=10,
                 help="frame size in ms (default 10)")
 
@@ -40,7 +44,8 @@ class SlmodemSipCaller(ModemCaller):
             sys.exit(1)
 
         rtp_cmd = [rtp_path, "-p", opts.peer, "-t", str(opts.ptime)]
-        slm_cmd = [slm_path, "-m", opts.slmodem_mode, "-M", str(opts.modulation)]
+        slm_cmd = [slm_path, "-m", opts.slmodem_mode, "-M", str(opts.modulation),
+                   "-v", str(opts.debug_level), "-D", str(opts.io_delay)]
         if getattr(opts, "record", None):
             slm_cmd += ["-r", opts.record]
         if getattr(opts, "tx_record", None):

@@ -27,6 +27,10 @@ class SlmodemE1Caller(ModemCaller):
         add_opt(sp, "-M", "--modulation", type=int, default=90,
                 help="SREG_DP modulation value "
                      "(21=V.21, 122=V.22bis, 132=V.32bis, 34=V.34, 90=V.90)")
+        add_opt(sp, "--debug-level", type=int, default=1,
+                help="slmodem debug verbosity (default 1)")
+        add_opt(sp, "--io-delay", type=int, default=240,
+                help="local audio I/O delay in 9.6 kHz samples (default 240)")
         add_opt(sp, "-b", "--bchannel", type=int, default=2,
                 help="preferred B-channel (default 2)")
         add_opt(sp, "--called", default="-",
@@ -43,7 +47,8 @@ class SlmodemE1Caller(ModemCaller):
                   file=sys.stderr)
             sys.exit(1)
 
-        slm_cmd = [slm_path, "-m", "orig", "-M", str(opts.modulation), "-e"]
+        slm_cmd = [slm_path, "-m", "orig", "-M", str(opts.modulation),
+                   "-v", str(opts.debug_level), "-D", str(opts.io_delay), "-e"]
         if getattr(opts, "record", None):
             slm_cmd += ["-r", opts.record]
         if getattr(opts, "tx_record", None):

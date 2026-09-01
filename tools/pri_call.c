@@ -48,6 +48,8 @@ struct state {
 	int done;
 	int selected_channel;
 	int bchan_fd;
+	uint8_t tx_linear[AUDIO_BLOCK_SAMPLES * 2];
+	size_t tx_linear_len;
 };
 
 static volatile sig_atomic_t stop_requested;
@@ -373,9 +375,9 @@ static void hangup_call(struct state *st, int cause)
 /* B-channel (A-law) -> stdout (8k linear s16le) */
 static void pump_bchan_to_stdout(struct state *st)
 {
-	uint8_t alaw[1024];
-	int16_t lin[1024];
-	uint8_t out[2048];
+	uint8_t alaw[AUDIO_BLOCK_SAMPLES];
+	int16_t lin[AUDIO_BLOCK_SAMPLES];
+	uint8_t out[AUDIO_BLOCK_SAMPLES * 2];
 	ssize_t n;
 	ssize_t i;
 
@@ -402,40 +404,50 @@ static void pump_bchan_to_stdout(struct state *st)
 	}
 }
 
-/* stdin (8k linear s16le) -> B-channel (A-law) */
+/* stdin (8k linear s16le) -> one exact DAHDI A-law block */
 static void pump_stdin_to_bchan(struct state *st)
 {
-	uint8_t in[2048];
-	uint8_t alaw[1024];
+	uint8_t alaw[AUDIO_BLOCK_SAMPLES];
 	ssize_t n;
-	ssize_t cnt;
 	ssize_t i;
 
-	n = read(STDIN_FILENO, in, sizeof(in));
-	if (n <= 0)
-		return;
-	if (n % 2)
-		n--;                        /* ignore trailing odd byte */
+	if (st->tx_linear_len < sizeof(st->tx_linear)) {
+		size_t need = sizeof(st->tx_linear) - st->tx_linear_len;
 
-	cnt = n / 2;
-	for (i = 0; i < cnt; i++) {
-		int16_t l = (int16_t)((uint16_t)in[i * 2] | ((uint16_t)in[i * 2 + 1] << 8));
+		n = read(STDIN_FILENO, st->tx_linear + st->tx_linear_len,
+			need);
+		if (n <= 0)
+			return;
+		st->tx_linear_len += (size_t)n;
+	}
+	if (st->tx_linear_len < sizeof(st->tx_linear))
+		return;
+
+	for (i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
+		int16_t l = (int16_t)((uint16_t)st->tx_linear[i * 2] |
+			((uint16_t)st->tx_linear[i * 2 + 1] << 8));
 		alaw[i] = g711_pcm2alaw(l);
 	}
 
-	i = 0;
-	while (i < cnt) {
-		ssize_t wr = write(st->bchan_fd, alaw + i, cnt - i);
-		if (wr < 0) {
-			if (errno == EINTR)
-				continue;
-			return;
-		}
-		i += wr;
+	do {
+		n = write(st->bchan_fd, alaw, sizeof(alaw));
+	} while (n < 0 && errno == EINTR);
+	if (n < 0 && errno == EAGAIN)
+		return;
+	if (n < 0) {
+		log_line("ERROR", "B-channel write failed: %s",
+			strerror(errno));
+		return;
 	}
+	if ((size_t)n != sizeof(alaw)) {
+		log_line("ERROR", "short B-channel write: %zd of %zu bytes",
+			n, sizeof(alaw));
+		return;
+	}
+	st->tx_linear_len = 0;
 }
 
-/* Open the B-channel for audio as early as the channel is known (RINGING),
+/* Open the B-channel for audio as early as the channel is known (PROCEEDING),
  * so the slmodem can hear the RAS's V8bis before CONNECT cuts through. */
 static void open_bchan_if_needed(struct state *st, int channel)
 {
@@ -470,6 +482,7 @@ static void handle_event(struct state *st, pri_event *event)
 		st->selected_channel = event->proceeding.channel;
 		log_line("INFO", "call proceeding channel=%d cause=%d", event->proceeding.channel,
 			event->proceeding.cause);
+		open_bchan_if_needed(st, event->proceeding.channel);
 		break;
 	case PRI_EVENT_RINGING:
 		st->selected_channel = event->ringing.channel;

@@ -36,6 +36,7 @@
 #define PTIME_MS     10
 #define NET_SAMPC    (NET_RATE   * PTIME_MS / 1000)   /* 80 */
 #define MODEM_SAMPC  (MODEM_RATE * PTIME_MS / 1000)   /* 96 */
+#define DEFAULT_IO_DELAY 240
 
 /* slmodem init/exit externals */
 extern unsigned int modem_debug_level;
@@ -62,6 +63,7 @@ extern void RcFixed_Resample(struct RcFixedHandle *handle,
 static struct modem *g_modem;
 static int g_pty;
 static int g_running = 1;
+static int g_io_delay = DEFAULT_IO_DELAY;
 
 static void signal_handler(int sig)
 {
@@ -96,7 +98,7 @@ static int bridge_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
 	case MDMCTL_SETFRAGMENT:  return 0;
 	case MDMCTL_SPEAKERVOL:   return 0;
 	case MDMCTL_CODECTYPE:    return CODEC_UNKNOWN;
-	case MDMCTL_IODELAY:      return 0;
+	case MDMCTL_IODELAY:      return g_io_delay;
 	default:                  return -2;
 	}
 }
@@ -158,7 +160,7 @@ static int resample_emit(SRC_STATE *st, double ratio,
 		block[i] = (int16_t)(acc[i] * 32767.0f + 0.5f);
 	memmove(acc, acc + want, (size_t)(have - want) * sizeof(float));
 	*acc_n = have - want;
-	return 1;
+	return want;
 }
 
 static int resampler_init(void)
@@ -191,12 +193,12 @@ static int resample_to_modem(int16_t *input, int16_t *output)
 		MODEM_SAMPC, output);
 }
 
-static int resample_to_net(int16_t *input, int16_t *output)
+static int resample_to_net(int16_t *input, int input_count, int16_t *output)
 {
 	return resample_emit(src_to_net,
 		(double)NET_RATE / (double)MODEM_RATE,
-		input, MODEM_SAMPC, to_net_acc, &to_net_acc_n,
-		NET_SAMPC, output);
+		input, input_count, to_net_acc, &to_net_acc_n,
+		input_count * NET_RATE / MODEM_RATE, output);
 }
 
 static void resampler_destroy(void)
@@ -235,18 +237,13 @@ static int resampler_init(void)
 
 static int resample_fixed(struct RcFixedHandle *state,
 			  int16_t *input, unsigned int input_count,
-			  int16_t *output, unsigned int output_count)
+			  int16_t *output, unsigned int output_capacity)
 {
-	unsigned int produced = output_count;
+	unsigned int produced = output_capacity;
 
 	RcFixed_Resample(state, input, input_count,
 		(uint16_t *)output, &produced);
-	if (produced != output_count) {
-		fprintf(stderr, "resample: expected %u samples, got %u\n",
-			output_count, produced);
-		return -1;
-	}
-	return 1;
+	return (int)produced;
 }
 
 static int resample_to_modem(int16_t *input, int16_t *output)
@@ -255,9 +252,9 @@ static int resample_to_modem(int16_t *input, int16_t *output)
 		output, MODEM_SAMPC);
 }
 
-static int resample_to_net(int16_t *input, int16_t *output)
+static int resample_to_net(int16_t *input, int input_count, int16_t *output)
 {
-	return resample_fixed(src_to_net, input, MODEM_SAMPC,
+	return resample_fixed(src_to_net, input, (unsigned int)input_count,
 		output, NET_SAMPC);
 }
 
@@ -367,6 +364,34 @@ static void close_wav(FILE *fp, const char *label)
 	fclose(fp);
 }
 
+static int emit_net_audio(FILE *txrec_fp, const int16_t *samples, int count)
+{
+	size_t out_bytes = (size_t)count * sizeof(samples[0]);
+	size_t written = 0;
+	ssize_t n;
+
+	if (txrec_fp)
+		fwrite(samples, sizeof(samples[0]), (size_t)count, txrec_fp);
+
+	while (written < out_bytes) {
+		n = write(STDOUT_FILENO, (const char *)samples + written,
+			out_bytes - written);
+		if (n == 0) {
+			fprintf(stderr, "stdout write returned zero\n");
+			return -1;
+		}
+		if (n < 0) {
+			if (errno == EAGAIN)
+				continue;
+			fprintf(stderr, "stdout write error: %s\n",
+				strerror(errno));
+			return -1;
+		}
+		written += (size_t)n;
+	}
+	return 0;
+}
+
 static void usage(const char *name)
 {
 	fprintf(stderr,
@@ -378,6 +403,8 @@ static void usage(const char *name)
 		"  -r, --record FILE  Record RX audio to WAV file\n"
 		"  -T, --tx-record FILE  Record TX audio to WAV file\n"
 		"  -M MOD             SREG_DP modulation value (default: 122)\n"
+		"  -v LEVEL           Debug verbosity (default: 1)\n"
+		"  -D SAMPLES         Local audio I/O delay at 9.6 kHz (default: 240)\n"
 		"  -e, --early-dial   In orig mode, dial at startup (before the\n"
 		"                     audio path is established) so the modem is\n"
 		"                     already listening when the call cuts through\n"
@@ -402,13 +429,14 @@ int main(int argc, char *argv[])
 	char pty_name[64];
 	int dial_sent = 0;
 	int modulation = 122;
+	int debug_level = 1;
 	int early_dial = 0;
 	const char *rec_path = NULL;
 	FILE *rec_fp = NULL;
 	const char *txrec_path = NULL;
 	FILE *txrec_fp = NULL;
 
-	while ((opt = getopt(argc, argv, "m:d:r:T:M:eh")) != -1) {
+	while ((opt = getopt(argc, argv, "m:d:r:T:M:v:D:eh")) != -1) {
 		switch (opt) {
 		case 'm':
 			mode = optarg;
@@ -424,6 +452,20 @@ int main(int argc, char *argv[])
 			break;
 		case 'M':
 			modulation = atoi(optarg);
+			break;
+		case 'v':
+			debug_level = atoi(optarg);
+			if (debug_level < 0) {
+				fprintf(stderr, "Invalid debug level '%s'.\n", optarg);
+				return 1;
+			}
+			break;
+		case 'D':
+			g_io_delay = atoi(optarg);
+			if (g_io_delay < 0) {
+				fprintf(stderr, "Invalid I/O delay '%s'.\n", optarg);
+				return 1;
+			}
 			break;
 		case 'e':
 			early_dial = 1;
@@ -454,7 +496,7 @@ int main(int argc, char *argv[])
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
 
-	modem_debug_level = 3;
+	modem_debug_level = (unsigned int)debug_level;
 	modem_debug_init("bridge");
 
 	dp_dummy_init();
@@ -484,6 +526,8 @@ int main(int argc, char *argv[])
 
 	fprintf(stderr, "PTY: %s\n", pty_name);
 	fprintf(stderr, "Mode: %s\n", mode);
+	fprintf(stderr, "I/O delay: %d samples at %d Hz\n",
+		g_io_delay, MODEM_RATE);
 
 	/* In answer mode, just go off-hook so we can detect remote caller. */
 	if (strcmp(mode, "ans") == 0) {
@@ -553,6 +597,8 @@ int main(int argc, char *argv[])
 
 		while (net_in_n >= NET_SAMPC) {
 			int converted;
+			int modem_count = MODEM_SAMPC;
+			int modem_offset = 0;
 
 			memcpy(net_rx, net_in, sizeof(net_rx));
 			memmove(net_in, net_in + NET_SAMPC,
@@ -582,6 +628,40 @@ int main(int argc, char *argv[])
 				fwrite(net_rx, 2, NET_SAMPC, rec_fp);
 
 			converted = resample_to_modem(net_rx, modem_rx);
+			if (converted == 0)
+				continue;
+			if (converted != MODEM_SAMPC) {
+				fprintf(stderr,
+					"resample: expected %d modem samples, got %d\n",
+					MODEM_SAMPC, converted);
+				g_running = 0;
+				break;
+			}
+
+			/* The original hardware drivers honor UPDATE_DELAY by letting
+			 * their playback queue drain while discarding the same number
+			 * of captured samples. V.32bis uses this to reduce excessive
+			 * local buffering before training. */
+			if (g_modem->update_delay < 0) {
+				int drop = -g_modem->update_delay;
+
+				if (drop > modem_count)
+					drop = modem_count;
+				modem_offset += drop;
+				modem_count -= drop;
+				g_modem->update_delay += drop;
+				g_io_delay -= drop;
+				fprintf(stderr,
+					"I/O delay adjusted by -%d samples to %d\n",
+					drop, g_io_delay);
+			}
+			if (modem_count == 0)
+				continue;
+
+			modem_process(g_modem, modem_rx + modem_offset, modem_tx,
+				modem_count);
+
+			converted = resample_to_net(modem_tx, modem_count, net_tx);
 			if (converted < 0) {
 				g_running = 0;
 				break;
@@ -589,37 +669,28 @@ int main(int argc, char *argv[])
 			if (converted == 0)
 				continue;
 
-			modem_process(g_modem, modem_rx, modem_tx, MODEM_SAMPC);
-
-			converted = resample_to_net(modem_tx, net_tx);
-			if (converted < 0) {
+			if (emit_net_audio(txrec_fp, net_tx, converted) < 0) {
 				g_running = 0;
 				break;
 			}
-			if (converted == 0)
-				continue;
 
-			if (txrec_fp)
-				fwrite(net_tx, 2, NET_SAMPC, txrec_fp);
+			while (g_modem->update_delay > 0) {
+				int add = g_modem->update_delay;
 
-			{
-				size_t out_bytes = sizeof(net_tx);
-				size_t written = 0;
-
-				while (written < out_bytes) {
-					n = write(STDOUT_FILENO,
-						(char *)net_tx + written,
-						out_bytes - written);
-					if (n < 0) {
-						if (errno == EAGAIN)
-							continue;
-						fprintf(stderr, "stdout write error: %s\n",
-							strerror(errno));
-						g_running = 0;
-						break;
-					}
-					written += (size_t)n;
+				if (add > MODEM_SAMPC)
+					add = MODEM_SAMPC;
+				memset(modem_tx, 0, (size_t)add * sizeof(modem_tx[0]));
+				converted = resample_to_net(modem_tx, add, net_tx);
+				if (converted <= 0 ||
+				    emit_net_audio(txrec_fp, net_tx, converted) < 0) {
+					g_running = 0;
+					break;
 				}
+				g_modem->update_delay -= add;
+				g_io_delay += add;
+				fprintf(stderr,
+					"I/O delay adjusted by +%d samples to %d\n",
+					add, g_io_delay);
 			}
 		}
 
