@@ -47,7 +47,7 @@ def cmd_gen(args):
 
 def cmd_analyze(args):
     ret = analysis.analyze_pair(args.tx_wav, args.rx_wav, args.freq,
-                                args.period, csv=args.csv)
+                                args.period, args.burst, csv=args.csv)
     if ret:
         sys.exit(ret)
 
@@ -65,7 +65,8 @@ def cmd_latency(args):
     caller = cls()
     _ensure_tx_wav(args)
     rx = caller.run_latency(args)
-    ret = analysis.analyze_pair(args.tx_wav, rx, args.freq, args.period)
+    ret = analysis.analyze_pair(args.tx_wav, rx, args.freq, args.period,
+                                args.burst)
     if ret:
         sys.exit(ret)
 

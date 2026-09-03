@@ -24,6 +24,23 @@ def read_wav(path):
         w.close()
 
 
+def cadence_windows(burst_ms, period_ms):
+    """On/off window counts (in 10 ms windows) for a burst pattern.
+
+    Matches ``signal.pattern_sample``: ``on`` windows of tone followed by
+    ``off`` windows of silence, repeating every ``period`` ms.  Both must be
+    whole 10 ms windows (the Goertzel envelope granularity) and there must be
+    at least one silence window.
+    """
+    on_w = burst_ms // WINDOW_MS
+    off_w = (period_ms - burst_ms) // WINDOW_MS
+    if on_w < 1 or off_w < 1:
+        raise ValueError(
+            "burst/period must leave at least one whole 10 ms on and off "
+            f"window (got burst={burst_ms} ms period={period_ms} ms)")
+    return on_w, off_w
+
+
 def goertzel_envelope(pcm_bytes, freq):
     """Goertzel power for each 10 ms window (the detection envelope)."""
     N = SRATE * WINDOW_MS // 1000
@@ -136,14 +153,15 @@ def estimate_delay(tx_env, rx_env, max_ms=500):
     return best_k * WINDOW_MS
 
 
-def analyze_pair(tx_wav, rx_wav, freq, period, csv=None):
+def analyze_pair(tx_wav, rx_wav, freq, period, burst=100, csv=None):
     """Analyze an RX WAV against a TX WAV. Returns process exit code
     (0 = all bursts accounted for, 2 = some bursts missing)."""
     tx_pcm = read_wav(tx_wav)
     rx_pcm = read_wav(rx_wav)
 
-    tx = detect_bursts_cadence(tx_pcm, freq)
-    rx = detect_bursts_cadence(rx_pcm, freq)
+    cadence = cadence_windows(burst, period)
+    tx = detect_bursts_cadence(tx_pcm, freq, cadence)
+    rx = detect_bursts_cadence(rx_pcm, freq, cadence)
     print(f"tx bursts: {len(tx)}  rx bursts: {len(rx)}"
           "  (cadence cross-correlation)")
 

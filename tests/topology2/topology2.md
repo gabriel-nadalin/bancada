@@ -44,8 +44,9 @@ check, NOT topology-2 validation — the RAS must be the far end.
 
 Notes:
 - `rtp_bridge`'s **From** is `sip:12@<local_ip>` — **12 is the originating
-  address**, not the destination. Confirmed: `burstbench.py` uses `--id
-  sip:12@10.42.0.1`, `baresip_play.c` registers `<sip:12@10.42.0.1>`.
+  address**, not the destination. Confirmed: `rtp_bridge` sets the local id
+  `sip:12@10.42.0.1` (the `dialbench` `slmodem_sip` caller launches it for the
+  SIP leg), and `baresip_play.c` registers `<sip:12@10.42.0.1>`.
 - The **peer URI is what you dial**. Default `sip:11@...` was for the
   slmodem→Conexant test; set it to **`sip:42@10.42.0.102`** to reach the RAS.
   (Verified by changing 11→42: the call to the MICA completes.)
@@ -81,7 +82,7 @@ is "12". When the ATA dials 42, the 2911 routes dial-peer 42 → PRI → MICA.
 |---|---|
 | `slmodem_bridge.c` | Wraps one 32-bit slmodem: PCM stdin/stdout + PTY; resamples 8k↔9.6k (slmodem data pump runs at 9600 Hz); sends a bare originate `ATD` on audio-path-established |
 | `rtp_bridge.c` | SIP UA + RTP (libre); local id `sip:12@<local_ip>`, dials `-p` peer URI; 8 kHz s16le PCM on stdin/stdout; requires PCMA |
-| `burstbench.py` | Orchestrates both processes, cross-connects PCM, echoes stderr (`[slm]`/`[rtp]`) |
+| `dialbench` (`modem slmodem_sip`) | Orchestrates both processes, cross-connects PCM (`process.spawn_pump_pair`), echoes stderr (`[slm]`/`[rtp]`), and runs the end-to-end RAS data probe |
 | `Makefile` | Builds `slmodem_bridge` (`-m32`, links slmodem objects + 32-bit libsamplerate) |
 
 ### Build
@@ -129,9 +130,9 @@ Bridge default `-M` = **122 (V.22bis)** — pass an explicit `-M` per test.
 1. Ensure the 2911/AS5300 PRI link is up (as in Topology 1).
 2. Orchestrated run:
    ```sh
-   python3 burstbench.py run slmodem \
+   python3 -m dialbench modem slmodem_sip \
      --peer sip:42@10.42.0.102:5062 \
-     -m orig -M 90
+     --slmodem-mode orig -M 90
    ```
    (`-M 90` = V.90; swap per protocol table. The destination is the peer URI —
    no separate dial number is needed.)

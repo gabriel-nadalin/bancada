@@ -13,8 +13,8 @@ AS5300 E1:    E1 <n>  (MICA slot <n>)
 MICA port:    <from show modem>
 
 -- COMMAND ---------------------------------------------------------------
-python3 burstbench.py run slmodem --peer sip:42@10.42.0.102:5062 \
-  -m orig -M <mod>
+python3 -m dialbench modem slmodem_sip \
+  --peer sip:42@10.42.0.102:5062 --slmodem-mode orig -M <mod>
 <or manual FIFO run>
 NOTE: dialing is all-SIP (peer URI). slmodem's ATD is a bare originate;
 it does not generate the dial DTMF.
