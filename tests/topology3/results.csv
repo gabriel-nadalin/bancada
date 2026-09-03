@@ -1,0 +1,8 @@
+protocol,transport,peer,codec,result,tx_rate_bps,rx_rate_bps,ras_responses,notes
+V.21,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,300,300,3/3,"Clean call using local SIP/RTP ports 5066/4012; all three first-attempt RAS responses completed."
+V.22,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,1200,1200,3/3,"Clean call using local SIP/RTP ports 5069/4018; all three first-attempt RAS responses completed."
+V.22bis,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,2400,2400,3/3,"Clean call using local SIP/RTP ports 5070/4020; all three first-attempt RAS responses completed."
+V.23,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,1200,1200,3/3,"Clean call using local SIP/RTP ports 5068/4016 with a 10-second post-CONNECT settle interval; all three first-attempt RAS responses completed."
+V.32bis,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,14400,14400,3/3,"Clean call using local SIP/RTP ports 5071/4022, native 8 kHz data pump, IODELAY=0, and 9 dB local retrain threshold."
+V.34,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,33600,33600,3/3,"Clean call using local SIP/RTP ports 5072/4024; all three first-attempt RAS responses completed."
+V.90,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,26400-28800,54667-56000,3/3,"Four clean calls passed. The latest used ephemeral local SIP/RTP ports, native 9.6 kHz, and IODELAY=240; all three first-attempt RAS responses completed after one recoverable phase-4 retrain."

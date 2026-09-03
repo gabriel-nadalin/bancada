@@ -35,6 +35,10 @@ class SlmodemSipCaller(ModemCaller):
         add_slmodem_timing_args(sp)
         add_opt(sp, "--ptime", type=int, default=10,
                 help="frame size in ms (default 10)")
+        add_opt(sp, "--sip-port", type=int, default=0,
+                help="local SIP signaling port; 0 selects an ephemeral port")
+        add_opt(sp, "--rtp-port", type=int, default=0,
+                help="local RTP media port; 0 selects an ephemeral port")
         add_data_probe_args(sp)
 
     def run_modem(self, opts):
@@ -47,7 +51,8 @@ class SlmodemSipCaller(ModemCaller):
             sys.exit(1)
 
         modem_rate, io_delay, max_rate = resolve_slmodem_timing(opts)
-        rtp_cmd = [rtp_path, "-p", opts.peer, "-t", str(opts.ptime)]
+        rtp_cmd = [rtp_path, "-p", opts.peer, "-t", str(opts.ptime),
+                   "-Q", str(opts.sip_port), "-P", str(opts.rtp_port)]
         slm_cmd = [slm_path, "-m", opts.slmodem_mode, "-M", str(opts.modulation),
                    "-v", str(opts.debug_level), "-D", str(io_delay),
                    "-S", str(modem_rate)]

@@ -14,7 +14,8 @@
 #define RX_MAX_SAMPC 4096                     /* max samples decoded/packet */
 
 #define DEFAULT_LOCAL_IP "10.42.0.1"
-#define DEFAULT_RTP_PORT 4000
+#define DEFAULT_SIP_PORT 0
+#define DEFAULT_RTP_PORT 0
 #define DEFAULT_PTIME   10
 #define DEFAULT_PEER_URI "sip:11@10.42.0.102:5062;transport=udp"
 
@@ -34,6 +35,7 @@ static long wav_out_samples;
 
 static char local_ip[64]  = DEFAULT_LOCAL_IP;
 static char peer_uri[256] = DEFAULT_PEER_URI;
+static int  sip_port = DEFAULT_SIP_PORT;
 static int  rtp_port = DEFAULT_RTP_PORT;
 static int  ptime      = DEFAULT_PTIME;       /* ms per RTP packet */
 static int  frame_sampc = SRATE * DEFAULT_PTIME / 1000;
@@ -47,6 +49,16 @@ static uint32_t rtp_ssrc;
 static bool     call_active;
 static bool     tx_marker = true;
 
+/* Live audio is driven by the peer's RTP clock.  Record packet-boundary
+ * variation, but do not equate an interval above ptime with an audio
+ * deadline miss: an earlier packet or the gateway's playout queue can
+ * absorb it. */
+static uint64_t tx_last_jiffies;
+static unsigned tx_packets;
+static unsigned tx_intervals_over_ptime;
+static uint64_t tx_interval_min;
+static uint64_t tx_interval_max;
+
 static int16_t  tx_samples[MAX_FRAME_SZ];
 static size_t   tx_len;
 
@@ -56,9 +68,37 @@ static bool     rx_seq_valid;
 static unsigned rx_pt_drops;
 static unsigned rx_ctl_drops;
 
+/* Estatísticas por payload type: tamanho de payload e cadência de timestamp.
+ * Discrimina G.711 (80 B @ 10 ms / 160 B @ 20 ms) de L16 (160 B @ 10 ms /
+ * 320 B @ 20 ms) sem depender de tcpdump. */
+#define RX_PT_BUCKETS 128
+static struct {
+    unsigned pkts;
+    size_t   pay_min, pay_max, pay_total;
+    uint32_t ts_last;
+    bool     ts_valid;
+    unsigned ts_unexpected;
+} rx_stats[RX_PT_BUCKETS];
+
 static void stdin_handler(int flags, void *arg);
 
 static void send_rtp(const uint8_t *payload, size_t n) {
+    const uint64_t now = tmr_jiffies();
+    if (tx_packets) {
+        const uint64_t interval = now - tx_last_jiffies;
+        if (interval < tx_interval_min)
+            tx_interval_min = interval;
+        if (interval > tx_interval_max)
+            tx_interval_max = interval;
+        if (interval > (uint64_t)ptime)
+            tx_intervals_over_ptime++;
+    }
+    else {
+        tx_interval_min = (uint64_t)-1;
+    }
+    tx_last_jiffies = now;
+    tx_packets++;
+
     uint8_t hdr[12];
     hdr[0] = 0x80;
     hdr[1] = (uint8_t)((pt & 0x7F) | (tx_marker ? 0x80 : 0));
@@ -120,11 +160,6 @@ static void tx_tick(void *arg) {
     encode_and_send(samples);
 }
 
-/*
- * Each live output frame is produced by slmodem in response to one received
- * RTP frame.  Sending it immediately preserves that clock, avoids drift
- * between two independent timers and adds no queueing delay.
- */
 static void stdin_handler(int flags, void *arg) {
     (void)flags;
     (void)arg;
@@ -247,6 +282,8 @@ static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
             }
         }
         else {
+            if (!accept_rx_sequence(seq))
+                return;
             if (++rx_pt_drops == 1)
                 re_fprintf(stderr, "RTP: dropping packets with pt=%u"
                                    " (expecting %u)\n", pkt_pt,
@@ -257,6 +294,27 @@ static void rtp_handler(const struct sa *src, struct mbuf *mb, void *arg) {
 
     if (!accept_rx_sequence(seq))
         return;
+    const uint32_t ts = ((uint32_t)p[4] << 24) | ((uint32_t)p[5] << 16) |
+                        ((uint32_t)p[6] << 8) | (uint32_t)p[7];
+
+    /* Coleta de estatísticas por PT (antes de qualquer truncamento). */
+    if (pkt_pt < RX_PT_BUCKETS) {
+        unsigned *pkts   = &rx_stats[pkt_pt].pkts;
+        size_t   *paymin = &rx_stats[pkt_pt].pay_min;
+        size_t   *paymax = &rx_stats[pkt_pt].pay_max;
+        size_t   *paytot = &rx_stats[pkt_pt].pay_total;
+        uint32_t *tslast = &rx_stats[pkt_pt].ts_last;
+        bool     *tsval  = &rx_stats[pkt_pt].ts_valid;
+        unsigned *tsbad  = &rx_stats[pkt_pt].ts_unexpected;
+        if (*pkts == 0 || paylen < *paymin) *paymin = paylen;
+        if (*pkts == 0 || paylen > *paymax) *paymax = paylen;
+        *paytot += paylen;
+        if (*tsval && ts - *tslast != (uint32_t)frame_sampc)
+            (*tsbad)++;
+        *tslast = ts;
+        *tsval = true;
+        (*pkts)++;
+    }
 
     if (paylen > RX_MAX_SAMPC) {
         re_fprintf(stderr, "RTP: oversized payload (%zu bytes),"
@@ -546,7 +604,10 @@ static void usage(const char *name) {
         "  -p, --peer URI        Peer SIP URI to dial\n"
         "                        (default: %s)\n"
         "  -l, --local-ip IP     Local IP address (default: %s)\n"
-        "  -P, --rtp-port PORT   Local RTP port (default: %u)\n"
+        "  -Q, --sip-port PORT   Local SIP port; 0 selects an ephemeral port"
+        " (default: %u)\n"
+        "  -P, --rtp-port PORT   Local RTP port; 0 selects an ephemeral port"
+        " (default: %u)\n"
         "  -t, --ptime MS        Packetization time, 5-%u ms (default: %u)\n"
         "Audio options:\n"
         "  -i, --input FILE      Play WAV file instead of stdin\n"
@@ -556,7 +617,8 @@ static void usage(const char *name) {
         "\n"
         "Without -i, raw s16le/%u Hz/mono audio is read from stdin;\n"
         "received audio is always written to stdout in the same format.\n",
-        name, DEFAULT_PEER_URI, DEFAULT_LOCAL_IP, DEFAULT_RTP_PORT,
+        name, DEFAULT_PEER_URI, DEFAULT_LOCAL_IP, DEFAULT_SIP_PORT,
+        DEFAULT_RTP_PORT,
         MAX_PTIME, DEFAULT_PTIME, SRATE, SRATE);
 }
 
@@ -568,6 +630,7 @@ int main(int argc, char *argv[]) {
     static const struct option longopts[] = {
         {"peer",     required_argument, NULL, 'p'},
         {"local-ip", required_argument, NULL, 'l'},
+        {"sip-port", required_argument, NULL, 'Q'},
         {"rtp-port", required_argument, NULL, 'P'},
         {"ptime",    required_argument, NULL, 't'},
         {"input",    required_argument, NULL, 'i'},
@@ -577,7 +640,7 @@ int main(int argc, char *argv[]) {
     };
 
     for (;;) {
-        int c = getopt_long(argc, argv, "p:l:P:t:i:o:h", longopts, NULL);
+        int c = getopt_long(argc, argv, "p:l:Q:P:t:i:o:h", longopts, NULL);
         if (c == -1)
             break;
         switch (c) {
@@ -587,9 +650,16 @@ int main(int argc, char *argv[]) {
         case 'l':
             str_ncpy(local_ip, optarg, sizeof(local_ip));
             break;
+        case 'Q':
+            sip_port = atoi(optarg);
+            if (sip_port < 0 || sip_port > 65535) {
+                re_fprintf(stderr, "Invalid SIP port %s\n", optarg);
+                return 1;
+            }
+            break;
         case 'P':
             rtp_port = atoi(optarg);
-            if (rtp_port < 1 || rtp_port > 65534) {
+            if (rtp_port < 0 || rtp_port > 65534) {
                 re_fprintf(stderr, "Invalid RTP port %s\n", optarg);
                 return 1;
             }
@@ -639,7 +709,7 @@ int main(int argc, char *argv[]) {
     }
 
     struct sa laddr;
-    err = sa_set_str(&laddr, local_ip, 5060);
+    err = sa_set_str(&laddr, local_ip, (uint16_t)sip_port);
     if (err) {
         re_fprintf(stderr, "Invalid local IP %s\n", local_ip);
         goto out;
@@ -660,6 +730,12 @@ int main(int argc, char *argv[]) {
         err = 1;
         goto out;
     }
+    if (udp_local_get(rtp_socket, &rtp_local)) {
+        re_fprintf(stderr, "Failed to query local RTP socket\n");
+        err = 1;
+        goto out;
+    }
+    rtp_port = sa_port(&rtp_local);
     struct sa rtcp_local;
     sa_set_str(&rtcp_local, local_ip, (uint16_t)(rtp_port + 1));
     if (udp_listen(&rtcp_socket, &rtcp_local, rtcp_handler, NULL))
@@ -706,6 +782,26 @@ int main(int argc, char *argv[]) {
     re_main(signal_handler);
 
 out:
+    if (tx_packets > 1) {
+        re_fprintf(stderr,
+                   "RTP TX packets=%u interval %llu..%llu ms; "
+                   "intervals-over-ptime=%u (ptime=%d ms)\n",
+                   tx_packets,
+                   (unsigned long long)tx_interval_min,
+                   (unsigned long long)tx_interval_max,
+                   tx_intervals_over_ptime, ptime);
+    }
+    for (unsigned i = 0; i < RX_PT_BUCKETS; i++) {
+        if (rx_stats[i].pkts == 0)
+            continue;
+        re_fprintf(stderr,
+                   "RTP RX pt=%u pkts=%u payload %zu..%zu B (méd %zu B)"
+                   " ts_unexpected=%u (esperado +%u/pkt)\n",
+                   i, rx_stats[i].pkts,
+                   rx_stats[i].pay_min, rx_stats[i].pay_max,
+                   rx_stats[i].pay_total / rx_stats[i].pkts,
+                   rx_stats[i].ts_unexpected, frame_sampc);
+    }
     call_active = false;
     tmr_cancel(&tx_tmr);
     wav_out_close();
