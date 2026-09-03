@@ -31,7 +31,7 @@ makes V.90 downstream possible.
 | 1 | Cisco AS5300 | RAS, terminates dial-up with MICA modems | E1 PRI, `mica-modem-pw.2.9.5.0.bin` |
 | 2 | Cisco 2911 | Voice gateway: FXS ↔ E1 | VWIC3-1MFT-T1/E1 + VIC3-4FXS + PVDM3 |
 | 3 | USB hardmodem Lenovo (Conexant CX93010) | Reference client modem | /dev/ttyACM2 on the bench PC |
-| 4 | Linux PC | Hosts the modem, tooling, logs | picocom, `testes/topology1/` |
+| 4 | Linux PC | Hosts the modem, tooling, logs | picocom, `tests/topology1/` |
 
 Consoles on the bench PC: `ttyACM0` = Cisco USB console (2911), `ttyUSB0` =
 USB-serial adapter (AS5300).
@@ -167,7 +167,7 @@ Reset auto-negotiation between protocols: `AT&F`.
 | V.34 | 33600/31200 | QAM-1664+precoding | none | 2/11 | `t1-v34-2026-08-27.log` |
 | V.90 | 46667/31200 | PCM↓ / QAM↑ | none | 2/12 | `t1-v90-2026-08-27.log` |
 
-Consolidated in `resultados.csv`. 6/6 success, zero retrains, 100% MICA success
+Consolidated in `results.csv`. 6/6 success, zero retrains, 100% MICA success
 rate across all calls.
 
 ---

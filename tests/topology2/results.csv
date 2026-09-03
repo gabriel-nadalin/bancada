@@ -1,0 +1,8 @@
+topology,protocol,date,transport,peer,codec,result,tx_rate_bps,rx_rate_bps,ras_responses,notes
+2,V.21,2026-09-01,SIP-via-HT503,AS5300,PCMA,pass,300,300,3/3,"Consolidated HT503 baseline"
+2,V.22,2026-09-01,SIP-via-HT503,AS5300,PCMA,pass,1200,1200,3/3,"Consolidated HT503 baseline"
+2,V.22bis,2026-09-01,SIP-via-HT503,AS5300,PCMA,pass,2400,2400,3/3,"Consolidated HT503 baseline"
+2,V.23,2026-09-01,SIP-via-HT503,AS5300,PCMA,pass,1200,1200,3/3,"Consolidated HT503 baseline"
+2,V.32bis,2026-09-01,SIP-via-HT503,AS5300,PCMA,pass,14400,14400,36/36,"Twelve-call baseline"
+2,V.34,2026-09-03,SIP-via-HT503,AS5300,PCMA,pass,24000,26400,3/3,"Ephemeral local SIP/RTP ports"
+2,V.90,2026-09-01,SIP-via-HT503,AS5300,PCMA,fail,,,0/3,"Phase-4 convergence failure; no functional RAS data connection through the HT503 DAC/ADC path"

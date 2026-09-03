@@ -206,6 +206,22 @@ but four later retrained from 14.4/14.4 to 12/12 kbit/s with the stock local
 policy. The E1 timing estimate converged to 0 ppm; SIP timing remained between
 approximately -102 and -90 ppm in the detailed diagnostic runs.
 
+### V.34 three-path regression, September 3, 2026
+
+V.34 was repeated serially after the SIP port-isolation and RTP diagnostics
+changes. Each run required three complete `show clock` exchanges through the
+slmodem PTY. All three paths passed:
+
+| Path | Result | Negotiated TX/RX rate | RAS data probe |
+|---|---|---:|---:|
+| Direct E1 (`slmodem_e1`) | Pass | 33.6/33.6 kbit/s | 3/3 |
+| SIP through HT503 | Pass | 24.0/26.4 kbit/s | 3/3 |
+| SIP-to-E1 through Cisco 2911 | Pass | 31.2/33.6 kbit/s | 3/3 |
+
+The two SIP calls used ephemeral local SIP and RTP ports. The PCMA RTP
+timestamps were contiguous in both cases. This is a regression check of
+functional data traffic, not a carrier-only observation.
+
 ## Build
 
 The bridge must be compiled as a 32-bit executable because `dsplibs.o` is a

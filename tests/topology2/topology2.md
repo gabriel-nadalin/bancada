@@ -3,7 +3,8 @@
 Validation of the slmodem softmodem as the client against the RAS (AS5300/MICA),
 using the Grandstream HT503 ATA to bridge SIP/RTP to the analog FXS path.
 
-Status: in progress (Topology 1 complete; ATA config + first RAS test pending).
+Status: V.34 RAS validation completed; remaining protocol coverage is tracked
+separately.
 
 ---
 
@@ -111,13 +112,15 @@ Bridge default `-M` = **122 (V.22bis)** — pass an explicit `-M` per test.
 
 ---
 
-## 5. ATA configuration (TODO — fill in)
+## 5. ATA configuration used by the validated path
 
-- [ ] Wiring: ATA **FXO** → 2911 FXS port (dial-peer 12).
-- [ ] SIP: extension/registration, IP 10.42.0.102:5062; dial plan that
-      **dials the Request-URI number (42) on the FXO**.
-- [ ] Codec: must be **G.711** (no compression codecs — modems can't run over them).
-- [ ] **Echo cancellation: OFF** (same requirement as the 2911 FXS `no echo-cancel enable`).
+- ATA **FXO** → 2911 FXS port (dial-peer 12).
+- SIP peer: `10.42.0.102:5062`; the ATA dials Request-URI number `42` on its
+  FXO port.
+- Audio: PCMA/G.711 at 8 kHz; no compressed voice codec.
+- The path necessarily contains ATA DAC/ADC conversion and independent ATA
+  sample timing. It is therefore distinct from Topology 3 (direct E1) and
+  Topology 4 (direct SIP-to-E1).
 
 ---
 
@@ -144,40 +147,41 @@ Manual FIFO run + PTY access: see `SLMODEM_NOTES.md`.
 
 ## 7. Results
 
-TODO — fill the matrix as tests run (`resultados.csv`).
+All passing entries require the end-to-end RAS data criterion: command echo,
+`UTC` response, and `Router>` prompt for every `show clock` probe. The V.90
+entry is intentionally not a pass: bypassing the spectral verifier did not
+make the modem converge through the ATA DAC/ADC path.
 
 | Protocol | Rate (↓/↑) | Modulation | Errors | slmodem log | Notes |
 |---|---|---|---|---|---|
-| V.21 | | | | | |
-| V.22 | | | | | |
-| V.22bis | | | | | |
-| V.32bis | | | | | |
-| V.34 | | | | | |
-| V.90 | | | | | |
+| V.21 | 300/300 bit/s | V.21 | none observed | Consolidated regression | 3/3 RAS responses. |
+| V.22 | 1,200/1,200 bit/s | V.22 | none observed | Consolidated regression | 3/3 RAS responses. |
+| V.22bis | 2,400/2,400 bit/s | V.22bis | none observed | Consolidated regression | 3/3 RAS responses. |
+| V.23 | 1,200/1,200 bit/s | V.23 | none observed | Consolidated regression | 3/3 RAS responses. |
+| V.32bis | 14,400/14,400 bit/s | V.32bis | none observed | Consolidated regression | 36/36 RAS responses across twelve calls. |
+| V.34 | 26.4/24.0 kbit/s (RX/TX) | V.34 | none observed | Consolidated regression | 3/3 RAS responses on 2026-09-03. |
+| V.90 | No functional connection | V.90 | Phase-4 convergence failure | V.90 analysis records | No RAS data pass through the ATA DAC/ADC path. |
 
 ---
 
-## 8. slmodem debug logs (project deliverable d)
+## 8. Debug-output retention
 
-TODO — the slmodem's debug output is the deliverable the bench exists to
-collect. Document: how to raise the debug level, where it lands (stderr →
-`[slm]` prefixed in the orchestrated run), and archive per protocol.
+`dialbench` prefixes runtime modem and RTP diagnostics as `[slm]` and `[rtp]`.
+Only logs copied into this directory are durable experiment artifacts. The
+results matrix does not cite transient host paths.
 
 ---
 
-## 9. Findings (TODO)
+## 9. Findings
 
-Key analysis target: the **ATA's ADC/DAC conversion quality** and its impact on
-high-speed protocol stability — compare V.34/V.90 results here against Topology
-1 (same MICA, same line; the only variable is the ATA + slmodem path).
+The HT503 DAC/ADC segment is the material difference from Topology 4's
+digital SIP-to-E1 path. V.34 carries verified RAS traffic through it at
+24.0/26.4 kbit/s, whereas V.90 has no functional data pass on this path.
 
 ---
 
 ## 10. Artifacts
 
-- `testes/topology2/resultados.csv` — consolidated matrix.
-- `testes/topology2/t2-TEMPLATE.log` — per-run template (adds a slmodem-debug section).
-- `SLMODEM_NOTES.md` — integration/build notes.
-
-Open items: ATA config (§5), slmodem debug capture (§8), DP driver-ID
-confirmation via `AT+MS=?`.
+- `tests/topology2/results.csv` — consolidated matrix.
+- `tests/topology2/t2-TEMPLATE.log` — per-run template (adds a slmodem-debug section).
+- `docs/SLMODEM_NOTES.md` — integration and build notes.

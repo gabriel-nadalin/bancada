@@ -1,0 +1,8 @@
+topology,protocol,date,transport,peer,codec,result,tx_rate_bps,rx_rate_bps,ras_responses,notes
+4,V.21,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,300,300,3/3,"Clean call with independent local SIP/RTP ports"
+4,V.22,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,1200,1200,3/3,"Clean call with independent local SIP/RTP ports"
+4,V.22bis,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,2400,2400,3/3,"Clean call with independent local SIP/RTP ports"
+4,V.23,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,1200,1200,3/3,"Clean call with independent local SIP/RTP ports and a 10-second post-CONNECT settle interval"
+4,V.32bis,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,14400,14400,3/3,"Native 8 kHz, IODELAY=0, and 9 dB local retrain threshold"
+4,V.34,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,31200,33600,3/3,"Serial regression with ephemeral local SIP/RTP ports"
+4,V.90,2026-09-03,SIP-to-E1,sip:42@10.42.0.22:5060,PCMA,pass,26400-28800,54667-56000,3/3-per-call,"Four clean calls; latest used native 9.6 kHz and IODELAY=240 after one recoverable phase-4 retrain"
