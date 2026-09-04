@@ -1,0 +1,2530 @@
++ /home/gabriel/bancada/tools/rtp_bridge -p 'sip:42@10.42.0.22:5060;transport=udp' -t 10 -Q 0 -P 0
++ /home/gabriel/bancada/tools/slmodem_bridge -m orig -M 90 -v 2 -D 240 -S 9600 -r /tmp/v90-sip-digital-rx.wav -T /tmp/v90-sip-digital-tx.wav
+[slm] Recording RX audio to /tmp/v90-sip-digital-rx.wav
+[slm] Recording TX audio to /tmp/v90-sip-digital-tx.wav
+[slm] Resampler: dsplibs RcFixed
+[slm] <830.888608> SmartLink Soft Modem: version 2.9.11 Sep  1 2026 12:44:20
+[slm] <830.888621> slmodem_bridge: startup modem...
+[slm] PTY: /dev/pts/2
+[slm] Mode: orig
+[slm] Native data-pump rate: 9600 Hz
+[slm] I/O delay: 240 samples at 9600 Hz
+[rtp] Dialing sip:42@10.42.0.22:5060;transport=udp ...
+[rtp] SIP: 180 Ringing
+[rtp] Peer RTP: 10.42.0.22:27044 pt=8
+[rtp] Bridging stdin/stdout
+[rtp] Call established
+[slm] Audio path established, auto-dialing...
+[slm] <830.991788> slmodem_bridge: run cmd: ATS32=90
+[slm] <830.991799> slmodem_bridge: modem report result: 0 (OK)
+[slm] <830.991831> slmodem_bridge: run cmd: AT%C0
+[slm] <830.991837> slmodem_bridge: modem report result: 0 (OK)
+[slm] <830.991865> slmodem_bridge: run cmd: ATX3D
+[slm] <830.991870> slmodem_bridge: modem dial: ...
+[slm] <830.991873> slmodem_bridge: modem_dial_start...
+[slm] <830.991877> call: create...
+[slm] <830.991883> CallProgFP_Create >>
+[slm] <830.991886> APPLY_FILTER = 0
+[slm] <830.991891> Detection Thresholds: levle_fix=43,--> LEVEL_THRESHOLD=96
+[slm] <830.991895> ============> 6
+[slm] <830.991898> Cadence: Busy Tone loose detection is 0
+[slm] <830.991903> TYPE BUSY
+[slm] <830.991906> Filter index 6
+[slm] <830.991908> Filter SubIndex 0
+[slm] <830.991911> MAX_ON_TIME 30 Buffers     MIN_ON_TIME 9 Buffers
+[slm] <830.991914> MAX_OFF_TIME 30 Buffers    MIN_OFF_TIME 9 Buffers
+[slm] <830.991918> OFF_TIME_THAT_RESETS_CYCLE 90
+[slm] <830.991921> BUFFER LENGTH 160 samples.
+[slm] <830.991924> INTEGRATION_LENGTH 0[ms]
+[slm] <830.991927> LEVEL 96
+[slm] <830.991932> INTEGRATION_TIME = 0 Buffers.
+[slm] <830.991951> Detection Thresholds: levle_fix=43,--> LEVEL_THRESHOLD=96
+[slm] <830.991956> TYPE DIAL
+[slm] <830.991959> Filter index 5
+[slm] <830.991963> Filter SubIndex 0
+[slm] <830.991966> MAX_ON_TIME 0 Buffers     MIN_ON_TIME 0 Buffers
+[slm] <830.991970> MAX_OFF_TIME 0 Buffers    MIN_OFF_TIME 0 Buffers
+[slm] <830.991973> OFF_TIME_THAT_RESETS_CYCLE 0
+[slm] <830.991976> BUFFER LENGTH 666 samples.
+[slm] <830.991979> INTEGRATION_LENGTH 2500[ms]
+[slm] <830.991982> LEVEL 96
+[slm] <830.991986> INTEGRATION_TIME = 28 Buffers.
+[slm] <830.991992> CALLPROG Create <<
+[slm] <830.991995> CALLPROG Dialing
+[slm] <830.991999> Configuration->tone_DigitLength 100
+[slm] <830.992003> Configuration->pulse_OffHookTime 36
+[slm] <830.992006> Configuration->pulse_OnHookTime 64
+[slm] <830.992009> Configuration->dialPauseTime 2
+[slm] <830.992013> Configuration->flashTime 50
+[slm] <830.992016> Configuration->toneOrPulseFlag 0
+[slm] <830.992019> Configuration->dialModifierValidationFlag 0
+[slm] <830.992022> Configuration->ABCD_PermittedFlag 0
+[slm] <830.992025> Configuration->pulseAndToneInSameStringPermittedFlag 0
+[slm] <830.992028> Configuration->callingToneFlag 0
+[slm] <830.992032> Configuration->commaPauseDurLimit 255
+[slm] <830.992035> Configuration->digitPattern 1
+[slm] <830.992038> Configuration->tone_BetweenDigitsInterval 100
+[slm] <830.992041> Configuration->pulse_BetweenDigitsInterval 800
+[slm] <830.992044> DTMF_Gain1 = 13014
+[slm] <830.992047> DTMF_Gain2 = 16384
+[slm] <830.992050> AnalyzeDialString: Updated 17 May 1999 00:50
+[slm] <830.992054> Dial String Syntax is VALID
+[slm] <830.992059> GetNoAnswerTimeOut. 60
+[slm] <830.992063> BlindCall: GetBlindDialPause = 2 .
+[slm] <830.992066> CALLPROG_Dial was exited.
+[slm] <830.992069> call: create RC: 9600 <-> 8000...
+[slm] <830.992075> slmodem_bridge: modem_start..
+[slm] <830.992079> slmodem_bridge: modem set state: 1 --> 2...
+[slm] <830.992083> slmodem_bridge: new state: DP_ESTAB
+[slm] <830.992086> slmodem_bridge: modem set hook: 0 --> 1...
+[slm] <830.992128> call: process: msg 18 --> 0
+[slm] <832.580886> DCR: initial DC Evaluation done, DC level -8, enabled
+[slm] <832.991309> CALLPROG: Time out
+[slm] <832.991323> STATE:  CALLPROG_WAIT_DIAL --> CALLPROG_DIALING
+[slm] <832.991332> call: process: msg 0 --> 3
+[slm] <832.991340> DIALER_INITIAL_STATE
+[slm] <832.991342> DIALER_END_STATE
+[slm] <832.991344> STATE:  CALLPROG_DIALING --> CALLPROG_WAIT_RING
+[slm] <832.991351> call: process: msg 3 --> 4
+[slm] <833.001879> call: process: msg 4 --> 0
+[slm] <833.970179> CYCLES_COUNTER= 1
+[slm] <836.660723> Found 2100
+[slm] <836.660741> call: process: msg 0 --> 16
+[slm] <836.660746> slmodem_bridge: 54480: change dp: --> 8...
+[slm] <836.660751> v8: create: caller 1, automode 0, dp id 90.
+[slm] <836.660775> V8: Create called, V8 version 23/09/03 .
+[slm] <836.660779> ############################################################
+[slm] <836.660783> V8: local configuration :
+[slm] <836.660786> 	Side = Caller
+[slm] <836.660789> 	Operation Mode = 0
+[slm] <836.660792> 	Modulations - V90=1, V34=1, V34HD=0, V32=1, V22=0, V17=0, V29=0, V27=0, V23=0, V21=0
+[slm] <836.660798> 	Call Functions - Data=1, CallRxFax=0, CallTxFax=0, V.80=0
+[slm] <836.660803> 	Protocol - LAPM V.42
+[slm] <836.660806> 	v8bisIndication - 0
+[slm] <836.660809> 	timeouts - signal detect 12 sec, message detect 7 sec
+[slm] <836.660813> 	quickConnectEnabled - 0
+[slm] <836.660816> 	lapmIndication - 1
+[slm] <836.660819> 	ucodeForQts - 9
+[slm] <836.660821> 	ansPcmLevel - 0
+[slm] <836.660824> ############################################################
+[slm] <836.660830> V8: Initial CM message length is 9 octets
+[slm] <836.660834> call: delete...
+[slm] <836.660836> Dialer was aborted.
+[slm] <836.660839> CALLPROG_Delete is entered
+[slm] <836.660841> cadence_delete with CADENCE_DIAL_OBJ is invoked
+[slm] <836.660850> cadence_delete with CADENCE_OBJ is invoked
+[slm] <836.660854> CALLPROG_Delete is exited
+[slm] <836.671283> V8: State changed from V8_INIT to V8_ORG_WAITING_FOR_ANSAM
+[slm] <836.671293> v8: status (6) V8_ORG_WAITING_FOR_ANSAM
+[slm] <836.741589> V8: State changed from V8_ORG_WAITING_FOR_ANSAM to V8_ORG_ANSAM_DETECTED_WAITING_TE
+[slm] <836.741599> v8: status (7) V8_ORG_ANSAM_DETECTED_WAITING_TE
+[slm] <837.411608> ANSAM phase reversals detected delay = 449
+[slm] <837.411619> ANSAM phase reversals detected delay = 449
+[slm] <837.741423> V8 ANSAM Detected (CM ready)
+[slm] <837.741452> V8: State changed from V8_ORG_ANSAM_DETECTED_WAITING_TE to V8_ORG_SEND_CM
+[slm] <837.741455> v8: status (8) V8_ORG_SEND_CM
+[slm] <839.141056> V8: on CALLER: remote call function is: 107
+[slm] <839.141070> V8: call function DATA indication...
+[slm] <839.141074> V8: Got Call Function Match!
+[slm] <839.141110> V8: State changed from V8_ORG_SEND_CM to V8_ORG_SEND_CJ
+[slm] <839.141115> v8: status (10) V8_ORG_SEND_CJ
+[slm] <839.249849> V8: State changed from V8_ORG_SEND_CJ to V8_OK
+[slm] <839.249860> v8: process: OK.
+[slm] <839.249865> V8Report: remote V90: mod - 1, digital connection - 1, pcmIndication - 1
+[slm] <839.249870> V8Report: v90:1, v34:1, v34hd:0, V32:1, V22:0, V17:0, V29:0, V27:0, V23:0, V21:0
+[slm] <839.249876> v8: Link established. Idle timer 912.
+[slm] <839.249880> v8: status (13) V8_OK
+[slm] <839.249883> slmodem_bridge: 79296: change dp: --> 90...
+[slm] <839.249887> vpcm: create: dp 90, caller 1, frag 48 (size 53848).
+[slm] <839.249985> VPCMXF_Create: side is Analog, maxDataBuffer - 48
+[slm] <839.250031> V90Modem Construction (as Analog Modem)
+[slm] <839.250058> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <839.250065> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <839.250071> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <839.250074> *********************************************************
+[slm] <839.250076> V90Modem Version: 2.98  (25-Mar-04)
+[slm] <839.250080> *********************************************************
+[slm] <839.250084> $!$ 9<5@497B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <839.250090> $!$ 8C8F7=9>>=:?8<7=55=8;;8@7<9@:7898F7G9C><:99;39:<>@;:8?7H::?;666D7>9B>F;89@395@:79:997:9>>E667;7B9B><664B3978>F:D9:8=9:>C66777H:<><;82D1C????
+[slm] <839.250096> $!$ 898F7F:5>F:D8<7G:9?:7@475?9A>F;88<7::9:C66685=7>:C66685<79:C666E7>:<:7886C5E3B8A????
+[slm] <839.250099> *********************************************************
+[slm] <839.250103> V90Parameters: upStream min rate : 4800 upStream max rate : 4800  Rate mask :1
+[slm] <839.250112> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C976987:77C47493B8A????
+[slm] <839.250118> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C9769:7>F:88<396B:7762D1C????
+[slm] <839.250124> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C975<9D>E:D8<7<:9>@:E8E6=:>?7:;474F55;74C2A????
+[slm] <839.250131> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9?9:D597=8D>D:;887G8D><;8997H:7=F;99;7=8D><;<887E::>8;:8@7H9C=F:;8E7:97>C:;474F55;84C2A????
+[slm] <839.250138> V90PreFilter: HardwareCodecType: Unknown
+[slm] <839.250697> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <839.250836> V90ConnectionEvaluator reset called !
+[slm] <839.250845> $!$ 664A3C5?:A6@4A3C5?:A6@4A397:>::>8F3987?9:D475F9:>::>887G9>?::C473C5?:A6@4A3C5?:A6@4A3C558A????
+[slm] <839.250862> V90Phase3Demodulator: Reset called, sessionFlag = 1 !
+[slm] <839.250889> V90Phase3Demodulator: initial state set to WaitForSd
+[slm] <839.250930> $!$ 9<5@497:?8;;887E9>?A:;994C55<:;88<7::9><::473F55<D8C7?399B>F::8<399>?:668;7B:8>8:88C7>99:E4C2A????
+[slm] <839.250936> $!$ 9<5@497:?8;;887E9>?A:;994C55?9:;9:7>:98D4@????
+[slm] <839.250943> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <839.250950> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <839.250980> V92Modem Construction (as Analog Modem)
+[slm] <839.250987> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <839.250994> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <839.251000> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <839.251004> *********************************************************
+[slm] <839.251007> V92Modem Version: 1.1  (9-Apr-01)
+[slm] <839.251010> *********************************************************
+[slm] <839.251015> $!$ 9<5@4;7B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <839.251021> $!$ 8C8<7F9D?9;?477<9A><:78E8>:5?:664B3999>@:B477=9:?::9997B:5?;:E993998?9:79:7A55>=:?9?1F3?????
+[slm] <839.251027> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <839.251056> V92Modulator constraction
+[slm] <839.251704> $!$ 9<5@4;85>?:79:7>68<D:E8;8>9A>8;:8F8;6?:79:795G66?<669:8=96?;:;477E9:>E:=9;7A55?::;9;39:9>F66594965;77:2D1C????
+[slm] <839.251715> V92Modulator reset
+[slm] <839.251730> V92EchoCanceller: constraction
+[slm] <839.251736> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5=9:>C:79@39::?7::888=9:>;669;7H6?:77>5;493?????
+[slm] <839.251742> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5?9>>C;:8<8;7A><:D474F55;87>571F3?????
+[slm] <839.251763> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:7474F55:D764E4965;77657493B8A????
+[slm] <839.251770> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:76;7>98>8;?474F55:D764E4965;77657493B8A????
+[slm] <839.251793> vpcm: VPCM rate limits: 300-56000
+[slm] <839.251798> vpcm: Delays: HW 244, DMA 196
+[slm] <839.251802> vpcm: initial dp V.90, session type 1.
+[slm] <839.251807> VPcmV34Create: quick connect indication from phase1 = 0
+[slm] <839.251811> VPcmV34Create: Uqts index is 9
+[slm] <839.251815> VPcmV34Create: ANSpcm level index is 0
+[slm] <839.251818> VPcmV34Create, initial Session Type = 1
+[slm] <839.251821> RX at 57CBFA20
+[slm] <839.251830> On Create: Setting desired TX MD (0 mSec)!
+[slm] <839.251834> V90Parameters: upStream min rate : 4800 upStream max rate : 33600  Rate mask :1fff
+[slm] <839.251842> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C976987:77C47493B8A????
+[slm] <839.251847> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C9769:7>F:88<396B:7762D1C????
+[slm] <839.251853> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C975<9D>E:D8<7<:9>@:E8E6=:>?7:;474F55;74C2A????
+[slm] <839.251860> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9?9:D597=8D>D:;887G8D><;8997H:7=F;99;7=8D><;<887E::>8;:8@7H9C=F:;8E7:97>C:;474F55;84C2A????
+[slm] <839.251864> V90_V34_Main: reinitializing parameters.
+[slm] <839.251867> V90ConnectionEvaluator reset called !
+[slm] <839.251872> $!$ 664A3C5?:A6@4A3C5?:A6@4A397:>::>8F3987?9:D475F9:>::>887G9>?::C473C5?:A6@4A3C5?:A6@4A3C558A????
+[slm] <839.251876> V90Phase3Demodulator: clearVerificationStatus called
+[slm] <839.251880> V90_V34_Main: external reset called.
+[slm] <839.251887> $!$ 9<777<9B==795;6<9:?;9:9?6<98>8:B8<4C55?;;>478<98>8:B8<39:8><;:478=9D:77;5>4B688D4@????
+[slm] <839.251891> V34SetupModulator: baudrate 2400, carrier 1800, preemp 0, V90=0. fullReset=0
+[slm] <839.251899> V34SetupDemodulator: baudrate 2400, carrier 1800
+[slm] <839.251904> V34SetupModulator: baudrate 600, carrier 2400, preemp 0, V90=0. fullReset=1
+[slm] <839.251914> V34FLO: Echo running in Original Integer...
+[slm] <839.251918> V34FLO: Echo running in Original Integer...
+[slm] <839.251923> V34HSHAKE: txstate NOSTATE0=>SILENCEINFO(rx NOSTATE0, mst NOSTATE0, [1]0, [2]0)
+[slm] <839.251928> V34HSHAKE: rxstate NOSTATE0=>RX_DPSK(tx SILENCEINFO, mst NOSTATE0, [1]0, [2]0)
+[slm] <839.251933> V34HSHAKE: microstate NOSTATE0=>DET_SYNC(tx SILENCEINFO, rx RX_DPSK, [1]0, [2]0)
+[slm] <839.251939> V90, setINFO0dBits
+[slm] <839.251942> V90ConstellationDesigner: set min rate to 300
+[slm] <839.251946> V90ConstellationDesigner: set max rate to 56000
+[slm] <839.251950> VPcmV34Main: minLevel given is 0 , minSigLevel set to 101
+[slm] <839.251953> V34 filtdelay set to 95 (params initial delay = 244)
+[slm] <839.251957> V34FEC, V34dmadelay set to 1356, (ext delay=196)
+[slm] <839.251964> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5=9:>C:79@39::?7::888=9:>;669;7H6?:77957493?????
+[slm] <839.251968> VPcmFlo: From Stream - Entrance Filter forced disabled...
+[slm] <839.251971> VPcmFlo: YES! entrance filter applied = 0
+[slm] <839.251976> v8: delete...
+[slm] <839.313026> V34HSHAKE: txstate SILENCEINFO=>TX_DPSK(rx RX_DPSK, mst DET_SYNC, [1]10, [2]0)
+[slm] <839.313038> setINFO0aBits - setting info0a for V.PCM
+[slm] <839.400659> V34HSHAKE: txstate TX_DPSK=>TONE_AB(rx RX_DPSK, mst DET_SYNC, [1]0, [2]0)
+[slm] <839.460344> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <839.460355> DET_SYNC is received in RX_DPSK,rx->gain=0x600
+[slm] <839.540963> VPcmV34Main, giveINFO0aBits
+[slm] <839.540974> VPcmV34Main, rxinfo0a = <839.540977> 0xff,0x85,0x37,0x70,0xfd,0x0,0x0,0x0,0x0,0x0
+[slm] <839.540984> VPcmV34Main: localV92- 0, remoteV92- 1, localShort- 0, remoteShort- 0, isShort- 0
+[slm] <839.540989> V34INFO, rxinfo0 0xff,0x85,0x37,0x70,0xfd,0x0,0x0,0x0,0x0,0x0
+[slm] <839.540995> V34HSHAKE: microstate DET_INFO=>TX_PHASE1_ANS(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <839.541000> V34INFO, info0 received in DET_INFO
+[slm] <839.702463> V34HSHAKE: microstate TX_PHASE1_ANS=>RX_PHASE1_ANS(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <839.800673> VPcmV34Main: Masking CAS detection after 4800 in train...
+[slm] <839.849685> On RX_PHASE1_ANS: is short=0, bulkDelay=600, filtDelay=95
+[slm] <839.849697> V34 bulk delay estimation 600 (FAR=0)
+[slm] <839.849701> V34HSHAKE: microstate RX_PHASE1_ANS=>TX_PHASE2_ANS(tx TONE_AB, rx RX_DPSK, [1]0, [2]95)
+[slm] <839.849714> V34HSHAKE: microstate TX_PHASE2_ANS=>TX_L1(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <839.870704> V34HSHAKE: txstate TONE_AB=>TX_L1(rx RX_DPSK, mst TX_L1, [1]0, [2]42)
+[slm] <839.870716> V34HSHAKE: rxstate RX_DPSK=>DET_AB(tx TX_L1, mst TX_L1, [1]0, [2]42)
+[slm] <839.870723> V34RETRAIN, starting DET_AB, rx->rxflgs = 0x1a04,rx->gain=0x357
+[slm] <840.032112> V34HSHAKE: microstate TX_L1=>TX_L2(tx TX_L1, rx DET_AB, [1]1536, [2]42)
+[slm] <840.649623> V34RETRAIN, End of L2,rx->gain=0x357,count1=5940
+[slm] <840.649635> V34HSHAKE: txstate TX_L1=>TONE_AB(rx DET_AB, mst TX_L2, [1]5940, [2]42)
+[slm] <840.649642> V34HSHAKE: microstate TX_L2=>TX_PHASE3_ANS(tx TONE_AB, rx DET_AB, [1]5940, [2]42)
+[slm] <840.649648> V34HSHAKE: rxstate DET_AB=>RX_DPSK(tx TONE_AB, mst TX_PHASE3_ANS, [1]5940, [2]42)
+[slm] <840.712813> V34HSHAKE: txstate TONE_AB=>SILENCE(rx RX_DPSK, mst TX_PHASE3_ANS, [1]0, [2]162)
+[slm] <840.712825> V34HSHAKE: microstate TX_PHASE3_ANS=>RX_PHASE2_ANS(tx SILENCE, rx RX_DPSK, [1]0, [2]162)
+[slm] <840.842565> V34SetupDemodulator: baudrate 2400, carrier 1800
+[slm] <840.842577> V34HSHAKE: rxstate RX_DPSK=>RX_L1(tx SILENCE, mst RX_PHASE2_ANS, [1]0, [2]20)
+[slm] <840.860111> V34AGC, rx->gain = 0x178, at the beginning of RX_L1
+[slm] <841.281091> V34SetupDemodulator: baudrate 2400, carrier 0
+[slm] <841.281102> V34HSHAKE: rxstate RX_L1=>RX_DPSK(tx SILENCE, mst RX_PHASE2_ANS, [1]0, [2]1089)
+[slm] <841.281107> V34HSHAKE: txstate SILENCE=>TONE_AB(rx RX_DPSK, mst RX_PHASE2_ANS, [1]0, [2]1089)
+[slm] <841.281110> V34HSHAKE: microstate RX_PHASE2_ANS=>DET_SYNC(tx TONE_AB, rx RX_DPSK, [1]0, [2]1089)
+[slm] <841.432009> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <841.432025> DET_SYNC is received in RX_DPSK,rx->gain=0x357
+[slm] <841.589802> V34HSHAKE: txstate TONE_AB=>TX_DPSK(rx RX_DPSK, mst DET_INFO, [1]0, [2]0)
+[slm] <841.589816> RX MDLENGTH = 0
+[slm] <841.589819> V34PROBE, snr_L1=42743 , snr_L2=53376 , L2toL1ratio=1279  (all not in dB)
+[slm] <841.589822> V34PROBE, dBcnt=1 , powerReductionReq=0 , gain=855
+[slm] <841.589824> Sensitive RX Power Reduction mechanism disabled!
+[slm] <841.589826> V34PROBE, not asking for power reduction
+[slm] <841.589828> V34PROBE, rx->gain=855 ,(obj->rxinfo0.data[1]&0x80)=128
+[slm] <841.589831> V34PROBE,0=3,0,0,0,0,5=12,0,12,0,0,10=0,12,0,0,0,12,0,0,0,0,20=0,0,22=0,1,24=2
+[slm] <841.589838> VpcmV34Main: max V34 baud rate index = 0
+[slm] <841.589841> V34PREEMPHASIS, - index is 6, baudrate= 3200
+[slm] <841.589843> V34PROBESELECT, in ANSWER, txbaudrate = 3200,rxbaudrate = 3200,
+[slm] <841.589846> V34PROBE, rxinfo1c 0x98,0x0,0x26,0x1a,0xd,0x81,0xc2,0xc0,0x0,0x7
+[slm] <841.589850> VPcmV34Main: giveINFO1dBits
+[slm] <841.589852> VPcmV34Main: rxinfo1d = 0x98,0x0,0x26,0x1a,0xd,0x81,0xc2,0xc0,0x0,0x7
+[slm] <841.589856> VPcmV34Main: upstream selection: local cap - 0, remote cap - 1, requested in info1 - 0, isPCM - 0
+[slm] <841.589859> VPcmV34Main, setINFO1aBits
+[slm] <841.589863> Final L2 Probing signal:
+[slm] <841.589865> L2[15]    = +0.14094
+[slm] <841.589868> L2[16]    = -0.04415
+[slm] <841.589870> L2[17]    = +0.18203
+[slm] <841.589873> L2[18]    = +0.41493
+[slm] <841.589875> L2[19]    = +2.20776
+[slm] <841.589877> L2[20]    = +6.01490
+[slm] <841.589880> P2 REPORT : A_LAW or MU_LAW 1 ( 0 = Mu, 1 = A)
+[slm] <841.589883> P2 REPORT : Tx power measurment point = 1 ( 0 = digital modem terminal, 1 = codec output)
+[slm] <841.589885> P2 REPORT : Max tx power = 23
+[slm] <841.589887> P2 REPORT : short phase2: local=0 , remote=0
+[slm] <841.589889> P2 REPORT : V92 capabilities: local=0 , remote=1 , selected=90
+[slm] <841.589896> $!$ 9<777<9B<=:B8F5F9D>;:;8D4C55?::;9;8=9>>E:=476978<D669:7>:8?::?8F7G55?;:E476?5C;@762A????
+[slm] <841.589900> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A669:7>:9=::;9:8<9>>F:D6=7E96>>6B477?9A>8:=474F55;74C2A????
+[slm] <841.589903> VPcmV34Main: V.34 Upstream is selected (info1)...
+[slm] <841.589905> VPcmV34Main: It is ===== V90 receiver ==== from Now on
+[slm] <841.589907> V34HSHAKE: microstate DET_INFO=>INFODONE(tx TX_DPSK, rx RX_DPSK, [1]0, [2]0)
+[slm] <841.589911> V34PROBE, txinfo1a 0x0,0x3,0x90,0xb0,0x0,0x0,0x0,0x0,0x0,0x0
+[slm] <841.712639> V34HSHAKE: txstate TX_DPSK=>TONE_AB(rx RX_DPSK, mst INFODONE, [1]0, [2]0)
+[slm] <841.723077> V34HSHAKE: txstate TONE_AB=>SILENCE(rx RX_DPSK, mst INFODONE, [1]0, [2]16)
+[slm] <841.723099> $!$ 9<777<9B==795;5F96>@:D5A39:5>?:79:7>68>?:78C7?79?<;68C7>:=<C:;8E7@:9>?665D396:;;775939:8?@:C897H9A?:664?7;96?<::474<67;7764@1F3?????
+[slm] <841.723103> V90Parameters: upStream min rate : 4800 upStream max rate : 33600  Rate mask :1fff
+[slm] <841.723108> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C976987:77C47493B8A????
+[slm] <841.723112> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C9769:7>F:88<396B:7762D1C????
+[slm] <841.723115> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C975<9D>E:D8<7<:9>@:E8E6=:>?7:;474F55;74C2A????
+[slm] <841.723119> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9?9:D597=8D>D:;887G8D><;8997H:7=F;99;7=8D><;<887E::>8;:8@7H9C=F:;8E7:97>C:;474F55;84C2A????
+[slm] <841.723123> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A669:7>:9=::;9:8<9>>F:D6=7E96>>6B477?9A>8:=474F55;74C2A????
+[slm] <841.723125> V90Modem Reset, qcFlag = 0
+[slm] <841.723130> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <841.723133> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <841.723137> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <841.723139> *********************************************************
+[slm] <841.723140> V90Modem Version: 2.98  (25-Mar-04)
+[slm] <841.723143> *********************************************************
+[slm] <841.723146> $!$ 9<5@497B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <841.723150> $!$ 8C8F7=9>>=:?8<7=55=8;;8@7<9@:7898F7G9C><:99;39:<>@;:8?7H::?;666D7>9B>F;89@395@:79:997:9>>E667;7B9B><664B3978>F:D9:8=9:>C66777H:<><;82D1C????
+[slm] <841.723154> $!$ 898F7F:5>F:D8<7G:9?:7@475?9A>F;88<7::9:C66685=7>:C66685<79:C666E7>:<:7886C5E3B8A????
+[slm] <841.723155> *********************************************************
+[slm] <841.723160> $!$ 9<5@4979>@:B6;7>:8>:;88@89:9>F;87:7>:9?;:?8E7@:8;A666;5B7A:7::8<8<98?9:?978=9D?9669:7>:9:7;:8F399D?7;:8@7H9C:7876;5B5C8D4@????
+[slm] <841.723162> V90Demodulator reset, quick connect flag = 0
+[slm] <841.723168> $!$ 9<5@4979><:C8F7=::>C:79;7H:7:7;88<8<9:?;7@475;96?<::475H9;>=;98<8=55;D664D495C;776571F3?????
+[slm] <841.723172> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <841.723175> $!$ 9<5@497:?8;;887E9>?A:;994C55?9:;9:7>:98D4@????
+[slm] <841.723179> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <841.723183> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <841.723203> V92Modem Reset
+[slm] <841.723206> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <841.723210> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <841.723213> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <841.723215> *********************************************************
+[slm] <841.723217> V92Modem Version: 1.1  (9-Apr-01)
+[slm] <841.723219> *********************************************************
+[slm] <841.723222> $!$ 9<5@4;7B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <841.723225> $!$ 8C8<7F9D?9;?477<9A><:78E8>:5?:664B3999>@:B477=9:?::9997B:5?;:E993998?9:79:7A55>=:?9?1F3?????
+[slm] <841.723228> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <841.723231> ## Debug: pParamObj address = 57CCC9F4
+[slm] <841.723233> ## Debug: BitVector address = 57CD2B24
+[slm] <841.723235> ## Debug: Cnt address = 57CD2B20
+[slm] <841.723237> ## Debug: pParamObj->N = 144
+[slm] <841.723239> ## Debug: pParamObj->Lsp = 120
+[slm] <841.723241> ## Debug: pParamObj->Ltp = 120
+[slm] <841.723249> #%# Debug: last bit before V.92 info = 1683
+[slm] <841.723255> #%# Debug: last bit after V.92 info = 1717, temp calculation = 1716
+[slm] <841.723276> V92Modulator reset
+[slm] <841.723285> V92Modulator enter Phase 3
+[slm] <841.723289> $!$ 9<5@4;85>?:79:7>68<D:E8;8>9A>8;:8F8;6?:79:795G66?<669:8=96?;:;477E9:>E:=9;7A55?::;9;39:9>F66594965;77:2D1C????
+[slm] <841.723294> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:7474F55:D764E4965;77657493B8A????
+[slm] <841.723298> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:76;7>98>8;?474F55:D764E4965;77657493B8A????
+[slm] <841.723301> VPcmV34Main: Wait (before P2 COMPLETE)...
+[slm] <841.723352> VPcmV34Main: Indicating First P2 COMPLETE... (after 96)
+[slm] <841.723355> vpcm: New status 1
+[slm] <841.723357> vpcm: Phase II completed !!!
+[slm] <841.730137> On PHASE2_COMPLETE: added Silence = 0, p2DelayCntr = 144
+[slm] <841.730145> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.730195> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.740577> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.740633> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.751127> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.751184> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.761644> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.761701> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.772132> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.772189> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <841.782703> V34Hshak: Setting up transmitter for phase3...
+[slm] <841.782718> $!$ 9<777<9B==795;5F96>@:D5A3979?<:;478=9D:7:<8@7G96>C666D7B9C=;9>776;55;D665=3E55?::;9;8=9>>E:=477>98>?:E5A3999><:9888B55?:;:888;:9:77C474;65;7764C3999><:9888B55>=:78:8=55;D665:4;6<;:7;4C3997><;:88396B:7782D1C????
+[slm] <841.782724> $!$ 9<777<9B==795;5F96>@:D5A397<><;:475F9>>E:?8D7:9A:7;68F8@9:?966997>99?<:99;7B9D>E664D39:7><;:9<8;9C>@:D8>396;:76>8:7?9<:7:<8C7:9<:7;98<8=55?;:E47495>8D4@????
+[slm] <841.782726> V34TXSCALE, power reduction requested by remote modem is 4 dB
+[slm] <841.782729> V34TXSCALE, txscale before is 5793, reduced txscale is 6 dB,final txscale is 2900
+[slm] <841.782731> V34SetupModulator: baudrate 3200, carrier 1920, preemp 0, V90=1. fullReset=1
+[slm] <841.782736> V34HSHAKE: rxstate RX_DPSK=>WAIT(tx SILENCE, mst INFODONE, [1]0, [2]30)
+[slm] <841.782740> V34HSHAKE: txstate SILENCE=>SSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <841.782744> V34FLO: Echo running in Original Integer...
+[slm] <841.782747> V34FLO: Echo running in Original Integer...
+[slm] <841.782793> VPcmV34Main: Moving to Phase3 Modem V90..
+[slm] <841.782796> vpcm: New status 2
+[slm] <841.789701> Estimated DC = -1  (acc = -27)
+[slm] <841.800231> Estimated DC = -2  (acc = -128)
+[slm] <841.810843> Estimated DC = -2  (acc = -128)
+[slm] <841.821358> V34HSHAKE: txstate SSEG=>SBARSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <841.831779> V34HSHAKE: txstate SBARSEG=>PPSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <841.831804> Estimated DC = -2  (acc = -128)
+[slm] <841.842292> Estimated DC = -2  (acc = -128)
+[slm] <841.852851> Estimated DC = -2  (acc = -128)
+[slm] <841.870425> Estimated DC = -2  (acc = -128)
+[slm] <841.880941> Estimated DC = -2  (acc = -128)
+[slm] <841.891583> Estimated DC = -2  (acc = -128)
+[slm] <841.912536> Estimated DC = -2  (acc = -128)
+[slm] <841.923024> V34HSHAKE: txstate PPSEG=>TRNSEG4(rx WAIT, mst INFODONE, [1]744, [2]30)
+[slm] <841.923035> V34Hshak: echo start wait time would be: NEC 435 symbols, FEC 970 symbols...
+[slm] <841.923083> Estimated DC = -2  (acc = -128)
+[slm] <841.930155> Estimated DC = -2  (acc = -128)
+[slm] <841.951077> Estimated DC = -2  (acc = -128)
+[slm] <841.961604> Estimated DC = -2  (acc = -128)
+[slm] <841.961717> VPcmV34Main: Echo adapt start reported...
+[slm] <841.972222> Estimated DC = -2  (acc = -128)
+[slm] <841.972251> Echo Energy = 0, BETA = 2
+[slm] <841.972257> updateAlphaNE: updated 0 => -3021
+[slm] <841.989702> Estimated DC = -2  (acc = -128)
+[slm] <842.000230> Estimated DC = -2  (acc = -128)
+[slm] <842.010819> Estimated DC = -2  (acc = -128)
+[slm] <842.031770> Estimated DC = -2  (acc = -128)
+[slm] <842.042299> Estimated DC = -2  (acc = -128)
+[slm] <842.052945> Estimated DC = -2  (acc = -128)
+[slm] <842.070362> Estimated DC = -2  (acc = -128)
+[slm] <842.080878> Estimated DC = -2  (acc = -128)
+[slm] <842.091544> Estimated DC = -2  (acc = -128)
+[slm] <842.112495> Estimated DC = -2  (acc = -128)
+[slm] <842.122997> Estimated DC = -2  (acc = -128)
+[slm] <842.130129> Estimated DC = -2  (acc = -128)
+[slm] <842.151044> Estimated DC = -2  (acc = -128)
+[slm] <842.161613> Estimated DC = -2  (acc = -128)
+[slm] <842.172203> Estimated DC = -2  (acc = -128)
+[slm] <842.189639> Estimated DC = -2  (acc = -128)
+[slm] <842.200195> Estimated DC = -2  (acc = -128)
+[slm] <842.210784> Estimated DC = -2  (acc = -128)
+[slm] <842.231729> Estimated DC = -2  (acc = -128)
+[slm] <842.242284> Estimated DC = -2  (acc = -128)
+[slm] <842.252889> Estimated DC = -2  (acc = -128)
+[slm] <842.270325> Estimated DC = -2  (acc = -128)
+[slm] <842.280873> Estimated DC = -2  (acc = -128)
+[slm] <842.291517> Estimated DC = -2  (acc = -128)
+[slm] <842.312431> Estimated DC = -2  (acc = -128)
+[slm] <842.322955> Estimated DC = -2  (acc = -128)
+[slm] <842.330103> Estimated DC = -2  (acc = -128)
+[slm] <842.351017> Estimated DC = -2  (acc = -128)
+[slm] <842.361598> Estimated DC = -2  (acc = -128)
+[slm] <842.372168> Estimated DC = -2  (acc = -128)
+[slm] <842.389588> Estimated DC = -2  (acc = -128)
+[slm] <842.400142> Estimated DC = -2  (acc = -128)
+[slm] <842.410729> Estimated DC = -2  (acc = -128)
+[slm] <842.431678> Estimated DC = -2  (acc = -128)
+[slm] <842.442245> Estimated DC = -2  (acc = -128)
+[slm] <842.452833> Estimated DC = -2  (acc = -128)
+[slm] <842.470268> Estimated DC = -2  (acc = -128)
+[slm] <842.480797> Estimated DC = -2  (acc = -128)
+[slm] <842.491456> Estimated DC = -2  (acc = -128)
+[slm] <842.512381> Estimated DC = -2  (acc = -128)
+[slm] <842.522887> Estimated DC = -2  (acc = -128)
+[slm] <842.530057> Estimated DC = -2  (acc = -128)
+[slm] <842.550957> Estimated DC = -2  (acc = -128)
+[slm] <842.561581> Estimated DC = -2  (acc = -128)
+[slm] <842.572108> Estimated DC = -2  (acc = -128)
+[slm] <842.589585> Estimated DC = -2  (acc = -128)
+[slm] <842.600093> Estimated DC = -2  (acc = -128)
+[slm] <842.610664> Estimated DC = -2  (acc = -128)
+[slm] <842.631636> Estimated DC = -2  (acc = -128)
+[slm] <842.642199> Estimated DC = -2  (acc = -128)
+[slm] <842.652792> Estimated DC = -2  (acc = -128)
+[slm] <842.670238> Estimated DC = -2  (acc = -128)
+[slm] <842.670411> VPcmV34Main: Echo adapt middle reported...
+[slm] <842.680764> Estimated DC = -2  (acc = -128)
+[slm] <842.691429> Estimated DC = -2  (acc = -128)
+[slm] <842.712330> Estimated DC = -2  (acc = -128)
+[slm] <842.722968> Estimated DC = -2  (acc = -128)
+[slm] <842.730117> Estimated DC = -2  (acc = -128)
+[slm] <842.751019> Estimated DC = -2  (acc = -128)
+[slm] <842.761616> Estimated DC = -2  (acc = -128)
+[slm] <842.772183> Estimated DC = -2  (acc = -128)
+[slm] <842.789578> Estimated DC = -2  (acc = -128)
+[slm] <842.800153> Estimated DC = -2  (acc = -128)
+[slm] <842.810742> Estimated DC = -2  (acc = -128)
+[slm] <842.831698> Estimated DC = -2  (acc = -128)
+[slm] <843.522752> V34HSHAKE: txstate TRNSEG4=>JTXMIT(rx WAIT, mst INFODONE, [1]744, [2]435)
+[slm] <843.522767> V34Hshak: On J TX start, would freeze EC after bulk delay (600 samples, bulk=600)
+[slm] <843.522772> V34HSHAKE: rxstate WAIT=>RECEIVE(tx JTXMIT, mst INFODONE, [1]744, [2]600)
+[slm] <843.522779> V34SetupDemodulator: baudrate 3200, carrier 1920
+[slm] <843.522784> V34AGC, setup receiver gain = 0x2f0
+[slm] <843.522788> V34HSHAKE: microstate INFODONE=>DET_SYNC(tx JTXMIT, rx RECEIVE, [1]744, [2]600)
+[slm] <843.522792> V34HSHAKE: txstate JTXMIT=>JaTXMIT(rx RECEIVE, mst DET_SYNC, [1]0, [2]600)
+[slm] <843.522797> V34HSHAKE: rxstate RECEIVE=>WAIT(tx JaTXMIT, mst DET_SYNC, [1]0, [2]600)
+[slm] <843.522803> VPcmFloModem: enterPhase3 called.
+[slm] <843.522806> V90Demodulator: enter Phase 3
+[slm] <843.522809> V90Phase2Info: pcmType = A_LAW
+[slm] <843.522813> V90Phase2Info: rtd = 1080
+[slm] <843.522817> V90Phase2Info: maxTxPower [dBm0]  = -12.0
+[slm] <843.522822> V90Phase2Info: txPowerMeasurementPoint = CodecOutput
+[slm] <843.522830> $!$ 9<5@4985>?:79:7>67<@:D8=7H6?:79;8@7G9;>F665D396<;?4C2A????
+[slm] <843.522834> V90Phase2Info: L2[0] = +203.402
+[slm] <843.522838> V90Phase2Info: L2[1] = +210.702
+[slm] <843.522842> V90Phase2Info: L2[2] = +211.011
+[slm] <843.522846> V90Phase2Info: L2[3] = +211.256
+[slm] <843.522849> V90Phase2Info: L2[4] = +211.253
+[slm] <843.522853> V90Phase2Info: L2[5] = +211.410
+[slm] <843.522857> V90Phase2Info: L2[6] = +211.335
+[slm] <843.522860> V90Phase2Info: L2[7] = +211.455
+[slm] <843.522864> V90Phase2Info: L2[8] = +211.315
+[slm] <843.522868> V90Phase2Info: L2[9] = +211.377
+[slm] <843.522872> V90Phase2Info: L2[10] = +211.441
+[slm] <843.522875> V90Phase2Info: L2[11] = +211.324
+[slm] <843.522879> V90Phase2Info: L2[12] = +211.442
+[slm] <843.522883> V90Phase2Info: L2[13] = +211.378
+[slm] <843.522887> V90Phase2Info: L2[14] = +211.385
+[slm] <843.522891> V90Phase2Info: L2[15] = +211.244
+[slm] <843.522894> V90Phase2Info: L2[16] = +211.429
+[slm] <843.522898> V90Phase2Info: L2[17] = +211.203
+[slm] <843.522902> V90Phase2Info: L2[18] = +210.970
+[slm] <843.522906> V90Phase2Info: L2[19] = +209.177
+[slm] <843.522910> V90Phase2Info: L2[20] = +205.370
+[slm] <843.522919> $!$ 9<5@4985?9:;6=7B9A?;:;994C55>C:E8F8955;D66688<98><:D8;5G8:<C8B473A66:@4C2A????
+[slm] <843.522926> $!$ 9<5@4985?9:;6=7B9A?;:;994C55=7;88<397;>@:B9;7>:7:7898F7>9;>=;9476=:>?7:;477::7?9:79@3966:C664?7?9>>C;:8<8;55>C:;8E7@:9>?6659495>8D4@????
+[slm] <843.522932> $!$ 9<5@4985?9:;6=7B9A?;:;994C55<?:7997=:<>8;88<5<9D>;:;8:6=:>?7:;5A398:>E:A8E7H:<>E4C2A????
+[slm] <843.522937> $!$ 9<5@4985?9:;6=7B9A?;:;994C55<=:?8C8=9:?9666>7:9>>E665D39698D4@????
+[slm] <843.522943> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A66797>:8><;:2D1C????
+[slm] <843.522947> V90Phase3Demodulator: Reset called, sessionFlag = 0 !
+[slm] <843.522959> V90Phase3Demodulator: initial state set to WaitForSd
+[slm] <843.522976> $!$ 9<5@497:?8;;887E9>?A:;994C55><:D9;7>:7:7968?7::8><665:1F3?????
+[slm] <843.523017> $!$ 9<777<9B<=:B8F5F9D>;:;8D4C55><:D9;7>:7=7:>888<9:;:7@475C96:7:B8<7G9<?;:>474F55;87=574;3B8A????
+[slm] <843.523149> V90Demodulator: Error Energy = -0.000
+[slm] <843.523156> V90Demodulator: Timing Offset [ppm]  = -0.000
+[slm] <843.600040> V90Demodulator: Error Energy = -0.000
+[slm] <843.680695> V90Demodulator: Error Energy = -0.000
+[slm] <843.712168> V34Hshak: on JaTXMIT - time to freeze echo...
+[slm] <843.712177> V34HSHAK: Freeze EC
+[slm] <843.712180> ==== Near Echo Canceller report ======
+[slm] <843.712184> ?======= Nothing to report =========
+[slm] <843.712188> ==== Far Echo Canceller report ======
+[slm] <843.712191> ?======= Nothing to report =========
+[slm] <843.761427> V90Demodulator: Error Energy = -0.000
+[slm] <843.842042> V90Demodulator: Error Energy = -0.000
+[slm] <843.922725> V90Demodulator: Error Energy = -0.000
+[slm] <843.999929> V90Demodulator: Error Energy = -0.000
+[slm] <844.080665> V90Demodulator: Error Energy = -0.000
+[slm] <844.161381> V90Demodulator: Error Energy = -0.000
+[slm] <844.210515> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@476<99:7::8<8=9:>:;:8<7=55<7665<4>67;=4C2A????
+[slm] <844.210571> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:78:8<7F9D>;998;5=9:?;:;8:8=9:>;4C2A????
+[slm] <844.210576> Ja Flag set to 1
+[slm] <844.231666> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@476<99<E:E9;3999><;:8<7<:9><::475955;9785:1F3?????
+[slm] <844.231692> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:78:8<7F9D>;998;5G9D?;8:8<8=9:>:;:8<7=3B8A????
+[slm] <844.242058> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;993989=98D587=55<B:D8F8@9C:78:888=96:7;99;7::9><4C2A????
+[slm] <844.242071> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475B7C<@9:6@5:7A8D4@????
+[slm] <844.242084> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A669:8=96?9;:477=96?;:7477:98>:;;8D8>9A>8;:8@7H9C8D4@????
+[slm] <844.242090> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:7878:8=9>?=:79;7>998D4@????
+[slm] <844.242094> V90Demodulator: Error Energy = -0.000
+[slm] <844.322734> V90Demodulator: Error Energy = +2773.184
+[slm] <844.361428> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B774E4965;776577>5B;8762D1C????
+[slm] <844.361444> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78<997H:?><:D2D1C????
+[slm] <844.361451> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78;8E7>:7>>;?474F55:B775<4<6=;9775@4<5C;7762D1C????
+[slm] <844.361457> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78=887B9C:77C473D65:E7?5=4=6:;;782D1C????
+[slm] <844.361462> ResamplerTiming::adjustHalfBaudBpfGain  baud/2 dft bin = +151449.068
+[slm] <844.361466> ResamplerTiming::adjustHalfBaudBpfGain  normFactor = +2.000
+[slm] <844.361469> ResamplerTiming::adjustHalfBaudBpfGain  normBPFhBaudB0coef = +0.079
+[slm] <844.361473> V90Demodulator: Agc Gain low > Setting DIL overflow protection !!!
+[slm] <844.361478> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A666;7B9A:7:C888A55?<:98F7=9::77C474:66;=4@????
+[slm] <844.399914> V90Demodulator: Error Energy = +3472.260
+[slm] <844.452563> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?76=:9:2D1C????
+[slm] <844.480594> V90Demodulator: Error Energy = +1937.676
+[slm] <844.491124> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;>7657499::D7=2D1C????
+[slm] <844.491273> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;993989=98D587=55<;8:478<:9>8;:8<1F3?????
+[slm] <844.522690> V90Demodulator: Timing Offset [ppm]  = -11.137
+[slm] <844.561295> V90Demodulator: Error Energy = +749.766
+[slm] <844.641963> V90Demodulator: Error Energy = +266.221
+[slm] <844.670310> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A66797>96>;;?2D1C????
+[slm] <844.670324> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E397>=:8:6E397C=;77477;9D??7@477E9:>=;:47899:>8:A477=9:>C;:88396B:76A584B5C;97=2D1C????
+[slm] <844.670333> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E397>=:8:6E397C=;77477;9D??7@478;9>>>:>9;39:5><:78B3999><:B9;7:55;D664D4<5C;87=2D1C????
+[slm] <844.670339> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E3985<99>5A399A><:<9;39:5><:78B3999><:B9;7:55;D664B4=5C;:7=2D1C????
+[slm] <844.670346> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E3985<99>5A39:7>@:=8?8=55?7:;887D55>;:;8C8=96:77C473F6<:E78581F3?????
+[slm] <844.670354> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;88<7?55>=;88<8:55:?795=4965:@66474F55:B7?5=3G67;94C2A????
+[slm] <844.670361> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;:8<8<:9:7:<997>:6;8664?4=65;7764@3955;D664B4@6;:E78581F3?????
+[slm] <844.670385> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;:8<8<:9:7:<997>:6;9664?4=67;7764@3955;D664B4=6<:E7<5?1F3?????
+[slm] <844.670390> V90SpectralVerifier: No special conditions
+[slm] <844.722656> V90Demodulator: Error Energy = +120.803
+[slm] <844.799862> V90Demodulator: Error Energy = +73.797
+[slm] <844.880535> V90Demodulator: Error Energy = +54.967
+[slm] <844.961186> V90Demodulator: Error Energy = +51.034
+[slm] <845.041870> V90Demodulator: Error Energy = +42.659
+[slm] <845.122556> V90Demodulator: Error Energy = +54.525
+[slm] <845.199729> V90Demodulator: Error Energy = +47.378
+[slm] <845.199828> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475F7:<;8?7<5F3B8A????
+[slm] <845.280410> V90Demodulator: Error Energy = +48.192
+[slm] <845.361089> V90Demodulator: Error Energy = +34.162
+[slm] <845.441765> V90Demodulator: Error Energy = +25.516
+[slm] <845.522496> V90Demodulator: Error Energy = +22.002
+[slm] <845.522507> V90Demodulator: Timing Offset [ppm]  = +3.999
+[slm] <845.599664> V90Demodulator: Error Energy = +19.713
+[slm] <845.680331> V90Demodulator: Error Energy = +19.936
+[slm] <845.761001> V90Demodulator: Error Energy = +17.747
+[slm] <845.841686> V90Demodulator: Error Energy = +16.861
+[slm] <845.922427> V90Demodulator: Error Energy = +16.006
+[slm] <845.992655> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;9939:8?;;;8;8B55?9:;8=7>:7><:D8:7>55=<:98F7=9::7;99;7::9><66673966;97657493B8A????
+[slm] <845.992670> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476<7A<F9=2D1C????
+[slm] <845.999620> V90Demodulator: Error Energy = +15.308
+[slm] <846.069774> V90AutoDigitalImpDetector:  initail var (Trn1):  204  227  285  252  211  219
+[slm] <846.069790> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>D:;887G8;>8;8474F55:B78584>5C;?762D1C????
+[slm] <846.069795> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>=:78:8=9D?9665D395@;86D5<493B8A????
+[slm] <846.069800> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>@:D8@8=9>>8:B478?96?99:8?8;9:?::>474F55:B79594<5C;>762D1C????
+[slm] <846.069802> V90AutoDigitalImpDetector:  initail AltRbsVarThresh (Trn1) = 4000
+[slm] <846.069807> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@476=:7>E77477:9A?;:;997G96?;:;478;97?:668@7G9>?;:?887E55?7:79;7>:7>E66474965;77657493?????
+[slm] <846.080301> V90Demodulator: Error Energy = +14.715
+[slm] <846.160959> V90Demodulator: Error Energy = +14.141
+[slm] <846.220578> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?9669;8;9C;8668=7B:7?:;:478>:5>;:79;7>55:77@473968;@765;3955;:7?574=55:7795@4969:7665:4B65;;66474<6>;77:473968;@765;1C????
+[slm] <846.241620> V90Demodulator: Error Energy = +14.789
+[slm] <846.290799> V90AutoDigitalImpDetector trn1 second update  :  3904  3904  3904  3904  3904  3904
+[slm] <846.290810> V90AutoDigitalImpDetector trn1 Alt first update  :  3904  3904  3904  3904  3904  3904
+[slm] <846.322335> V90Demodulator: Error Energy = +14.295
+[slm] <846.399529> V90Demodulator: Error Energy = +13.812
+[slm] <846.480183> V90Demodulator: Error Energy = +13.458
+[slm] <846.522314> V90Demodulator: Timing Offset [ppm]  = +0.653
+[slm] <846.560835> V90Demodulator: Error Energy = +12.815
+[slm] <846.620575> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476<7A<F9=591F3?????
+[slm] <846.641511> V90Demodulator: Error Energy = +13.837
+[slm] <846.669616> V90AutoDigitalImpDetector trn1 third update  :  3903  3903  3903  3903  3903  3903
+[slm] <846.669627> V90AutoDigitalImpDetector trn1 Alt second update  :  3904  3904  3904  3904  3904  3904
+[slm] <846.669631> V90AutoDigitalImpDetector first update : trn1Sigma = -536870912
+[slm] <846.722260> V90Demodulator: Error Energy = +13.249
+[slm] <846.802869> V90Demodulator: Error Energy = +14.186
+[slm] <846.880060> V90Demodulator: Error Energy = +13.509
+[slm] <846.890686> V90AutoDigitalImpDetector trn1 final update  :  3903  3903  3903  3903  3903  3903
+[slm] <846.890697> V90AutoDigitalImpDetector trn1 Alt final update  :  3904  3904  3904  3904  3904  3904
+[slm] <846.890700> V90AutoDigitalImpDetector second update : trn1Sigma = 1610612736
+[slm] <846.890706> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;99398<>8:?9;397;>F;8475C99:7;99;7::9><6667396<;976571F3?????
+[slm] <846.890714> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668<7G96>9:B8@7G9<:7:98F7G9C><:99;7B9D>E8;9=7:9A?<:79;7H:7:7:E8=3989=98D587=3B8A????
+[slm] <846.960787> V90Demodulator: Error Energy = +13.949
+[slm] <847.041453> V90Demodulator: Error Energy = +14.018
+[slm] <847.122133> V90Demodulator: Error Energy = +13.517
+[slm] <847.202820> V90Demodulator: Error Energy = +12.851
+[slm] <847.279995> V90Demodulator: Error Energy = +12.060
+[slm] <847.360673> V90Demodulator: Error Energy = +13.229
+[slm] <847.441397> V90Demodulator: Error Energy = +12.959
+[slm] <847.522043> V90Demodulator: Error Energy = +12.801
+[slm] <847.522054> V90Demodulator: Timing Offset [ppm]  = +0.056
+[slm] <847.602848> V90Demodulator: Error Energy = +11.948
+[slm] <847.679999> V90Demodulator: Error Energy = +13.229
+[slm] <847.760681> V90Demodulator: Error Energy = +12.165
+[slm] <847.841407> V90Demodulator: Error Energy = +11.573
+[slm] <847.922015> V90Demodulator: Error Energy = +12.945
+[slm] <848.002734> V90Demodulator: Error Energy = +13.117
+[slm] <848.079886> V90Demodulator: Error Energy = +11.704
+[slm] <848.160590> V90Demodulator: Error Energy = +11.570
+[slm] <848.241263> V90Demodulator: Error Energy = +12.319
+[slm] <848.321934> V90Demodulator: Error Energy = +9.731
+[slm] <848.349970> V90Phase3Demodulator: waitForJd framePosition = 0
+[slm] <848.349985> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@475C99:7::8<8=9:>:;:8<7=55<766584:6;;;762D1C????
+[slm] <848.349999> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668<7G96>9:B8@7G9<:7:98F7G9C><:99;7B9D>E8;9=7:9A?<:79;7H:7:7:E8=3989=98D587=3B8A????
+[slm] <848.350003> VPcmFloModem (V90): Train constellation : 1  RRN constellation : 0 (0 = 4 points / 1 = 16 points)
+[slm] <848.350011> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:7;68?7::8><79476<78=9669:7>:9:7;:8F397C<F9:478<9>>C:;8E7<9::C668;8>9::7;:8F3987=;8:474:65;?762D1C????
+[slm] <848.350015> SetNofBitsPhase4 - nof bits each call = 4
+[slm] <848.350018> V34Main: IndicateJdReceived - constel size = 1, silence SCR = 0
+[slm] <848.392019> Entered v34m->v90Receiver == V90RCV_P3_THIRD_S with tx->symcnt = 128 period = 970
+[slm] <848.402653> V90Demodulator: Error Energy = +8.710
+[slm] <848.479836> V90Demodulator: Error Energy = +10.028
+[slm] <848.500938> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@475C99<E:E9;3999><;:8<7<:9><::475955;8785:4?3B8A????
+[slm] <848.500955> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4>65;776577>5B;8762D1C????
+[slm] <848.500962> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6;;@7?5@4B9::D7=2D1C????
+[slm] <848.500981> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668;7B:8>8:88C7B9C>>668:7H9C>E:;8:8=9>>F:D6<8?96>C;;888=9D?9668F7?55=7:>888<9:;:4C2A????
+[slm] <848.500988> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A666A7=55>D:79?5E9D>F:A687A9:>8::474F55;84C2A????
+[slm] <848.500994> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475=7><C4C2A????
+[slm] <848.521883> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <848.560460> V90Demodulator: Error Energy = +10.079
+[slm] <848.641195> V90Demodulator: Error Energy = +6.032
+[slm] <848.721860> V90Demodulator: Error Energy = +3.847
+[slm] <848.802569> V90Demodulator: Error Energy = +3.018
+[slm] <848.879756> V90Demodulator: Error Energy = +3.020
+[slm] <848.960407> V90Demodulator: Error Energy = +3.049
+[slm] <848.981522> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@5A899D?9:98<8<:8<=:?998<:9=:;:9<7=:>:?6?473967:E7;4A8=:7>E777:7B9<>D:75D4=6<;9664C39:8?8;86;7B9;>=9:8?8;9:?::>5D4;6:;7762A????
+[slm] <848.981535> V90AutoDigitalImpDetector: suspected rbs patern  000000
+[slm] <849.041065> V90Demodulator: Error Energy = +4.873
+[slm] <849.121803> V90Demodulator: Error Energy = +5.764
+[slm] <849.202471> V90Demodulator: Error Energy = +5.454
+[slm] <849.279662> V90Demodulator: Error Energy = +5.273
+[slm] <849.360358> V90Demodulator: Error Energy = +5.214
+[slm] <849.440978> V90Demodulator: Error Energy = +5.102
+[slm] <849.521678> V90Demodulator: Error Energy = +4.972
+[slm] <849.521688> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <849.602380> V90Demodulator: Error Energy = +4.940
+[slm] <849.679594> V90Demodulator: Error Energy = +4.880
+[slm] <849.760235> V90Demodulator: Error Energy = +4.786
+[slm] <849.840935> V90Demodulator: Error Energy = +4.778
+[slm] <849.921581> V90Demodulator: Error Energy = +4.701
+[slm] <850.002291> V90Demodulator: Error Energy = +4.691
+[slm] <850.079483> V90Demodulator: Error Energy = +4.746
+[slm] <850.160106> V90Demodulator: Error Energy = +4.686
+[slm] <850.240828> V90Demodulator: Error Energy = +4.580
+[slm] <850.321506> V90Demodulator: Error Energy = +4.617
+[slm] <850.402186> V90Demodulator: Error Energy = +4.514
+[slm] <850.479357> V90Demodulator: Error Energy = +4.522
+[slm] <850.521469> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <850.560015> V90Demodulator: Error Energy = +4.660
+[slm] <850.640724> V90Demodulator: Error Energy = +4.796
+[slm] <850.721418> V90Demodulator: Error Energy = +4.907
+[slm] <850.802058> V90Demodulator: Error Energy = +5.001
+[slm] <850.882773> V90Demodulator: Error Energy = +5.131
+[slm] <850.959926> V90Demodulator: Error Energy = +5.218
+[slm] <851.040657> V90Demodulator: Error Energy = +5.415
+[slm] <851.110899> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4<67;@7?5@7>5B;8762D1C????
+[slm] <851.110911> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6:;@7?5@4B9::D7=2D1C????
+[slm] <851.110917> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<D:;8;6>98>F::8<8<88?;:78>7>3?????
+[slm] <851.121401> V90Demodulator: Error Energy = +5.929
+[slm] <851.202059> V90Demodulator: Error Energy = +5.346
+[slm] <851.282685> V90Demodulator: Error Energy = +5.639
+[slm] <851.359859> V90Demodulator: Error Energy = +5.832
+[slm] <851.440633> V90Demodulator: Error Energy = +5.866
+[slm] <851.521316> V90Demodulator: Error Energy = +5.837
+[slm] <851.521327> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <851.602057> V90Demodulator: Error Energy = +5.646
+[slm] <851.682696> V90Demodulator: Error Energy = +5.570
+[slm] <851.710883> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4:69;@7?5@7>5B;8762D1C????
+[slm] <851.710891> V90Equalizer: DfeProtectionOnDil = 9
+[slm] <851.710896> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;<7;5<4>9::D7=2D1C????
+[slm] <851.710899> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <851.710903> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<?:?8>7A8:>::E8;7>:8=:;:887@9::76C5E399;?9:;8<8C9::7;:8@7F9>>E:=2D1C????
+[slm] <851.710906> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<?:?8>7A8:>::E8;7>:8=:;:887@9:8D4@????
+[slm] <851.759864> V90Demodulator: Error Energy = +5.509
+[slm] <851.840543> V90Demodulator: Error Energy = +5.770
+[slm] <851.921206> V90Demodulator: Error Energy = +6.130
+[slm] <852.001939> V90Demodulator: Error Energy = +6.483
+[slm] <852.072215> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <852.072225> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <852.072229> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<=;88<7>:?><665D4G55>=;88<7>:?><666C5>55:=666;5?7::76<478=9>>D:?8E7@5C8D4@????
+[slm] <852.082614> V90Demodulator: Error Energy = +6.906
+[slm] <852.152753> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@478>9C=:;;9:899:>:;:8<7=85>?:79:7>55;D66571F3?????
+[slm] <852.152762> ------------------------------------------------------------------
+[slm] <852.152765> ------------------------------------------------------------------
+[slm] <852.152767> ------------------------------------------------------
+[slm] <852.152769> -----------------  Linear Mapping report --------------
+[slm] <852.152770> linearMapping[0]  :  0  0  0  0  0  0
+[slm] <852.152773> linearMapping[1]  :  0  0  0  0  0  0
+[slm] <852.152776> linearMapping[2]  :  34  34  34  34  34  34
+[slm] <852.152779> linearMapping[3]  :  56  56  56  56  56  56
+[slm] <852.152782> linearMapping[4]  :  72  72  72  72  72  72
+[slm] <852.152784> linearMapping[5]  :  88  88  88  88  88  88
+[slm] <852.152787> linearMapping[6]  :  104  104  104  104  104  104
+[slm] <852.152790> linearMapping[7]  :  118  118  118  118  118  118
+[slm] <852.152792> linearMapping[8]  :  130  130  130  130  130  130
+[slm] <852.152795> linearMapping[9]  :  146  146  146  146  146  146
+[slm] <852.152797> linearMapping[10]  :  161  161  161  161  161  161
+[slm] <852.152800> linearMapping[11]  :  182  182  182  182  182  182
+[slm] <852.152803> linearMapping[12]  :  200  200  200  200  200  200
+[slm] <852.152805> linearMapping[13]  :  214  214  214  214  214  214
+[slm] <852.152808> linearMapping[14]  :  225  225  225  225  225  225
+[slm] <852.152810> linearMapping[15]  :  246  246  246  246  246  246
+[slm] <852.152813> linearMapping[16]  :  257  257  257  257  257  257
+[slm] <852.152816> linearMapping[17]  :  278  278  278  278  278  278
+[slm] <852.152818> linearMapping[18]  :  289  289  289  289  289  289
+[slm] <852.152821> linearMapping[19]  :  310  310  310  310  310  310
+[slm] <852.152824> linearMapping[20]  :  328  328  328  328  328  328
+[slm] <852.152827> linearMapping[21]  :  341  341  341  341  341  341
+[slm] <852.152830> linearMapping[22]  :  353  353  353  353  353  353
+[slm] <852.152832> linearMapping[23]  :  374  374  374  374  374  374
+[slm] <852.152835> linearMapping[24]  :  385  385  385  385  385  385
+[slm] <852.152837> linearMapping[25]  :  406  406  406  406  406  406
+[slm] <852.152840> linearMapping[26]  :  416  416  416  416  416  416
+[slm] <852.152843> linearMapping[27]  :  434  434  434  434  434  434
+[slm] <852.152845> linearMapping[28]  :  448  448  448  448  448  448
+[slm] <852.152848> linearMapping[29]  :  469  469  469  469  469  469
+[slm] <852.152850> linearMapping[30]  :  480  480  480  480  480  480
+[slm] <852.152853> linearMapping[31]  :  502  502  502  502  502  502
+[slm] <852.152856> linearMapping[32]  :  520  520  520  520  520  520
+[slm] <852.152858> linearMapping[33]  :  558  558  558  558  558  558
+[slm] <852.152861> linearMapping[34]  :  584  584  584  584  584  584
+[slm] <852.152864> linearMapping[35]  :  622  622  622  622  622  622
+[slm] <852.152866> linearMapping[36]  :  648  648  648  648  648  648
+[slm] <852.152869> linearMapping[37]  :  685  685  685  685  685  685
+[slm] <852.152872> linearMapping[38]  :  711  711  711  711  711  711
+[slm] <852.152874> linearMapping[39]  :  749  749  749  749  749  749
+[slm] <852.152877> linearMapping[40]  :  775  775  775  775  775  775
+[slm] <852.152880> linearMapping[41]  :  813  813  813  813  813  813
+[slm] <852.152882> linearMapping[42]  :  839  839  839  839  839  839
+[slm] <852.152885> linearMapping[43]  :  877  877  877  877  877  877
+[slm] <852.152887> linearMapping[44]  :  902  902  902  902  902  902
+[slm] <852.152890> linearMapping[45]  :  941  941  941  941  941  941
+[slm] <852.152892> linearMapping[46]  :  966  966  966  966  966  966
+[slm] <852.152895> linearMapping[47]  :  1005  1005  1005  1005  1005  1005
+[slm] <852.152898> linearMapping[48]  :  1046  1046  1046  1046  1046  1046
+[slm] <852.152901> linearMapping[49]  :  1117  1117  1117  1117  1117  1117
+[slm] <852.152903> linearMapping[50]  :  1174  1174  1174  1174  1174  1174
+[slm] <852.152906> linearMapping[51]  :  1245  1245  1245  1245  1245  1245
+[slm] <852.152908> linearMapping[52]  :  1301  1301  1301  1301  1301  1301
+[slm] <852.152911> linearMapping[53]  :  1372  1372  1372  1372  1372  1372
+[slm] <852.152914> linearMapping[54]  :  1429  1429  1429  1429  1429  1429
+[slm] <852.152916> linearMapping[55]  :  1500  1500  1500  1500  1500  1500
+[slm] <852.152919> linearMapping[56]  :  1557  1557  1557  1557  1557  1557
+[slm] <852.152922> linearMapping[57]  :  1628  1628  1628  1628  1628  1628
+[slm] <852.152924> linearMapping[58]  :  1684  1684  1684  1684  1684  1684
+[slm] <852.152927> linearMapping[59]  :  1755  1755  1755  1755  1755  1755
+[slm] <852.152929> linearMapping[60]  :  1812  1812  1812  1812  1812  1812
+[slm] <852.152932> linearMapping[61]  :  1883  1883  1883  1883  1883  1883
+[slm] <852.152935> linearMapping[62]  :  1940  1940  1940  1940  1940  1940
+[slm] <852.152937> linearMapping[63]  :  2011  2011  2011  2011  2011  2011
+[slm] <852.152940> linearMapping[64]  :  2099  2099  2099  2099  2099  2099
+[slm] <852.152942> linearMapping[65]  :  2227  2227  2227  2227  2227  2227
+[slm] <852.152945> linearMapping[66]  :  2355  2355  2355  2355  2355  2355
+[slm] <852.152947> linearMapping[67]  :  2483  2483  2483  2483  2483  2483
+[slm] <852.152950> linearMapping[68]  :  2611  2611  2611  2611  2611  2611
+[slm] <852.152953> linearMapping[69]  :  2738  2738  2738  2738  2738  2738
+[slm] <852.152955> linearMapping[70]  :  2866  2866  2866  2866  2866  2866
+[slm] <852.152958> linearMapping[71]  :  2994  2994  2994  2994  2994  2994
+[slm] <852.152960> linearMapping[72]  :  3122  3122  3122  3122  3122  3122
+[slm] <852.152963> linearMapping[73]  :  3250  3250  3250  3250  3250  3250
+[slm] <852.152966> linearMapping[74]  :  3378  3378  3378  3378  3378  3378
+[slm] <852.152968> linearMapping[75]  :  3506  3506  3506  3506  3506  3506
+[slm] <852.152999> linearMapping[76]  :  3634  3634  3634  3634  3634  3634
+[slm] <852.153002> linearMapping[77]  :  3762  3762  3762  3762  3762  3762
+[slm] <852.153004> linearMapping[78]  :  3903  3903  3903  3903  3903  3903
+[slm] <852.153007> linearMapping[79]  :  4023  4023  4023  4023  4023  4023
+[slm] <852.153009> linearMapping[80]  :  4214  4214  4214  4214  4214  4214
+[slm] <852.153012> linearMapping[81]  :  4469  4469  4469  4469  4469  4469
+[slm] <852.153014> linearMapping[82]  :  4725  4725  4725  4725  4725  4725
+[slm] <852.153017> linearMapping[83]  :  4980  4980  4980  4980  4980  4980
+[slm] <852.153019> linearMapping[84]  :  5240  5240  5240  5240  5240  5240
+[slm] <852.153022> linearMapping[85]  :  5495  5495  5495  5495  5495  5495
+[slm] <852.153025> linearMapping[86]  :  5750  5750  5750  5750  5750  5750
+[slm] <852.153027> linearMapping[87]  :  6006  6006  6006  6006  6006  6006
+[slm] <852.153030> linearMapping[88]  :  6261  6261  6261  6261  6261  6261
+[slm] <852.153032> linearMapping[89]  :  6516  6516  6516  6516  6516  6516
+[slm] <852.153035> linearMapping[90]  :  6772  6772  6772  6772  6772  6772
+[slm] <852.153037> linearMapping[91]  :  7028  7028  7028  7028  7028  7028
+[slm] <852.153040> linearMapping[92]  :  7287  7287  7287  7287  7287  7287
+[slm] <852.153042> linearMapping[93]  :  7543  7543  7543  7543  7543  7543
+[slm] <852.153045> linearMapping[94]  :  7799  7799  7799  7799  7799  7799
+[slm] <852.153048> linearMapping[95]  :  8055  8055  8055  8055  8055  8055
+[slm] <852.153050> linearMapping[96]  :  8439  8439  8439  8439  8439  8439
+[slm] <852.153053> linearMapping[97]  :  8951  8951  8951  8951  8951  8951
+[slm] <852.153055> linearMapping[98]  :  9463  9463  9463  9463  9463  9463
+[slm] <852.153058> linearMapping[99]  :  9967  9967  9967  9967  9967  9967
+[slm] <852.153060> linearMapping[100]  :  10478  10478  10478  10478  10478  10478
+[slm] <852.153064> linearMapping[101]  :  10989  10989  10989  10989  10989  10989
+[slm] <852.153066> linearMapping[102]  :  11499  11499  11499  11499  11499  11499
+[slm] <852.153069> linearMapping[103]  :  12010  12010  12010  12010  12010  12010
+[slm] <852.153072> linearMapping[104]  :  12521  12521  12521  12521  12521  12521
+[slm] <852.153074> linearMapping[105]  :  13030  13030  13030  13030  13030  13030
+[slm] <852.153077> linearMapping[106]  :  13543  13543  13543  13543  13543  13543
+[slm] <852.153080> linearMapping[107]  :  14052  14052  14052  14052  14052  14052
+[slm] <852.153082> linearMapping[108]  :  14563  14563  14563  14563  14563  14563
+[slm] <852.153085> linearMapping[109]  :  15074  15074  15074  15074  15074  15074
+[slm] <852.153088> linearMapping[110]  :  15586  15586  15586  15586  15586  15586
+[slm] <852.153090> linearMapping[111]  :  16098  16098  16098  16098  16098  16098
+[slm] <852.153093> linearMapping[112]  :  16862  16862  16862  16862  16862  16862
+[slm] <852.153099> linearMapping[113]  :  17883  17883  17883  17883  17883  17883
+[slm] <852.153102> linearMapping[114]  :  18905  18905  18905  18905  18905  18905
+[slm] <852.153105> linearMapping[115]  :  19926  19926  19926  19926  19926  19926
+[slm] <852.153108> linearMapping[116]  :  20578  20578  20578  20578  20578  20578
+[slm] <852.153111> linearMapping[117]  :  0  0  0  0  0  0
+[slm] <852.153113> linearMapping[118]  :  0  0  0  0  0  0
+[slm] <852.153116> linearMapping[119]  :  0  0  0  0  0  0
+[slm] <852.153118> linearMapping[120]  :  0  0  0  0  0  0
+[slm] <852.153121> linearMapping[121]  :  0  0  0  0  0  0
+[slm] <852.153124> linearMapping[122]  :  0  0  0  0  0  0
+[slm] <852.153126> linearMapping[123]  :  0  0  0  0  0  0
+[slm] <852.153129> linearMapping[124]  :  0  0  0  0  0  0
+[slm] <852.153131> linearMapping[125]  :  0  0  0  0  0  0
+[slm] <852.153134> linearMapping[126]  :  0  0  0  0  0  0
+[slm] <852.153136> linearMapping[127]  :  0  0  0  0  0  0
+[slm] <852.153139> ------------------------------------------------------
+[slm] <852.153146> V90Demodulator: Dil study Terminated. Enter error relaxation period.
+[slm] <852.153151> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477H:7>@:=8@7G96>C669=7::7=;:>997>:8>?665D395@;<7;4E4?678D4@????
+[slm] <852.153155> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477?9>>E:78C39:;>8;87;7A:7><;98?396B:76A5<4965:E76571F3?????
+[slm] <852.153159> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C2D1C????
+[slm] <852.153162> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477E9>>E:;888;7B>8;6977B9C>>9<888;55?9:;977H:7?;7@2D1C????
+[slm] <852.153166> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>586F55;D66594>3B8A????
+[slm] <852.153169> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>596F55;D665:493B8A????
+[slm] <852.153172> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5:6F55;D66594A3B8A????
+[slm] <852.153175> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5;6F55;D665:4=3B8A????
+[slm] <852.153178> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5<6F55;D665:4B3B8A????
+[slm] <852.153181> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5=6F55;D665:4@3B8A????
+[slm] <852.153184> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5>6F55;D665:4A3B8A????
+[slm] <852.153187> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5?6F55;D665:4>3B8A????
+[slm] <852.153189> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5@6F55;D665;4;3B8A????
+[slm] <852.153192> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?576F55;D665:4B3B8A????
+[slm] <852.153195> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?586F55;D665:4B3B8A????
+[slm] <852.153198> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?596F55;D665;4;3B8A????
+[slm] <852.153201> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5:6F55;D665;4:3B8A????
+[slm] <852.153204> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5;6F55;D665;493B8A????
+[slm] <852.153207> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5<6F55;D665:4?3B8A????
+[slm] <852.153210> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5=6F55;D665;4:3B8A????
+[slm] <852.153213> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5>6F55;D665:4@3B8A????
+[slm] <852.153216> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5?6F55;D66594A3B8A????
+[slm] <852.153219> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5@6F55;D665;4B3B8A????
+[slm] <852.153222> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7757498B:77C474<6<8D4@????
+[slm] <852.153225> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574:8B:77C474=6;8D4@????
+[slm] <852.153228> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574;8B:77C474=6=8D4@????
+[slm] <852.153231> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574<8B:77C474=6>8D4@????
+[slm] <852.153234> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574=8B:77C474@688D4@????
+[slm] <852.153237> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574>8B:77C474>688D4@????
+[slm] <852.153239> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574?8B:77C474@658D4@????
+[slm] <852.153242> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574@8B:77C474@6<8D4@????
+[slm] <852.153245> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574A8B:77C474A698D4@????
+[slm] <852.153248> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574B8B:77C474B6=8D4@????
+[slm] <852.153251> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7758498B:77C474@6:8D4@????
+[slm] <852.153255> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584:8B:77C474B688D4@????
+[slm] <852.153259> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584;8B:77C474:6:;?4C2A????
+[slm] <852.153262> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584<8B:77C474;65;=4C2A????
+[slm] <852.153265> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584=8B:77C474;69;74C2A????
+[slm] <852.153268> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584>8B:77C474;6=;74C2A????
+[slm] <852.153272> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584?8B:77C474:6;;<7<5<4=668D4@????
+[slm] <852.153275> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C2D1C????
+[slm] <852.153282> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3965:7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153286> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3966:7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153289> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3967:7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153292> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3968:7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153296> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3969:7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153299> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<396::7:C888A8:>::E8;7>55>@;9474:66;<4C2A????
+[slm] <852.153301> -------------------------------------------------------------------------
+[slm] <852.153303> V90AutoDigitalImpDetector::findPadGain() Report :
+[slm] <852.153305> -------------------------------------------------------------------------
+[slm] <852.153307> Codec type 0
+[slm] <852.153309> projectionBaseUcode = 95 minUcodeForCodecProjection = 64
+[slm] <852.153314> error = 1100548, gain = +4.06
+[slm] <852.153319> error = 844579, gain = +3.82
+[slm] <852.153323> error = 1209674, gain = +3.60
+[slm] <852.153327> error = 1122987, gain = +3.40
+[slm] <852.153331> error = 959046, gain = +3.23
+[slm] <852.153335> error = 956222, gain = +3.07
+[slm] <852.153340> error = 935744, gain = +2.93
+[slm] <852.153344> error = 873304, gain = +2.80
+[slm] <852.153347> error = 868355, gain = +2.68
+[slm] <852.153352> error = 784422, gain = +2.57
+[slm] <852.153356> error = 1110079, gain = +2.47
+[slm] <852.153360> error = 732021, gain = +2.37
+[slm] <852.153364> error = 771615, gain = +2.29
+[slm] <852.153386> error = 1288905, gain = +2.21
+[slm] <852.153394> error = 530018, gain = +2.13
+[slm] <852.153401> error = 1105669, gain = +2.06
+[slm] <852.153408> error = 1300937, gain = +1.96
+[slm] <852.153413> error = 1065843, gain = +1.85
+[slm] <852.153417> error = 778254, gain = +1.74
+[slm] <852.153421> error = 832236, gain = +1.65
+[slm] <852.153425> error = 898390, gain = +1.57
+[slm] <852.153429> error = 748959, gain = +1.49
+[slm] <852.153433> error = 739605, gain = +1.43
+[slm] <852.153437> error = 685030, gain = +1.36
+[slm] <852.153441> error = 690775, gain = +1.31
+[slm] <852.153445> error = 666926, gain = +1.25
+[slm] <852.153449> error = 779364, gain = +1.21
+[slm] <852.153453> error = 788229, gain = +1.16
+[slm] <852.153457> error = 464936, gain = +1.12
+[slm] <852.153462> error = 989374, gain = +1.08
+[slm] <852.153466> error = 552275, gain = +1.04
+[slm] <852.153470> error = 342177, gain = +1.01
+[slm] <852.153472> Codec type 1
+[slm] <852.153474> projectionBaseUcode = 95 minUcodeForCodecProjection = 63
+[slm] <852.153479> error = 4597, gain = +3.99
+[slm] <852.153483> error = 345219, gain = +3.81
+[slm] <852.153487> error = 507532, gain = +3.59
+[slm] <852.153491> error = 764791, gain = +3.40
+[slm] <852.153495> error = 797663, gain = +3.22
+[slm] <852.153499> error = 675057, gain = +3.06
+[slm] <852.153503> error = 775348, gain = +2.92
+[slm] <852.153507> error = 823280, gain = +2.79
+[slm] <852.153511> error = 854573, gain = +2.67
+[slm] <852.153515> error = 588258, gain = +2.56
+[slm] <852.153520> error = 608440, gain = +2.46
+[slm] <852.153524> error = 628271, gain = +2.37
+[slm] <852.153528> error = 1121251, gain = +2.28
+[slm] <852.153532> error = 532027, gain = +2.20
+[slm] <852.153536> error = 705472, gain = +2.13
+[slm] <852.153540> error = 932295, gain = +2.06
+[slm] <852.153545> error = 4334, gain = +1.99
+[slm] <852.153549> error = 346536, gain = +1.90
+[slm] <852.153553> error = 508631, gain = +1.79
+[slm] <852.153559> error = 760703, gain = +1.70
+[slm] <852.153563> error = 794330, gain = +1.61
+[slm] <852.153567> error = 676659, gain = +1.53
+[slm] <852.153571> error = 774218, gain = +1.46
+[slm] <852.153576> error = 823510, gain = +1.39
+[slm] <852.153580> error = 855993, gain = +1.33
+[slm] <852.153584> error = 589187, gain = +1.28
+[slm] <852.153588> error = 607549, gain = +1.23
+[slm] <852.153592> error = 628163, gain = +1.18
+[slm] <852.153596> error = 1121335, gain = +1.14
+[slm] <852.153600> error = 533088, gain = +1.10
+[slm] <852.153604> error = 702378, gain = +1.06
+[slm] <852.153609> error = 934333, gain = +1.03
+[slm] <852.153613> error = 4402, gain = +0.99
+[slm] <852.153616> ------ Final conclusions -------
+[slm] <852.153620> $!$ :C8@7G7:?9;88F8;7B?<8B888@55;D664B4<69;9775>4@5C;:7:2D1C????
+[slm] <852.153624> $!$ :=887B9C==:78C8>9:<D;;6C7::<:77C473D66:E76584>6:;77<2D1C????
+[slm] <852.153627> $!$ :C8@7G7:?9;88F8;76<C:79>396B:76A5;4=65;96D584>3B8A????
+[slm] <852.153630> $!$ :=887B9C==:78C8>9:<88B888@55;D664B4:5C;776574965;74C2A????
+[slm] <852.153633> $!$ 8<8@7G96>C668:7H99><:9477B99><:D9;7B9;>@:;8;399>?:66685E96?>4C2A????
+[slm] <852.153637> $!$ 8<8@7G96>C66977:99<>:78@7G55>@::8<7G:9>@:<8@7>99:7:?9:396B:76A583G65;7765749658D4@????
+[slm] <852.153639> -------------------------------------------------------------------------
+[slm] <852.153651> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78=887B9C:77C473D65:E7?5=4=6:;;782D1C????
+[slm] <852.159782> V90Demodulator: Error Energy = +19.002
+[slm] <852.180824> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4@69;@7?5@7>5B;8762D1C????
+[slm] <852.180834> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6;;@7?5@4B9::D7=2D1C????
+[slm] <852.180838> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475=7><C4C2A????
+[slm] <852.180843> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C>@;:8@7:9A<<;8997H:7=9:;8C7::==;:;997F9>>E:79;7>99:77C5E39::>E:<997>9:?A:?8E7@55<C8;473?55<;8<6<3996>E::476=9>>D:?8E7@5C8D4@????
+[slm] <852.240450> V90Demodulator: Error Energy = +135.503
+[slm] <852.321160> V90Demodulator: Error Energy = +37.126
+[slm] <852.401835> V90Demodulator: Error Energy = +13.535
+[slm] <852.482500> V90Demodulator: Error Energy = +7.296
+[slm] <852.521127> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <852.542176> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A667;6;7C;8::476;7B=:66797::9>@:E474F55:B774E4965;776574965;74C2A????
+[slm] <852.542186> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>:=>@;:475=7><C4C2A????
+[slm] <852.542193> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7:C888A55=;9>477B9C>;:;9?396B:7785;3E55>>:?9=7B9C:7;68F8@9:?9668C7B9B>@;:474F55;:7659495A:7:?8D899A?@:?8E7@55>D:79?399A><;<8<7E55;D7:5@4:688D4@????
+[slm] <852.542198> $!$ 9<5@4989=98D595=9:?::?8>7G6?:76D4E3G9=><:D8:7>55>D:79?39::>::E8;7>55:?:78=8=9:?9668=7:98?;:E993B55;D665?4:5A:7:89@39:5>8;8887F:8:7:C888A8:>::E8;7>55;D665@4;3B8A????
+[slm] <852.542205> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;76B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542209> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;86B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542212> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;96B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542216> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;:6B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542219> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;;6B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542222> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;<6B477=7B>@:D474F55;?785<3G5C:E4C2A????
+[slm] <852.542230> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <852.542233> $!$ 9<5@4989=98D595=9:?::?8>7G6?8D4@????
+[slm] <852.542236> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7;9988;:9:?;68F8@9:?96?47396B:76A5;4;65;76D5=4:658D4@????
+[slm] <852.542241> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7:?8E7=9:??66594;5A:7;68F8@9:?9668@7G55>;888D4955:77C473F66;86D5<1F3?????
+[slm] <852.542243>
+[slm] --------------------------------------
+[slm] <852.542245> V90TRN2Designer : ADI design report :
+[slm] <852.542246> trn2 size  :  8
+[slm] <852.542249>
+[slm] ------------------------------------------------------------------------------------------------------
+[slm] <852.542250> trn2 constel[0]  :  91 91 91 91 91 91  :  91 91 91 91 91 91  :  7028 7028 7028 7028 7028 7028
+[slm] <852.542256> trn2 constel[1]  :  87 87 87 87 87 87  :  87 87 87 87 87 87  :  6006 6006 6006 6006 6006 6006
+[slm] <852.542261> trn2 constel[2]  :  83 83 83 83 83 83  :  83 83 83 83 83 83  :  4980 4980 4980 4980 4980 4980
+[slm] <852.542266> trn2 constel[3]  :  78 78 78 78 78 78  :  78 78 78 78 78 78  :  3903 3903 3903 3903 3903 3903
+[slm] <852.542270> trn2 constel[4]  :  71 71 71 71 71 71  :  71 71 71 71 71 71  :  2994 2994 2994 2994 2994 2994
+[slm] <852.542275> trn2 constel[5]  :  64 64 64 64 64 64  :  64 64 64 64 64 64  :  2099 2099 2099 2099 2099 2099
+[slm] <852.542279> trn2 constel[6]  :  51 51 51 51 51 51  :  51 51 51 51 51 51  :  1245 1245 1245 1245 1245 1245
+[slm] <852.542284> trn2 constel[7]  :  26 26 26 26 26 26  :  26 26 26 26 26 26  :  416 416 416 416 416 416
+[slm] <852.542289>
+[slm] ------------------------------------------------------------------------------------------------------
+[slm] <852.542292> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A667;6;7C;9::478<:5><:99;8;96>C66977::7>8:C8<8=9:?9;95A1F3?????
+[slm] <852.542295> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3988?9665D39668D4@????
+[slm] <852.542298> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A397>>;665D39668D4@????
+[slm] <852.542301> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;866474F55:B774E4965;77657493B8A????
+[slm] <852.542305> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;966474F55:D764E4965;77657493B8A????
+[slm] <852.542308> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;866474F55:D764E4965;77657493B8A????
+[slm] <852.542311> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;966474F55:D764E4965;77657493B8A????
+[slm] <852.542340> V90Phase4Demodulator: reset called, quickConnect indication is 0
+[slm] <852.542345> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@478=:7>E788;5=79<C:;8E7@:9>?665D3967;;76574955?:;?8D7;9D>C;92D1C????
+[slm] <852.542348> V34Main: IndicateDilReceived - constel size = 1
+[slm] <852.542359> $!$ 9<5@4978=766977:98>B:;8;4C55<:969;3997>@;:9:4C3?????
+[slm] <852.542365> $!$ 76574966;877584965;776574965;876571F3?????
+[slm] <852.542391> $!$ 76584:66;877584:66;877584:66;877571F3?????
+[slm] <852.542399> $!$ 76574965;776574965;776574965;876571F3?????
+[slm] <852.542408> $!$ 76574965;776574:65;776574965;776571F3?????
+[slm] <852.542413> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <852.542417> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <852.542421> $!$ 76574965;776574965;876574965;776571F3?????
+[slm] <852.542424> VPcmFloModem (V90): Building CPt, CPt length = 428
+[slm] <852.559753> V90Demodulator: Error Energy = +5.674
+[slm] <852.570192> $!$ 9<5@4985>?:79:7>68<D:E8;8>9A>8;:8F8;6?:7968?7::8><79476=9:?9:C8@7G96?;:;8;3975:779594>67;74C2A????
+[slm] <852.570202> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@47699=>8;98<4<55=;:;997F9>>E:79;7>99:786474<68;=762D1C????
+[slm] <852.570206> $!$ 9<5@497:?8;;887E9>?A:;994C55><:D9;7>:7:7968?7::8><665;1F3?????
+[slm] <852.570210> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <852.570214> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <852.570217> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <852.570221> $!$ 9<5@497:?8;;887E9>?A:;994C55?;:?8D7B9C>>668F7?9;?::;9;399D>E668=8;9:><;@8<395=?7:>888<9:;;6?474F55:D764E4:6=;<7=2D1C????
+[slm] <852.570227> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <852.570230> $!$ 8B8@7G9:>8;8475>:6?<:78C7B:?><;85A1F3?????
+[slm] <852.570234> $!$ :C8@7G7A><898F7>9;==:78C8>9::7665D395@;76D574965;776574=68;<7>2D1C????
+[slm] <852.570237> $!$ :C888A7A><898F7>9;==:78C8>9::7665D395@;76D5<4<6;;@76591F3?????
+[slm] <852.570241> $!$ :98F7>9;?:669:8>9B:7665D395B;86D574<66;;7;571F3?????
+[slm] <852.570244> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D6;:E785;4?6=;?7?2D1C????
+[slm] <852.570248> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <852.570250> $!$ 8:6=5>6?8D4@????
+[slm] <852.570254> $!$ :C8@7G79>=:;6:7H9:>=9<887E::><66474F55:B764E4965;;7:5?4@65;77?5>1F3?????
+[slm] <852.570257> $!$ :C888A79>=:;6:7H9:>=9<887E::><66474F55:B764E4<69;?7:5>4<3B8A????
+[slm] <852.570260> $!$ :98F7>9;?:669:8>9B:7665D395@;76D5>496>;;77591F3?????
+[slm] <852.570263> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D66:E78574:68;7782D1C????
+[slm] <852.570267> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <852.570276> V90Demodulator: enter Phase 4
+[slm] <852.619210> End of CP #1 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.640307> V90Demodulator: Error Energy = +2.474
+[slm] <852.650921> End of CP #2 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.689413> End of CP #3 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.720926> End of CP #4 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.721032> V90Demodulator: Error Energy = +0.905
+[slm] <852.742163> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@476;9>:7::8<8=9:>:;:8<7=55<766584<6=;76B47899D>C:7997B:9?@665D39668D4@????
+[slm] <852.742193> vpcm: New status 3
+[slm] <852.752594> End of CP #5 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.791161> End of CP #6 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.801761> V90Demodulator: Error Energy = +0.612
+[slm] <852.819218> End of CP #7 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <852.819483> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@476;9><E:E9;3999><;:8<7<:9><::475955;=7<573E55><:D9;7>:7:79:795G67>;8A8E7H:<>E8:888=96:7;99;7::9><4C2A????
+[slm] <852.819504> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B774E4965;776577>5B;8762D1C????
+[slm] <852.819511> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;@7?5@4B9::D7=2D1C????
+[slm] <852.819516> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476=87<E78475B7C<@9:6@5:7A8D4@????
+[slm] <852.819533> CPnot Flag set to 1
+[slm] <852.850879> End of CP #8 tx.... (terminateCp=0, terminateCpNot=1)
+[slm] <852.850890> GetV90CpBits: Indicating CP termination !!!!
+[slm] <852.882451> V90Demodulator: Error Energy = +7.958
+[slm] <852.959620> V90Demodulator: Error Energy = +8.894
+[slm] <853.040290> V90Demodulator: Error Energy = +8.709
+[slm] <853.071944> V90Phase4Demodulator reset & enable linear mapping study in TRN2.
+[slm] <853.120934> V90Demodulator: Error Energy = +8.434
+[slm] <853.201649> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4?6>;@7?5@7>5B;8762D1C????
+[slm] <853.201660> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476=87<E78471F3?????
+[slm] <853.201675> V90Demodulator: Error Energy = +8.430
+[slm] <853.282326> V90Demodulator: Error Energy = +8.130
+[slm] <853.359536> V90Demodulator: Error Energy = +7.876
+[slm] <853.440212> V90Demodulator: Error Energy = +7.612
+[slm] <853.520873> V90Demodulator: Error Energy = +8.002
+[slm] <853.520883> V90Demodulator: Timing Offset [ppm]  = -0.185
+[slm] <853.601531> V90Demodulator: Error Energy = +7.751
+[slm] <853.682253> V90Demodulator: Error Energy = +7.866
+[slm] <853.759456> V90Demodulator: Error Energy = +7.757
+[slm] <853.840053> V90Demodulator: Error Energy = +7.595
+[slm] <853.920875> V90Demodulator: Error Energy = +7.737
+[slm] <853.969991> V90Demapper: constelation update !!!
+[slm] <853.970010> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <853.970014> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:78:8<7;::>>7@2D1C????
+[slm] <853.970018> $!$ 9<5@497:?8;;887E9>?A:;994C55>::78C7<::>C:79;7>99:7:E9=7>:7:77:5<399B><:78E399:?9;88F8;:88D4@????
+[slm] <853.970021> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <853.970025> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8<7:9C:7665D395@;>6D5?4?6;;>7>5>1F3?????
+[slm] <853.970029> $!$ 9<5@497:?8;;887E9>?A:;994C55>:;;998;9:>E;:477F9:>8:D6<8;:7>F;86<7G9:?9:=9@3955;D664B4@5C;=79594B68;94C2A????
+[slm] <853.970032> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <853.970036> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7999;7=55:77C473D65:E795;4B69;>772D1C????
+[slm] <853.970040> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:79<888;9>>8:D8:7>55:77C473D65:E77594;66;:762D1C????
+[slm] <853.970043> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <853.970047> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8@7G55?=:78C8>9::7665D395@;>6D594:6:;776581F3?????
+[slm] <853.970051> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C888A55?=:78C8>9::7665D395@;?6D5=4B66;@7:5@1F3?????
+[slm] <853.970054> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <854.001450> V90Demodulator: Error Energy = +7.110
+[slm] <854.082128> V90Demodulator: Error Energy = +4.875
+[slm] <854.159392> V90Demodulator: Error Energy = +4.087
+[slm] <854.240024> V90Demodulator: Error Energy = +3.876
+[slm] <854.320694> V90Demodulator: Error Energy = +3.806
+[slm] <854.401412> V90Demodulator: Error Energy = +3.763
+[slm] <854.482115> V90Demodulator: Error Energy = +3.800
+[slm] <854.520678> V90Demodulator: Timing Offset [ppm]  = -0.184
+[slm] <854.559268> V90Demodulator: Error Energy = +3.804
+[slm] <854.639993> V90Demodulator: Error Energy = +3.761
+[slm] <854.720629> V90Demodulator: Error Energy = +3.783
+[slm] <854.801299> V90Demodulator: Error Energy = +3.709
+[slm] <854.871542> V90Demapper: constelation update !!!
+[slm] <854.871561> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <854.871565> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:78:8<7;::>>7@2D1C????
+[slm] <854.871569> $!$ 9<5@497:?8;;887E9>?A:;994C55>::78C7<::>C:79;7>99:7:E9=7>:7:77:5<399B><:78E399:?9;88F8;:88D4@????
+[slm] <854.871572> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <854.871576> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8<7:9C:7665D395@;:6D5?4B65;<7>5=1F3?????
+[slm] <854.871580> $!$ 9<5@497:?8;;887E9>?A:;994C55>:;;998;9:>E;:477F9:>8:D6<8;:7>F;86<7G9:?9:=9@3955;D664B4<5C;?78574A6=;<4C2A????
+[slm] <854.871583> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <854.871587> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7999;7=55:77C473D65:E795>4?67;77?2D1C????
+[slm] <854.871591> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:79<888;9>>8:D8:7>55:77C473D65:E775;4:6:;:792D1C????
+[slm] <854.871594> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <854.871598> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8@7G55?=:78C8>9::7665D395@;:6D5<4965;?7?591F3?????
+[slm] <854.871601> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C888A55?=:78C8>9::7665D395@;<6D5?4B65;=7=571F3?????
+[slm] <854.871605> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <854.871607> V90Equalizer: ph4MeanErrorEnergyBeforeToAfterUpdateRatio = +2.022
+[slm] <854.882024> V90Demodulator: Error Energy = +3.820
+[slm] <854.882134> $!$ 9<5@4978>F:D8E7>98?;:?8F7G7:?=:78C8>96?;:E99395=?7:>888<9:;;6?5A399>>E:?9;7B96?;:?8E7@55=9:;9;8;96>@:D473A:7><;:997:9>>E668E7H55;86?4C3999?<:;478=9D:7:C8<7:9C<<;8995;9:>=9:8F5:9;?;9;977=96?;:;797::9>@:E474F55:B784E4967;94C2A????
+[slm] <854.882138> VPcmFloModem (V90): retrain requested !!
+[slm] <854.882141> VPcmV34Main: Initiating retrain, requested DP is 90
+[slm] <854.882143> V90ConstellationDesigner: set min rate to 300
+[slm] <854.882145> V90ConstellationDesigner: set max rate to 56000
+[slm] <854.882147> VPcmV34Main: minLevel given is 0 , minSigLevel set to 101
+[slm] <854.882150> V34 filtdelay set to 95 (params initial delay = 244)
+[slm] <854.882152> V34FEC, V34dmadelay set to 1356, (ext delay=196)
+[slm] <854.882156> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5=9:>C:79@39::?7::888=9:>;669;7H6?:77957493?????
+[slm] <854.882160> $!$ 9<777<9B<=:B8F5F9D>;:;8D4C55?::;9;8=9>>E:=476978<D669:7>:8?::?8F7G55?;:E476?5C;@762A????
+[slm] <854.882164> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A669:7>:9=::;9:8<9>>F:D6=7E96>>6B477?9A>8:=474F55;74C2A????
+[slm] <854.882169> $!$ 9<777<9B==795;6<9:?;9:9?6<98>8:B8<4C55?;;>478<98>8:B8<39:8><;:478=9D:77;5>4B688D4@????
+[slm] <854.882171> V34SetupModulator: baudrate 2400, carrier 1800, preemp 0, V90=0. fullReset=0
+[slm] <854.882176> V34SetupDemodulator: baudrate 2400, carrier 1800
+[slm] <854.882179> V34SetupModulator: baudrate 600, carrier 2400, preemp 0, V90=0. fullReset=1
+[slm] <854.882186> V34FLO: Echo running in Original Integer...
+[slm] <854.882189> V34FLO: Echo running in Original Integer...
+[slm] <854.882191> V34HSHAKE: txstate JaTXMIT=>SILENCERETRAIN(rx WAIT, mst DET_SYNC, [1]0, [2]0)
+[slm] <854.882195> vpcm: New status 7
+[slm] <854.910027> vpcm: New status 0
+[slm] <854.910037> vpcm: Re-starting phase II
+[slm] <854.962596> V34HSHAKE: microstate DET_SYNC=>TX_PHASE1_ANS(tx SILENCERETRAIN, rx WAIT, [1]180, [2]0)
+[slm] <854.962607> V34HSHAKE: rxstate WAIT=>RX_DPSK(tx SILENCERETRAIN, mst TX_PHASE1_ANS, [1]180, [2]0)
+[slm] <854.962611> V34HSHAKE: txstate SILENCERETRAIN=>TONE_AB(rx RX_DPSK, mst TX_PHASE1_ANS, [1]180, [2]0)
+[slm] <854.962614> V34RETRAIN, SILENCERETRAIN finished, rx->rxflgs,=0x1a04,rx->gain=0x2f0,gainestimate=0x2f0
+[slm] <855.380150> VPcmV34Main: Masking CAS detection after 4800 in train...
+[slm] <855.450267> TX_PHASE_ANS: count3 = 0
+[slm] <855.450281> TX_PHASE_ANS: count3 = 1
+[slm] <855.450288> TX_PHASE_ANS: count3 = 2
+[slm] <857.621805> TX_PHASE_ANS: count3 = 3
+[slm] <857.621830> TX_PHASE_ANS: count3 = 4
+[slm] <857.621840> TX_PHASE_ANS: count3 = 5
+[slm] <857.621848> TX_PHASE_ANS: count3 = 6
+[slm] <857.621857> TX_PHASE_ANS: count3 = 7
+[slm] <857.621871> TX_PHASE_ANS: count3 = 8
+[slm] <857.720093> TX_PHASE_ANS: count3 = 9
+[slm] <857.720111> TX_PHASE_ANS: count3 = 10
+[slm] <857.720121> TX_PHASE_ANS: count3 = 11
+[slm] <857.730534> TX_PHASE_ANS: count3 = 12
+[slm] <857.730545> V34HSHAKE: txstate TONE_AB=>TX_DPSK(rx RX_DPSK, mst TX_PHASE1_ANS, [1]0, [2]6634)
+[slm] <857.730553> V34HSHAKE: microstate TX_PHASE1_ANS=>DET_SYNC(tx TX_DPSK, rx RX_DPSK, [1]0, [2]6634)
+[slm] <857.730559> info0 is detected, info0 is initialized in TX_PHASE1_ANS
+[slm] <858.972557> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TX_DPSK, rx RX_DPSK, [1]0, [2]6634)
+[slm] <858.972572> DET_SYNC is received in RX_DPSK,rx->gain=0x728
+[slm] <859.130391> V34INFO, info0 CRC not received properly in DET_INFO
+[slm] <859.130400> V34HSHAKE: microstate DET_INFO=>DET_SYNC(tx TX_DPSK, rx RX_DPSK, [1]0, [2]93)
+[slm] <859.130405> SetINFO0dBits
+[slm] <859.831951> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TX_DPSK, rx RX_DPSK, [1]0, [2]93)
+[slm] <859.831966> DET_SYNC is received in RX_DPSK,rx->gain=0x923
+[slm] <859.909176> V34INFO, info0 CRC not received properly in DET_INFO
+[slm] <859.909186> V34HSHAKE: microstate DET_INFO=>DET_SYNC(tx TX_DPSK, rx RX_DPSK, [1]0, [2]46)
+[slm] <859.909191> SetINFO0dBits
+[slm] <860.042506> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TX_DPSK, rx RX_DPSK, [1]0, [2]46)
+[slm] <860.042522> DET_SYNC is received in RX_DPSK,rx->gain=0x8f2
+[slm] <860.119548> V34INFO, info0 CRC not received properly in DET_INFO
+[slm] <860.119558> V34HSHAKE: microstate DET_INFO=>DET_SYNC(tx TX_DPSK, rx RX_DPSK, [1]0, [2]46)
+[slm] <860.119562> SetINFO0dBits
+[slm] <860.421319> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TX_DPSK, rx RX_DPSK, [1]0, [2]46)
+[slm] <860.421330> DET_SYNC is received in RX_DPSK,rx->gain=0x3e2
+[slm] <860.501972> VPcmV34Main, giveINFO0aBits
+[slm] <860.501982> VPcmV34Main, rxinfo0a = <860.501987> 0xff,0x85,0x37,0x70,0xfd,0x0,0x0,0x0,0x0,0x0
+[slm] <860.501993> VPcmV34Main: localV92- 0, remoteV92- 1, localShort- 0, remoteShort- 0, isShort- 0
+[slm] <860.501999> V34INFO, rxinfo0 0xff,0x85,0xb7,0x70,0xe6,0x36,0xff,0x8b,0x7e,0x8
+[slm] <860.502004> V34HSHAKE: microstate DET_INFO=>TX_PHASE1_ANS(tx TX_DPSK, rx RX_DPSK, [1]0, [2]0)
+[slm] <860.502009> V34INFO, info0 received in DET_INFO
+[slm] <860.610733> V34HSHAKE: txstate TX_DPSK=>TONE_AB(rx RX_DPSK, mst TX_PHASE1_ANS, [1]0, [2]0)
+[slm] <860.842263> V34HSHAKE: microstate TX_PHASE1_ANS=>RX_PHASE1_ANS(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <860.979124> On RX_PHASE1_ANS: is short=0, bulkDelay=608, filtDelay=95
+[slm] <860.979137> V34 bulk delay estimation 608 (FAR=0)
+[slm] <860.979142> V34HSHAKE: microstate RX_PHASE1_ANS=>TX_PHASE2_ANS(tx TONE_AB, rx RX_DPSK, [1]0, [2]95)
+[slm] <860.979154> V34HSHAKE: microstate TX_PHASE2_ANS=>TX_L1(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <861.000145> V34HSHAKE: txstate TONE_AB=>TX_L1(rx RX_DPSK, mst TX_L1, [1]0, [2]42)
+[slm] <861.000158> V34HSHAKE: rxstate RX_DPSK=>DET_AB(tx TX_L1, mst TX_L1, [1]0, [2]42)
+[slm] <861.000164> V34RETRAIN, starting DET_AB, rx->rxflgs = 0x1a04,rx->gain=0x354
+[slm] <861.161526> V34HSHAKE: microstate TX_L1=>TX_L2(tx TX_L1, rx DET_AB, [1]1536, [2]42)
+[slm] <861.782414> V34RETRAIN, End of L2,rx->gain=0x354,count1=5952
+[slm] <861.782429> V34HSHAKE: txstate TX_L1=>TONE_AB(rx DET_AB, mst TX_L2, [1]5952, [2]42)
+[slm] <861.782436> V34HSHAKE: microstate TX_L2=>TX_PHASE3_ANS(tx TONE_AB, rx DET_AB, [1]5952, [2]42)
+[slm] <861.782442> V34HSHAKE: rxstate DET_AB=>RX_DPSK(tx TONE_AB, mst TX_PHASE3_ANS, [1]5952, [2]42)
+[slm] <861.849074> V34HSHAKE: txstate TONE_AB=>SILENCE(rx RX_DPSK, mst TX_PHASE3_ANS, [1]0, [2]162)
+[slm] <861.849087> V34HSHAKE: microstate TX_PHASE3_ANS=>RX_PHASE2_ANS(tx SILENCE, rx RX_DPSK, [1]0, [2]162)
+[slm] <861.982341> V34SetupDemodulator: baudrate 2400, carrier 1800
+[slm] <861.982354> V34HSHAKE: rxstate RX_DPSK=>RX_L1(tx SILENCE, mst RX_PHASE2_ANS, [1]0, [2]20)
+[slm] <861.989411> V34AGC, rx->gain = 0x178, at the beginning of RX_L1
+[slm] <862.420896> V34SetupDemodulator: baudrate 2400, carrier 0
+[slm] <862.420910> V34HSHAKE: rxstate RX_L1=>RX_DPSK(tx SILENCE, mst RX_PHASE2_ANS, [1]0, [2]1089)
+[slm] <862.420917> V34HSHAKE: txstate SILENCE=>TONE_AB(rx RX_DPSK, mst RX_PHASE2_ANS, [1]0, [2]1089)
+[slm] <862.420922> V34HSHAKE: microstate RX_PHASE2_ANS=>DET_SYNC(tx TONE_AB, rx RX_DPSK, [1]0, [2]1089)
+[slm] <862.571750> V34HSHAKE: microstate DET_SYNC=>DET_INFO(tx TONE_AB, rx RX_DPSK, [1]0, [2]0)
+[slm] <862.571763> DET_SYNC is received in RX_DPSK,rx->gain=0x354
+[slm] <862.729589> V34HSHAKE: txstate TONE_AB=>TX_DPSK(rx RX_DPSK, mst DET_INFO, [1]0, [2]0)
+[slm] <862.729601> RX MDLENGTH = 0
+[slm] <862.729606> V34PROBE, snr_L1=42735 , snr_L2=45751 , L2toL1ratio=1096  (all not in dB)
+[slm] <862.729611> V34PROBE, dBcnt=0 , powerReductionReq=0 , gain=852
+[slm] <862.729615> Sensitive RX Power Reduction mechanism disabled!
+[slm] <862.729618> V34PROBE, not asking for power reduction
+[slm] <862.729621> V34PROBE, rx->gain=852 ,(obj->rxinfo0.data[1]&0x80)=128
+[slm] <862.729625> V34PROBE,0=3,0,0,0,0,5=12,0,12,0,0,10=0,12,0,0,0,12,0,0,0,0,20=0,0,22=0,1,24=2
+[slm] <862.729635> VpcmV34Main: max V34 baud rate index = 0
+[slm] <862.729639> V34PREEMPHASIS, - index is 6, baudrate= 3200
+[slm] <862.729643> V34PROBESELECT, in ANSWER, txbaudrate = 3200,rxbaudrate = 3200,
+[slm] <862.729646> V34PROBE, rxinfo1c 0x98,0x0,0x26,0x1a,0xd,0x81,0xc2,0xc0,0x0,0x7
+[slm] <862.729653> VPcmV34Main: giveINFO1dBits
+[slm] <862.729656> VPcmV34Main: rxinfo1d = 0x98,0x0,0x26,0x1a,0xd,0x81,0xc2,0xc0,0x0,0x7
+[slm] <862.729662> VPcmV34Main: upstream selection: local cap - 0, remote cap - 1, requested in info1 - 0, isPCM - 0
+[slm] <862.729667> VPcmV34Main, setINFO1aBits
+[slm] <862.729672> Final L2 Probing signal:
+[slm] <862.729675> L2[15]    = +0.14126
+[slm] <862.729679> L2[16]    = -0.04479
+[slm] <862.729683> L2[17]    = +0.18063
+[slm] <862.729687> L2[18]    = +0.41326
+[slm] <862.729690> L2[19]    = +2.20487
+[slm] <862.729694> L2[20]    = +6.01544
+[slm] <862.729698> P2 REPORT : A_LAW or MU_LAW 1 ( 0 = Mu, 1 = A)
+[slm] <862.729701> P2 REPORT : Tx power measurment point = 1 ( 0 = digital modem terminal, 1 = codec output)
+[slm] <862.729705> P2 REPORT : Max tx power = 23
+[slm] <862.729708> P2 REPORT : short phase2: local=0 , remote=0
+[slm] <862.729711> P2 REPORT : V92 capabilities: local=0 , remote=1 , selected=90
+[slm] <862.729720> $!$ 9<777<9B<=:B8F5F9D>;:;8D4C55?::;9;8=9>>E:=476978<D669:7>:8?::?8F7G55?;:E476?5C;@762A????
+[slm] <862.729727> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A669:7>:9=::;9:8<9>>F:D6=7E96>>6B477?9A>8:=474F55;74C2A????
+[slm] <862.729731> VPcmV34Main: V.34 Upstream is selected (info1)...
+[slm] <862.729735> VPcmV34Main: It is ===== V90 receiver ==== from Now on
+[slm] <862.729738> V34HSHAKE: microstate DET_INFO=>INFODONE(tx TX_DPSK, rx RX_DPSK, [1]0, [2]0)
+[slm] <862.729744> V34PROBE, txinfo1a 0x0,0x3,0x90,0xb0,0x0,0x0,0x0,0x0,0x0,0x0
+[slm] <862.852419> V34HSHAKE: txstate TX_DPSK=>TONE_AB(rx RX_DPSK, mst INFODONE, [1]0, [2]0)
+[slm] <862.859423> V34HSHAKE: txstate TONE_AB=>SILENCE(rx RX_DPSK, mst INFODONE, [1]0, [2]16)
+[slm] <862.859489> $!$ 9<777<9B==795;5F96>@:D5A39:5>?:79:7>68>?:78C7?79?<;68C7>:=<C:;8E7@:9>?665D396;;:7>5939:8?@:C897H9A?:664?7;96?<::474<67;7764@1F3?????
+[slm] <862.859495> V90Parameters: upStream min rate : 4800 upStream max rate : 33600  Rate mask :1fff
+[slm] <862.859503> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C976987:77C47493B8A????
+[slm] <862.859509> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C9769:7>F:88<396B:7762D1C????
+[slm] <862.859515> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9><:C975<9D>E:D8<7<:9>@:E8E6=:>?7:;474F55;74C2A????
+[slm] <862.859522> $!$ 9<5@4985>8;8887F9:?;:;998<6?:78:8<7;::>>664D39:9?9:D597=8D>D:;887G8D><;8997H:7=F;99;7=8D><;<887E::>8;:8@7H9C=F:;8E7:97>C:;474F55;84C2A????
+[slm] <862.859528> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A669:7>:9=::;9:8<9>>F:D6=7E96>>6B477?9A>8:=474F55;74C2A????
+[slm] <862.859531> V90Modem Reset, qcFlag = 0
+[slm] <862.859538> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <862.859544> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <862.859550> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <862.859553> *********************************************************
+[slm] <862.859556> V90Modem Version: 2.98  (25-Mar-04)
+[slm] <862.859560> *********************************************************
+[slm] <862.859565> $!$ 9<5@497B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <862.859572> $!$ 8C8F7=9>>=:?8<7=55=8;;8@7<9@:7898F7G9C><:99;39:<>@;:8?7H::?;666D7>9B>F;89@395@:79:997:9>>E667;7B9B><664B3978>F:D9:8=9:>C66777H:<><;82D1C????
+[slm] <862.859577> $!$ 898F7F:5>F:D8<7G:9?:7@475?9A>F;88<7::9:C66685=7>:C66685<79:C666E7>:<:7886C5E3B8A????
+[slm] <862.859580> *********************************************************
+[slm] <862.859587> $!$ 9<5@4979>@:B6;7>:8>:;88@89:9>F;87:7>:9?;:?8E7@:8;A666;5B7A:7::8<8<98?9:?978=9D?9669:7>:9:7;:8F399D?7;:8@7H9C:7876;5B5C8D4@????
+[slm] <862.859591> V90Demodulator reset, quick connect flag = 0
+[slm] <862.859599> $!$ 9<5@4979><:C8F7=::>C:79;7H:7:7;88<8<9:?;7@475;96?<::475H9;>=;98<8=55;D664D495C;776571F3?????
+[slm] <862.859605> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <862.859610> $!$ 9<5@497:?8;;887E9>?A:;994C55?9:;9:7>:98D4@????
+[slm] <862.859617> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <862.859623> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <862.859646> V92Modem Reset
+[slm] <862.859652> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <862.859658> $!$ 6@4A3C5?:A6@4A3955:766473955:7667;7A9>?:668@8<55>866776;7>==877;5>55?=:;998<9>>F:D473955:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <862.859664> $!$ 6@4A3C5?:A6@4A3955:766477?9D?9669;7A9::7;;9:7>55>F:<476<7A:78:7:6955>>;88F8>:5:7:E8E7E:>:766473955:76@4A3C5?:A6@4A1F3?????
+[slm] <862.859667> *********************************************************
+[slm] <862.859670> V92Modem Version: 1.1  (9-Apr-01)
+[slm] <862.859674> *********************************************************
+[slm] <862.859678> $!$ 9<5@4;7B>F::8<7F55==:;998<9>>F:D475=9:?::9997B:5?;:?8F7G6?8D4@????
+[slm] <862.859683> $!$ 8C8<7F9D?9;?477<9A><:78E8>:5?:664B3999>@:B477=9:?::9997B:5?;:E993998?9:79:7A55>=:?9?1F3?????
+[slm] <862.859689> $!$ 6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A3C5?:A6@4A1F3?????
+[slm] <862.859692> ## Debug: pParamObj address = 57CCC9F4
+[slm] <862.859695> ## Debug: BitVector address = 57CD2B24
+[slm] <862.859698> ## Debug: Cnt address = 57CD2B20
+[slm] <862.859701> ## Debug: pParamObj->N = 144
+[slm] <862.859704> ## Debug: pParamObj->Lsp = 120
+[slm] <862.859707> ## Debug: pParamObj->Ltp = 120
+[slm] <862.859719> #%# Debug: last bit before V.92 info = 1683
+[slm] <862.859728> #%# Debug: last bit after V.92 info = 1717, temp calculation = 1716
+[slm] <862.859761> V92Modulator reset
+[slm] <862.859776> V92Modulator enter Phase 3
+[slm] <862.859783> $!$ 9<5@4;85>?:79:7>68<D:E8;8>9A>8;:8F8;6?:79:795G66?<669:8=96?;:;477E9:>E:=9;7A55?::;9;39:9>F66594965;77:2D1C????
+[slm] <862.859791> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:7474F55:D764E4965;77657493B8A????
+[slm] <862.859798> $!$ 9<5@4;7:>::>8F5<96>E:98<7E9A><;85A399:>::>8F5;9:?;:76;7>98>8;?474F55:D764E4965;77657493B8A????
+[slm] <862.859802> VPcmV34Main: Wait (before P2 COMPLETE)...
+[slm] <862.859880> VPcmV34Main: Indicating First P2 COMPLETE... (after 96)
+[slm] <862.859884> vpcm: New status 1
+[slm] <862.859888> vpcm: Phase II completed !!!
+[slm] <862.869935> On PHASE2_COMPLETE: added Silence = 0, p2DelayCntr = 144
+[slm] <862.869946> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.870022> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.880464> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.880546> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.890990> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.891071> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.901491> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.901574> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.912027> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.912110> VPcmV34Main: Wait (after P2 COMPLETE)...
+[slm] <862.919052> V34Hshak: Setting up transmitter for phase3...
+[slm] <862.919070> $!$ 9<777<9B==795;5F96>@:D5A3979?<:;478=9D:7:<8@7G96>C666D7B9C=;9>776;55;D665=3E55?::;9;8=9>>E:=477>98>?:E5A3999><:9888B55?:;:888;:9:77C474;65;7764C3999><:9888B55>=:78:8=55;D665:4;6<;:7;4C3997><;:88396B:7782D1C????
+[slm] <862.919080> $!$ 9<777<9B==795;5F96>@:D5A397<><;:475F9>>E:?8D7:9A:7;68F8@9:?966997>99?<:99;7B9D>E664D39:7><;:9<8;9C>@:D8>396;:76>8:7?9<:7:<8C7:9<:7;98<8=55?;:E47495>8D4@????
+[slm] <862.919083> V34TXSCALE, power reduction requested by remote modem is 4 dB
+[slm] <862.919086> V34TXSCALE, txscale before is 5793, reduced txscale is 6 dB,final txscale is 2900
+[slm] <862.919090> V34SetupModulator: baudrate 3200, carrier 1920, preemp 0, V90=1. fullReset=1
+[slm] <862.919096> V34HSHAKE: rxstate RX_DPSK=>WAIT(tx SILENCE, mst INFODONE, [1]0, [2]30)
+[slm] <862.919102> V34HSHAKE: txstate SILENCE=>SSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <862.919109> V34FLO: Echo running in Original Integer...
+[slm] <862.919113> V34FLO: Echo running in Original Integer...
+[slm] <862.919186> VPcmV34Main: Moving to Phase3 Modem V90..
+[slm] <862.919189> vpcm: New status 2
+[slm] <862.929553> Estimated DC = -1  (acc = -87)
+[slm] <862.940086> Estimated DC = -4  (acc = -640)
+[slm] <862.950632> Estimated DC = -5  (acc = -640)
+[slm] <862.961119> V34HSHAKE: txstate SSEG=>SBARSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <862.971695> V34HSHAKE: txstate SBARSEG=>PPSEG(rx WAIT, mst INFODONE, [1]0, [2]30)
+[slm] <862.971733> Estimated DC = -6  (acc = -640)
+[slm] <862.982202> Estimated DC = -6  (acc = -640)
+[slm] <862.989265> Estimated DC = -6  (acc = -640)
+[slm] <863.010191> Estimated DC = -6  (acc = -640)
+[slm] <863.020735> Estimated DC = -6  (acc = -640)
+[slm] <863.031387> Estimated DC = -6  (acc = -640)
+[slm] <863.052323> Estimated DC = -6  (acc = -640)
+[slm] <863.059363> V34HSHAKE: txstate PPSEG=>TRNSEG4(rx WAIT, mst INFODONE, [1]752, [2]30)
+[slm] <863.059393> V34Hshak: echo start wait time would be: NEC 435 symbols, FEC 973 symbols...
+[slm] <863.059439> Estimated DC = -6  (acc = -640)
+[slm] <863.069999> Estimated DC = -6  (acc = -640)
+[slm] <863.090901> Estimated DC = -6  (acc = -640)
+[slm] <863.101453> Estimated DC = -6  (acc = -640)
+[slm] <863.101567> VPcmV34Main: Echo adapt start reported...
+[slm] <863.112098> Estimated DC = -6  (acc = -640)
+[slm] <863.112129> Echo Energy = 0, BETA = 2
+[slm] <863.112134> updateAlphaNE: updated 0 => -3021
+[slm] <863.129476> Estimated DC = -7  (acc = -944)
+[slm] <863.140105> Estimated DC = -8  (acc = -999)
+[slm] <863.150760> Estimated DC = -9  (acc = -1025)
+[slm] <863.171608> Estimated DC = -9  (acc = -1009)
+[slm] <863.182161> Estimated DC = -9  (acc = -923)
+[slm] <863.189301> Estimated DC = -9  (acc = -978)
+[slm] <863.210213> Estimated DC = -9  (acc = -981)
+[slm] <863.220767> Estimated DC = -9  (acc = -957)
+[slm] <863.231352> Estimated DC = -9  (acc = -991)
+[slm] <863.252299> Estimated DC = -9  (acc = -939)
+[slm] <863.259358> Estimated DC = -9  (acc = -937)
+[slm] <863.270082> Estimated DC = -9  (acc = -966)
+[slm] <863.291012> Estimated DC = -9  (acc = -951)
+[slm] <863.301539> Estimated DC = -9  (acc = -957)
+[slm] <863.312156> Estimated DC = -9  (acc = -972)
+[slm] <863.329596> Estimated DC = -9  (acc = -957)
+[slm] <863.340141> Estimated DC = -9  (acc = -953)
+[slm] <863.350758> Estimated DC = -9  (acc = -958)
+[slm] <863.371667> Estimated DC = -9  (acc = -923)
+[slm] <863.382201> Estimated DC = -9  (acc = -958)
+[slm] <863.389325> Estimated DC = -9  (acc = -894)
+[slm] <863.410261> Estimated DC = -9  (acc = -875)
+[slm] <863.420813> Estimated DC = -9  (acc = -920)
+[slm] <863.431420> Estimated DC = -9  (acc = -914)
+[slm] <863.452320> Estimated DC = -9  (acc = -939)
+[slm] <863.459414> Estimated DC = -9  (acc = -912)
+[slm] <863.469981> Estimated DC = -9  (acc = -887)
+[slm] <863.490886> Estimated DC = -9  (acc = -903)
+[slm] <863.501476> Estimated DC = -9  (acc = -850)
+[slm] <863.512079> Estimated DC = -9  (acc = -865)
+[slm] <863.529483> Estimated DC = -9  (acc = -895)
+[slm] <863.540056> Estimated DC = -9  (acc = -900)
+[slm] <863.550660> Estimated DC = -9  (acc = -953)
+[slm] <863.571600> Estimated DC = -9  (acc = -923)
+[slm] <863.582126> Estimated DC = -9  (acc = -904)
+[slm] <863.589305> Estimated DC = -9  (acc = -885)
+[slm] <863.610201> Estimated DC = -9  (acc = -899)
+[slm] <863.620757> Estimated DC = -9  (acc = -923)
+[slm] <863.631389> Estimated DC = -9  (acc = -910)
+[slm] <863.652282> Estimated DC = -9  (acc = -897)
+[slm] <863.659363> Estimated DC = -9  (acc = -896)
+[slm] <863.669977> Estimated DC = -9  (acc = -949)
+[slm] <863.690875> Estimated DC = -9  (acc = -954)
+[slm] <863.701420> Estimated DC = -9  (acc = -899)
+[slm] <863.712044> Estimated DC = -9  (acc = -920)
+[slm] <863.729417> Estimated DC = -9  (acc = -888)
+[slm] <863.740003> Estimated DC = -9  (acc = -837)
+[slm] <863.750620> Estimated DC = -9  (acc = -882)
+[slm] <863.771531> Estimated DC = -9  (acc = -866)
+[slm] <863.782103> Estimated DC = -9  (acc = -832)
+[slm] <863.789221> Estimated DC = -9  (acc = -828)
+[slm] <863.810109> Estimated DC = -9  (acc = -867)
+[slm] <863.820674> Estimated DC = -9  (acc = -857)
+[slm] <863.831277> Estimated DC = -9  (acc = -829)
+[slm] <863.852240> Estimated DC = -9  (acc = -838)
+[slm] <863.859319> Estimated DC = -9  (acc = -857)
+[slm] <863.869951> Estimated DC = -9  (acc = -882)
+[slm] <863.890861> Estimated DC = -9  (acc = -809)
+[slm] <863.901365> Estimated DC = -9  (acc = -783)
+[slm] <863.911999> Estimated DC = -9  (acc = -812)
+[slm] <863.929421> Estimated DC = -9  (acc = -903)
+[slm] <863.939949> Estimated DC = -9  (acc = -861)
+[slm] <863.950568> Estimated DC = -9  (acc = -840)
+[slm] <863.971457> VPcmV34Main: Echo adapt middle reported...
+[slm] <863.971502> Estimated DC = -9  (acc = -796)
+[slm] <864.922311> V90Demodulator: Error Energy = -0.000
+[slm] <864.922323> V90Demodulator: Timing Offset [ppm]  = -0.000
+[slm] <864.960885> V34HSHAKE: txstate TRNSEG4=>JTXMIT(rx WAIT, mst INFODONE, [1]752, [2]435)
+[slm] <864.960896> V34Hshak: On J TX start, would freeze EC after bulk delay (608 samples, bulk=608)
+[slm] <864.960899> V34HSHAKE: rxstate WAIT=>RECEIVE(tx JTXMIT, mst INFODONE, [1]752, [2]608)
+[slm] <864.960905> V34SetupDemodulator: baudrate 3200, carrier 1920
+[slm] <864.960908> V34AGC, setup receiver gain = 0x2f0
+[slm] <864.960911> V34HSHAKE: microstate INFODONE=>DET_SYNC(tx JTXMIT, rx RECEIVE, [1]752, [2]608)
+[slm] <864.960914> V34HSHAKE: txstate JTXMIT=>JaTXMIT(rx RECEIVE, mst DET_SYNC, [1]0, [2]608)
+[slm] <864.960917> V34HSHAKE: rxstate RECEIVE=>WAIT(tx JaTXMIT, mst DET_SYNC, [1]0, [2]608)
+[slm] <864.960921> VPcmFloModem: enterPhase3 called.
+[slm] <864.960923> V90Demodulator: enter Phase 3
+[slm] <864.960925> V90Phase2Info: pcmType = A_LAW
+[slm] <864.960927> V90Phase2Info: rtd = 1088
+[slm] <864.960929> V90Phase2Info: maxTxPower [dBm0]  = -12.0
+[slm] <864.960932> V90Phase2Info: txPowerMeasurementPoint = CodecOutput
+[slm] <864.960937> $!$ 9<5@4985>?:79:7>67<@:D8=7H6?:79;8@7G9;>F665D396<;?4C2A????
+[slm] <864.960939> V90Phase2Info: L2[0] = +203.406
+[slm] <864.960942> V90Phase2Info: L2[1] = +210.703
+[slm] <864.960944> V90Phase2Info: L2[2] = +211.010
+[slm] <864.960946> V90Phase2Info: L2[3] = +211.258
+[slm] <864.960949> V90Phase2Info: L2[4] = +211.254
+[slm] <864.960951> V90Phase2Info: L2[5] = +211.410
+[slm] <864.960953> V90Phase2Info: L2[6] = +211.335
+[slm] <864.960955> V90Phase2Info: L2[7] = +211.455
+[slm] <864.960957> V90Phase2Info: L2[8] = +211.311
+[slm] <864.960959> V90Phase2Info: L2[9] = +211.379
+[slm] <864.960961> V90Phase2Info: L2[10] = +211.440
+[slm] <864.960964> V90Phase2Info: L2[11] = +211.327
+[slm] <864.960966> V90Phase2Info: L2[12] = +211.443
+[slm] <864.960968> V90Phase2Info: L2[13] = +211.378
+[slm] <864.960970> V90Phase2Info: L2[14] = +211.384
+[slm] <864.960972> V90Phase2Info: L2[15] = +211.243
+[slm] <864.960975> V90Phase2Info: L2[16] = +211.429
+[slm] <864.960977> V90Phase2Info: L2[17] = +211.203
+[slm] <864.960979> V90Phase2Info: L2[18] = +210.971
+[slm] <864.960981> V90Phase2Info: L2[19] = +209.179
+[slm] <864.960983> V90Phase2Info: L2[20] = +205.369
+[slm] <864.960989> $!$ 9<5@4985?9:;6=7B9A?;:;994C55>C:E8F8955;D66688<98><:D8;5G8:<C8B473A66:@4C2A????
+[slm] <864.960994> $!$ 9<5@4985?9:;6=7B9A?;:;994C55=7;88<397;>@:B9;7>:7:7898F7>9;>=;9476=:>?7:;477::7?9:79@3966:C664?7?9>>C;:8<8;55>C:;8E7@:9>?6659495>8D4@????
+[slm] <864.960997> $!$ 9<5@4985?9:;6=7B9A?;:;994C55<?:7997=:<>8;88<5<9D>;:;8:6=:>?7:;5A398:>E:A8E7H:<>E4C2A????
+[slm] <864.961001> $!$ 9<5@4985?9:;6=7B9A?;:;994C55<=:?8C8=9:?9666>7:9>>E665D39698D4@????
+[slm] <864.961004> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A66797>:8><;:2D1C????
+[slm] <864.961006> V90Phase3Demodulator: Reset called, sessionFlag = 0 !
+[slm] <864.961015> V90Phase3Demodulator: initial state set to WaitForSd
+[slm] <864.961026> $!$ 9<5@497:?8;;887E9>?A:;994C55><:D9;7>:7:7968?7::8><665:1F3?????
+[slm] <864.961052> $!$ 9<777<9B<=:B8F5F9D>;:;8D4C55><:D9;7>:7=7:>888<9:;:7@475C96:7:B8<7G9<?;:>474F55;87=574;3B8A????
+[slm] <864.999571> V90Demodulator: Error Energy = -0.000
+[slm] <865.080246> V90Demodulator: Error Energy = -0.000
+[slm] <865.150289> V34Hshak: on JaTXMIT - time to freeze echo...
+[slm] <865.150300> V34HSHAK: Freeze EC
+[slm] <865.150302> ==== Near Echo Canceller report ======
+[slm] <865.150304> ?======= Coefficients[1..144]=========
+[slm] <865.150306> ?0 0 0 0 0 0
+[slm] <865.150310> ?0 -1 0 0 -1 -1
+[slm] <865.150312> ?0 -1 -1 0 0 -1
+[slm] <865.150315> ?0 0 -1 -1 -1 -1
+[slm] <865.150318> ?-1 -1 0 -1 -1 0
+[slm] <865.150320> ?-1 0 0 0 0 0
+[slm] <865.150323> ?0 -1 -1 0 0 -1
+[slm] <865.150325> ?-1 0 0 0 0 -1
+[slm] <865.150328> ?-1 0 -1 0 -1 -1
+[slm] <865.150330> ?-1 0 0 0 0 -1
+[slm] <865.150333> ?-1 -1 0 -1 0 0
+[slm] <865.150335> ?-1 0 0 -1 0 0
+[slm] <865.150338> ?0 0 0 0 0 -1
+[slm] <865.150340> ?0 0 -1 -1 0 -1
+[slm] <865.150343> ?-1 0 0 0 0 -1
+[slm] <865.150345> ?0 0 -1 -1 0 0
+[slm] <865.150348> ?0 0 -1 -1 0 0
+[slm] <865.150350> ?-1 0 -1 -1 0 -1
+[slm] <865.150353> ?-1 0 0 -1 -1 -1
+[slm] <865.150355> ?-1 -1 0 0 -1 0
+[slm] <865.150358> ?0 0 0 0 0 -1
+[slm] <865.150361> ?0 0 -1 -1 0 -1
+[slm] <865.150363> ?-1 0 0 0 0 1
+[slm] <865.150386> ?0 0 0 0 0 1
+[slm] <865.150391> ==== Far Echo Canceller report ======
+[slm] <865.150395> ?======= Nothing to report =========
+[slm] <865.160887> V90Demodulator: Error Energy = -0.000
+[slm] <865.241610> V90Demodulator: Error Energy = -0.000
+[slm] <865.322235> V90Demodulator: Error Energy = -0.000
+[slm] <865.399480> V90Demodulator: Error Energy = -0.000
+[slm] <865.480085> V90Demodulator: Error Energy = -0.000
+[slm] <865.560778> V90Demodulator: Error Energy = -0.000
+[slm] <865.641476> V90Demodulator: Error Energy = -0.000
+[slm] <865.651915> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@476<99:7::8<8=9:>:;:8<7=55<7665<4>66;94C2A????
+[slm] <865.651939> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:78:8<7F9D>;998;5=9:?;:;8:8=9:>;4C2A????
+[slm] <865.651943> Ja Flag set to 1
+[slm] <865.679945> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@476<99<E:E9;3999><;:8<7<:9><::475955;9785:1F3?????
+[slm] <865.679986> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:78:8<7F9D>;998;5G9D?;8:8<8=9:>:;:8<7=3B8A????
+[slm] <865.680107> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;993989=98D587=55<B:D8F8@9C:78:888=96:7;99;7::9><4C2A????
+[slm] <865.680115> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475B7C<@9:6@5:7A8D4@????
+[slm] <865.680145> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A669:8=96?9;:477=96?;:7477:98>:;;8D8>9A>8;:8@7H9C8D4@????
+[slm] <865.680150> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:7878:8=9>?=:79;7>998D4@????
+[slm] <865.722164> V90Demodulator: Error Energy = +2178.104
+[slm] <865.799482> V90Demodulator: Error Energy = +3489.612
+[slm] <865.809821> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B774E4965;776577>5B;8762D1C????
+[slm] <865.809853> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78<997H:?><:D2D1C????
+[slm] <865.809862> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78;8E7>:7>>;?474F55:B775<4;68;?7;5@4<5C;7762D1C????
+[slm] <865.809869> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78=887B9C:77C473D65:E7?5=4=6;;@7=2D1C????
+[slm] <865.809873> ResamplerTiming::adjustHalfBaudBpfGain  baud/2 dft bin = +151555.682
+[slm] <865.809877> ResamplerTiming::adjustHalfBaudBpfGain  normFactor = +2.000
+[slm] <865.809881> ResamplerTiming::adjustHalfBaudBpfGain  normBPFhBaudB0coef = +0.079
+[slm] <865.809885> V90Demodulator: Agc Gain low > Setting DIL overflow protection !!!
+[slm] <865.809891> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A666;7B9A:7:C888A55?<:98F7=9::77C474:66;=4@????
+[slm] <865.880077> V90Demodulator: Error Energy = +2352.440
+[slm] <865.890628> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?76=:9:2D1C????
+[slm] <865.922190> V90Demodulator: Timing Offset [ppm]  = +0.663
+[slm] <865.929211> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;>7657499::D7=2D1C????
+[slm] <865.939642> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;993989=98D587=55<;8:478<:9>8;:8<1F3?????
+[slm] <865.960788> V90Demodulator: Error Energy = +1031.904
+[slm] <866.041519> V90Demodulator: Error Energy = +347.274
+[slm] <866.111928> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A66797>96>;;?2D1C????
+[slm] <866.111943> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E397>=:8:6E397C=;77477;9D??7@477E9:>=;:47899:>8:A477=9:>C;:88396B:76A584B5C;>7:2D1C????
+[slm] <866.111952> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E397>=:8:6E397C=;77477;9D??7@478;9>>>:>9;39:5><:78B3999><:B9;7:55;D664D4;5C;<762D1C????
+[slm] <866.111960> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E3985<99>5A399A><:<9;39:5><:78B3999><:B9;7:55;D664B4=5C;<772D1C????
+[slm] <866.111966> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A666>7>:7>D:78E3985<99>5A39:7>@:=8?8=55?7:;887D55>;:;8C8=96:77C473F6<:E785=1F3?????
+[slm] <866.111974> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;88<7?55>=;88<8:55:?795=4965:@66474F55:B7?5=3G67;94C2A????
+[slm] <866.111982> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;:8<8<:9:7:<997>:6;8664?4=65;7764@3955;D664B4@6;:E775@1F3?????
+[slm] <866.111989> $!$ 9<5@4988?7:;8:8=:7>8:B7=7>:7>@:<8@7>:7;A667:7>:;><;88<3978>F::8<7<6?:7;:8<8<:9:7:<997>:6;9664?4=67;7764@3955;D664B4=6<:E7;571F3?????
+[slm] <866.111993> V90SpectralVerifier: No special conditions
+[slm] <866.122189> V90Demodulator: Error Energy = +124.969
+[slm] <866.199418> V90Demodulator: Error Energy = +82.360
+[slm] <866.280046> V90Demodulator: Error Energy = +57.324
+[slm] <866.360718> V90Demodulator: Error Energy = +48.386
+[slm] <866.441356> V90Demodulator: Error Energy = +48.700
+[slm] <866.522086> V90Demodulator: Error Energy = +49.606
+[slm] <866.599296> V90Demodulator: Error Energy = +54.354
+[slm] <866.651841> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475F7:<;8?7<5F3B8A????
+[slm] <866.679933> V90Demodulator: Error Energy = +44.720
+[slm] <866.760621> V90Demodulator: Error Energy = +29.341
+[slm] <866.841296> V90Demodulator: Error Energy = +25.819
+[slm] <866.921979> V90Demodulator: Error Energy = +23.772
+[slm] <866.921990> V90Demodulator: Timing Offset [ppm]  = +0.674
+[slm] <866.999183> V90Demodulator: Error Energy = +20.562
+[slm] <867.079883> V90Demodulator: Error Energy = +22.542
+[slm] <867.160540> V90Demodulator: Error Energy = +22.209
+[slm] <867.241225> V90Demodulator: Error Energy = +21.964
+[slm] <867.321894> V90Demodulator: Error Energy = +20.592
+[slm] <867.399138> V90Demodulator: Error Energy = +19.865
+[slm] <867.441100> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;9939:8?;;;8;8B55?9:;8=7>:7><:D8:7>55=<:98F7=9::7;99;7::9><66673966;97657493B8A????
+[slm] <867.441135> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476<7A<F9=2D1C????
+[slm] <867.479793> V90Demodulator: Error Energy = +20.771
+[slm] <867.511357> V90AutoDigitalImpDetector:  initail var (Trn1):  347  357  432  430  322  334
+[slm] <867.511397> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>D:;887G8;>8;8474F55:B795;495C;9772D1C????
+[slm] <867.511406> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>=:78:8=9D?9665D395@;86D5<493B8A????
+[slm] <867.511414> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477@9:?;878C8=8;>8;87;7A:7><;98?4C55>@:D8@8=9>>8:B478?96?99:8?8;9:?::>474F55:B7;58495C;:772D1C????
+[slm] <867.511417> V90AutoDigitalImpDetector:  initail AltRbsVarThresh (Trn1) = 4000
+[slm] <867.511426> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@476=:7>E77477:9A?;:;997G96?;:;478;97?:668@7G9>?;:?887E55?7:79;7>:7>E66474965;77657493?????
+[slm] <867.560492> V90Demodulator: Error Energy = +17.302
+[slm] <867.641161> V90Demodulator: Error Energy = +18.074
+[slm] <867.662186> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?9669;8;9C;8668=7B:7?:;:478>:5>;:79;7>55:77@473968;@765=3955;:7?574?55:7795@496;:7665:4B65;=66474<6>;77<473968;@765=1C????
+[slm] <867.721893> V90Demodulator: Error Energy = +17.974
+[slm] <867.739324> V90AutoDigitalImpDetector trn1 second update  :  3906  3906  3906  3906  3906  3906
+[slm] <867.739335> V90AutoDigitalImpDetector trn1 Alt first update  :  3904  3904  3904  3904  3904  3904
+[slm] <867.799052> V90Demodulator: Error Energy = +17.227
+[slm] <867.879713> V90Demodulator: Error Energy = +17.134
+[slm] <867.921811> V90Demodulator: Timing Offset [ppm]  = +1.326
+[slm] <867.960419> V90Demodulator: Error Energy = +17.481
+[slm] <868.041086> V90Demodulator: Error Energy = +14.944
+[slm] <868.069098> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476<7A<F9=591F3?????
+[slm] <868.111236> V90AutoDigitalImpDetector trn1 third update  :  3906  3906  3906  3906  3906  3906
+[slm] <868.111247> V90AutoDigitalImpDetector trn1 Alt second update  :  3904  3904  3904  3904  3904  3904
+[slm] <868.111253> V90AutoDigitalImpDetector first update : trn1Sigma = 1610612736
+[slm] <868.121802> V90Demodulator: Error Energy = +15.648
+[slm] <868.198944> V90Demodulator: Error Energy = +16.093
+[slm] <868.279616> V90Demodulator: Error Energy = +15.764
+[slm] <868.339192> V90AutoDigitalImpDetector trn1 final update  :  3907  3907  3907  3907  3907  3907
+[slm] <868.339203> V90AutoDigitalImpDetector trn1 Alt final update  :  3904  3904  3904  3904  3904  3904
+[slm] <868.339208> V90AutoDigitalImpDetector second update : trn1Sigma = 1073741824
+[slm] <868.339217> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>9C?;:;99398<>8:?9;397;>F;8475C99:7;99;7::9><6667396<;976571F3?????
+[slm] <868.339248> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668<7G96>9:B8@7G9<:7:98F7G9C><:99;7B9D>E8;9=7:9A?<:79;7H:7:7:E8=3989=98D587=3B8A????
+[slm] <868.360319> V90Demodulator: Error Energy = +15.670
+[slm] <868.440957> V90Demodulator: Error Energy = +15.509
+[slm] <868.521678> V90Demodulator: Error Energy = +14.544
+[slm] <868.598860> V90Demodulator: Error Energy = +11.710
+[slm] <868.679569> V90Demodulator: Error Energy = +13.729
+[slm] <868.760247> V90Demodulator: Error Energy = +12.765
+[slm] <868.840929> V90Demodulator: Error Energy = +11.282
+[slm] <868.921627> V90Demodulator: Error Energy = +13.575
+[slm] <868.921637> V90Demodulator: Timing Offset [ppm]  = +0.797
+[slm] <869.002280> V90Demodulator: Error Energy = +12.906
+[slm] <869.079526> V90Demodulator: Error Energy = +13.112
+[slm] <869.160175> V90Demodulator: Error Energy = +11.934
+[slm] <869.240874> V90Demodulator: Error Energy = +12.423
+[slm] <869.321617> V90Demodulator: Error Energy = +12.627
+[slm] <869.402275> V90Demodulator: Error Energy = +12.085
+[slm] <869.479472> V90Demodulator: Error Energy = +12.331
+[slm] <869.560136> V90Demodulator: Error Energy = +10.712
+[slm] <869.640781> V90Demodulator: Error Energy = +12.057
+[slm] <869.721521> V90Demodulator: Error Energy = +10.861
+[slm] <869.791613> V90Phase3Demodulator: waitForJd framePosition = 0
+[slm] <869.791629> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@475C99:7::8<8=9:>:;:8<7=55<766584:6;;;762D1C????
+[slm] <869.791659> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668<7G96>9:B8@7G9<:7:98F7G9C><:99;7B9D>E8;9=7:9A?<:79;7H:7:7:E8=3989=98D587=3B8A????
+[slm] <869.791664> VPcmFloModem (V90): Train constellation : 1  RRN constellation : 0 (0 = 4 points / 1 = 16 points)
+[slm] <869.791672> $!$ 9<777<9B<=:B8F5F9D>;:;8D395===7?573B6?:7;68?7::8><79476<78=9669:7>:9:7;:8F397C<F9:478<9>>C:;8E7<9::C668;8>9::7;:8F3987=;8:474:65;?7>2D1C????
+[slm] <869.791675> SetNofBitsPhase4 - nof bits each call = 4
+[slm] <869.791679> V34Main: IndicateJdReceived - constel size = 1, silence SCR = 0
+[slm] <869.802165> V90Demodulator: Error Energy = +8.936
+[slm] <869.830136> Entered v34m->v90Receiver == V90RCV_P3_THIRD_S with tx->symcnt = 128 period = 973
+[slm] <869.879350> V90Demodulator: Error Energy = +9.610
+[slm] <869.921462> V90Demodulator: Timing Offset [ppm]  = +0.084
+[slm] <869.949396> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@475C99<E:E9;3999><;:8<7<:9><::475955;8785:4?3B8A????
+[slm] <869.949412> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4>65;776577>5B;8762D1C????
+[slm] <869.949420> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6;;@7?5@4B9::D7=2D1C????
+[slm] <869.949457> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A668;7B:8>8:88C7B9C>>668:7H9C>E:;8:8=9>>F:D6<8?96>C;;888=9D?9668F7?55=7:>888<9:;:4C2A????
+[slm] <869.949464> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A666A7=55>D:79?5E9D>F:A687A9:>8::474F55;84C2A????
+[slm] <869.949470> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475=7><C4C2A????
+[slm] <869.960014> V90Demodulator: Error Energy = +11.436
+[slm] <870.040716> V90Demodulator: Error Energy = +8.198
+[slm] <870.121431> V90Demodulator: Error Energy = +6.223
+[slm] <870.202116> V90Demodulator: Error Energy = +5.619
+[slm] <870.279322> V90Demodulator: Error Energy = +5.202
+[slm] <870.359953> V90Demodulator: Error Energy = +4.770
+[slm] <870.430049> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@5A899D?9:98<8<:8<=:?998<:9=:;:9<7=:>:?6?473967:E7;4A8=:7>E777:7B9<>D:75D4>6=;?664C39:8?8;86;7B9;>=9:8?8;9:?::>5D4;6:;7762A????
+[slm] <870.430064> V90AutoDigitalImpDetector: suspected rbs patern  000000
+[slm] <870.440717> V90Demodulator: Error Energy = +6.979
+[slm] <870.521328> V90Demodulator: Error Energy = +9.600
+[slm] <870.602029> V90Demodulator: Error Energy = +8.898
+[slm] <870.679244> V90Demodulator: Error Energy = +7.390
+[slm] <870.759915> V90Demodulator: Error Energy = +6.683
+[slm] <870.840662> V90Demodulator: Error Energy = +6.371
+[slm] <870.921360> V90Demodulator: Error Energy = +6.032
+[slm] <870.921388> V90Demodulator: Timing Offset [ppm]  = +0.159
+[slm] <871.002031> V90Demodulator: Error Energy = +5.838
+[slm] <871.079242> V90Demodulator: Error Energy = +5.756
+[slm] <871.159939> V90Demodulator: Error Energy = +5.521
+[slm] <871.240601> V90Demodulator: Error Energy = +5.483
+[slm] <871.321280> V90Demodulator: Error Energy = +5.472
+[slm] <871.401982> V90Demodulator: Error Energy = +5.483
+[slm] <871.479210> V90Demodulator: Error Energy = +5.329
+[slm] <871.559870> V90Demodulator: Error Energy = +5.093
+[slm] <871.640557> V90Demodulator: Error Energy = +4.913
+[slm] <871.721335> V90Demodulator: Error Energy = +4.721
+[slm] <871.802050> V90Demodulator: Error Energy = +4.589
+[slm] <871.879275> V90Demodulator: Error Energy = +4.557
+[slm] <871.921344> V90Demodulator: Timing Offset [ppm]  = +0.159
+[slm] <871.959937> V90Demodulator: Error Energy = +4.624
+[slm] <872.040595> V90Demodulator: Error Energy = +4.593
+[slm] <872.121268> V90Demodulator: Error Energy = +4.625
+[slm] <872.202028> V90Demodulator: Error Energy = +4.671
+[slm] <872.279203> V90Demodulator: Error Energy = +4.585
+[slm] <872.359865> V90Demodulator: Error Energy = +4.600
+[slm] <872.440530> V90Demodulator: Error Energy = +4.573
+[slm] <872.521157> V90Demodulator: Error Energy = +5.893
+[slm] <872.559680> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4<67;@7?5@7>5B;8762D1C????
+[slm] <872.559691> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6:;@7?5@4B9::D7=2D1C????
+[slm] <872.559697> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<D:;8;6>98>F::8<8<88?;:78>7>3?????
+[slm] <872.601878> V90Demodulator: Error Energy = +4.688
+[slm] <872.679063> V90Demodulator: Error Energy = +4.880
+[slm] <872.759712> V90Demodulator: Error Energy = +5.083
+[slm] <872.840453> V90Demodulator: Error Energy = +5.093
+[slm] <872.921114> V90Demodulator: Error Energy = +4.892
+[slm] <872.921125> V90Demodulator: Timing Offset [ppm]  = +0.159
+[slm] <873.001821> V90Demodulator: Error Energy = +4.642
+[slm] <873.079026> V90Demodulator: Error Energy = +4.505
+[slm] <873.159564> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4:69;@7?5@7>5B;8762D1C????
+[slm] <873.159571> V90Equalizer: DfeProtectionOnDil = 9
+[slm] <873.159577> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;<7;5<4>9::D7=2D1C????
+[slm] <873.159581> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <873.159585> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<?:?8>7A8:>::E8;7>:8=:;:887@9::76C5E399;?9:;8<8C9::7;:8@7F9>>E:=2D1C????
+[slm] <873.159588> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<?:?8>7A8:>::E8;7>:8=:;:887@9:8D4@????
+[slm] <873.159693> V90Demodulator: Error Energy = +4.262
+[slm] <873.240434> V90Demodulator: Error Energy = +4.273
+[slm] <873.321061> V90Demodulator: Error Energy = +4.191
+[slm] <873.401730> V90Demodulator: Error Energy = +4.474
+[slm] <873.478965> V90Demodulator: Error Energy = +4.689
+[slm] <873.520915> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <873.520928> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <873.520935> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C<=;88<7>:?><665D4G55>=;88<7>:?><666C5>55:=666;5?7::76<478=9>>D:?8E7@5C8D4@????
+[slm] <873.559647> V90Demodulator: Error Energy = +7.705
+[slm] <873.591146> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@478>9C=:;;9:899:>:;:8<7=85>?:79:7>55;D66571F3?????
+[slm] <873.591155> ------------------------------------------------------------------
+[slm] <873.591160> ------------------------------------------------------------------
+[slm] <873.591162> ------------------------------------------------------
+[slm] <873.591165> -----------------  Linear Mapping report --------------
+[slm] <873.591168> linearMapping[0]  :  0  0  0  0  0  0
+[slm] <873.591173> linearMapping[1]  :  0  0  0  0  0  0
+[slm] <873.591177> linearMapping[2]  :  43  43  43  43  43  43
+[slm] <873.591182> linearMapping[3]  :  58  58  58  58  58  58
+[slm] <873.591186> linearMapping[4]  :  75  75  75  75  75  75
+[slm] <873.591190> linearMapping[5]  :  91  91  91  91  91  91
+[slm] <873.591194> linearMapping[6]  :  107  107  107  107  107  107
+[slm] <873.591199> linearMapping[7]  :  122  122  122  122  122  122
+[slm] <873.591204> linearMapping[8]  :  138  138  138  138  138  138
+[slm] <873.591208> linearMapping[9]  :  154  154  154  154  154  154
+[slm] <873.591213> linearMapping[10]  :  169  169  169  169  169  169
+[slm] <873.591217> linearMapping[11]  :  186  186  186  186  186  186
+[slm] <873.591222> linearMapping[12]  :  203  203  203  203  203  203
+[slm] <873.591227> linearMapping[13]  :  218  218  218  218  218  218
+[slm] <873.591231> linearMapping[14]  :  233  233  233  233  233  233
+[slm] <873.591235> linearMapping[15]  :  250  250  250  250  250  250
+[slm] <873.591240> linearMapping[16]  :  267  267  267  267  267  267
+[slm] <873.591244> linearMapping[17]  :  282  282  282  282  282  282
+[slm] <873.591249> linearMapping[18]  :  298  298  298  298  298  298
+[slm] <873.591253> linearMapping[19]  :  314  314  314  314  314  314
+[slm] <873.591258> linearMapping[20]  :  329  329  329  329  329  329
+[slm] <873.591262> linearMapping[21]  :  345  345  345  345  345  345
+[slm] <873.591266> linearMapping[22]  :  361  361  361  361  361  361
+[slm] <873.591271> linearMapping[23]  :  378  378  378  378  378  378
+[slm] <873.591275> linearMapping[24]  :  394  394  394  394  394  394
+[slm] <873.591280> linearMapping[25]  :  409  409  409  409  409  409
+[slm] <873.591285> linearMapping[26]  :  426  426  426  426  426  426
+[slm] <873.591289> linearMapping[27]  :  442  442  442  442  442  442
+[slm] <873.591294> linearMapping[28]  :  447  447  447  447  447  447
+[slm] <873.591298> linearMapping[29]  :  473  473  473  473  473  473
+[slm] <873.591303> linearMapping[30]  :  493  493  493  493  493  493
+[slm] <873.591307> linearMapping[31]  :  505  505  505  505  505  505
+[slm] <873.591312> linearMapping[32]  :  530  530  530  530  530  530
+[slm] <873.591316> linearMapping[33]  :  561  561  561  561  561  561
+[slm] <873.591321> linearMapping[34]  :  594  594  594  594  594  594
+[slm] <873.591325> linearMapping[35]  :  626  626  626  626  626  626
+[slm] <873.591330> linearMapping[36]  :  658  658  658  658  658  658
+[slm] <873.591334> linearMapping[37]  :  689  689  689  689  689  689
+[slm] <873.591339> linearMapping[38]  :  722  722  722  722  722  722
+[slm] <873.591343> linearMapping[39]  :  753  753  753  753  753  753
+[slm] <873.591347> linearMapping[40]  :  786  786  786  786  786  786
+[slm] <873.591352> linearMapping[41]  :  817  817  817  817  817  817
+[slm] <873.591357> linearMapping[42]  :  851  851  851  851  851  851
+[slm] <873.591361> linearMapping[43]  :  881  881  881  881  881  881
+[slm] <873.591384> linearMapping[44]  :  914  914  914  914  914  914
+[slm] <873.591389> linearMapping[45]  :  946  946  946  946  946  946
+[slm] <873.591394> linearMapping[46]  :  978  978  978  978  978  978
+[slm] <873.591398> linearMapping[47]  :  1009  1009  1009  1009  1009  1009
+[slm] <873.591403> linearMapping[48]  :  1059  1059  1059  1059  1059  1059
+[slm] <873.591408> linearMapping[49]  :  1119  1119  1119  1119  1119  1119
+[slm] <873.591412> linearMapping[50]  :  1187  1187  1187  1187  1187  1187
+[slm] <873.591417> linearMapping[51]  :  1251  1251  1251  1251  1251  1251
+[slm] <873.591421> linearMapping[52]  :  1315  1315  1315  1315  1315  1315
+[slm] <873.591426> linearMapping[53]  :  1375  1375  1375  1375  1375  1375
+[slm] <873.591431> linearMapping[54]  :  1443  1443  1443  1443  1443  1443
+[slm] <873.591435> linearMapping[55]  :  1504  1504  1504  1504  1504  1504
+[slm] <873.591440> linearMapping[56]  :  1572  1572  1572  1572  1572  1572
+[slm] <873.591444> linearMapping[57]  :  1631  1631  1631  1631  1631  1631
+[slm] <873.591449> linearMapping[58]  :  1699  1699  1699  1699  1699  1699
+[slm] <873.591453> linearMapping[59]  :  1759  1759  1759  1759  1759  1759
+[slm] <873.591458> linearMapping[60]  :  1828  1828  1828  1828  1828  1828
+[slm] <873.591462> linearMapping[61]  :  1887  1887  1887  1887  1887  1887
+[slm] <873.591467> linearMapping[62]  :  1956  1956  1956  1956  1956  1956
+[slm] <873.591471> linearMapping[63]  :  2015  2015  2015  2015  2015  2015
+[slm] <873.591476> linearMapping[64]  :  2116  2116  2116  2116  2116  2116
+[slm] <873.591480> linearMapping[65]  :  2245  2245  2245  2245  2245  2245
+[slm] <873.591484> linearMapping[66]  :  2373  2373  2373  2373  2373  2373
+[slm] <873.591489> linearMapping[67]  :  2502  2502  2502  2502  2502  2502
+[slm] <873.591493> linearMapping[68]  :  2630  2630  2630  2630  2630  2630
+[slm] <873.591497> linearMapping[69]  :  2758  2758  2758  2758  2758  2758
+[slm] <873.591501> linearMapping[70]  :  2886  2886  2886  2886  2886  2886
+[slm] <873.591505> linearMapping[71]  :  3014  3014  3014  3014  3014  3014
+[slm] <873.591510> linearMapping[72]  :  3142  3142  3142  3142  3142  3142
+[slm] <873.591513> linearMapping[73]  :  3271  3271  3271  3271  3271  3271
+[slm] <873.591517> linearMapping[74]  :  3400  3400  3400  3400  3400  3400
+[slm] <873.591521> linearMapping[75]  :  3527  3527  3527  3527  3527  3527
+[slm] <873.591525> linearMapping[76]  :  3656  3656  3656  3656  3656  3656
+[slm] <873.591529> linearMapping[77]  :  3784  3784  3784  3784  3784  3784
+[slm] <873.591533> linearMapping[78]  :  3907  3907  3907  3907  3907  3907
+[slm] <873.591537> linearMapping[79]  :  4038  4038  4038  4038  4038  4038
+[slm] <873.591541> linearMapping[80]  :  4231  4231  4231  4231  4231  4231
+[slm] <873.591545> linearMapping[81]  :  4489  4489  4489  4489  4489  4489
+[slm] <873.591550> linearMapping[82]  :  4745  4745  4745  4745  4745  4745
+[slm] <873.591554> linearMapping[83]  :  5002  5002  5002  5002  5002  5002
+[slm] <873.591558> linearMapping[84]  :  5258  5258  5258  5258  5258  5258
+[slm] <873.591563> linearMapping[85]  :  5515  5515  5515  5515  5515  5515
+[slm] <873.591567> linearMapping[86]  :  5772  5772  5772  5772  5772  5772
+[slm] <873.591571> linearMapping[87]  :  6028  6028  6028  6028  6028  6028
+[slm] <873.591576> linearMapping[88]  :  6285  6285  6285  6285  6285  6285
+[slm] <873.591580> linearMapping[89]  :  6537  6537  6537  6537  6537  6537
+[slm] <873.591585> linearMapping[90]  :  6792  6792  6792  6792  6792  6792
+[slm] <873.591589> linearMapping[91]  :  7050  7050  7050  7050  7050  7050
+[slm] <873.591593> linearMapping[92]  :  7307  7307  7307  7307  7307  7307
+[slm] <873.591598> linearMapping[93]  :  7563  7563  7563  7563  7563  7563
+[slm] <873.591602> linearMapping[94]  :  7820  7820  7820  7820  7820  7820
+[slm] <873.591606> linearMapping[95]  :  8077  8077  8077  8077  8077  8077
+[slm] <873.591611> linearMapping[96]  :  8461  8461  8461  8461  8461  8461
+[slm] <873.591616> linearMapping[97]  :  8975  8975  8975  8975  8975  8975
+[slm] <873.591620> linearMapping[98]  :  9488  9488  9488  9488  9488  9488
+[slm] <873.591625> linearMapping[99]  :  10001  10001  10001  10001  10001  10001
+[slm] <873.591629> linearMapping[100]  :  10515  10515  10515  10515  10515  10515
+[slm] <873.591634> linearMapping[101]  :  11028  11028  11028  11028  11028  11028
+[slm] <873.591639> linearMapping[102]  :  11541  11541  11541  11541  11541  11541
+[slm] <873.591643> linearMapping[103]  :  12056  12056  12056  12056  12056  12056
+[slm] <873.591648> linearMapping[104]  :  12570  12570  12570  12570  12570  12570
+[slm] <873.591652> linearMapping[105]  :  13083  13083  13083  13083  13083  13083
+[slm] <873.591657> linearMapping[106]  :  13584  13584  13584  13584  13584  13584
+[slm] <873.591661> linearMapping[107]  :  14096  14096  14096  14096  14096  14096
+[slm] <873.591666> linearMapping[108]  :  14609  14609  14609  14609  14609  14609
+[slm] <873.591670> linearMapping[109]  :  15122  15122  15122  15122  15122  15122
+[slm] <873.591675> linearMapping[110]  :  15653  15653  15653  15653  15653  15653
+[slm] <873.591680> linearMapping[111]  :  16166  16166  16166  16166  16166  16166
+[slm] <873.591684> linearMapping[112]  :  16936  16936  16936  16936  16936  16936
+[slm] <873.591693> linearMapping[113]  :  17932  17932  17932  17932  17932  17932
+[slm] <873.591698> linearMapping[114]  :  18957  18957  18957  18957  18957  18957
+[slm] <873.591703> linearMapping[115]  :  18460  18460  18460  18460  18460  18460
+[slm] <873.591707> linearMapping[116]  :  19080  19080  19080  19080  19080  19080
+[slm] <873.591712> linearMapping[117]  :  0  0  0  0  0  0
+[slm] <873.591716> linearMapping[118]  :  0  0  0  0  0  0
+[slm] <873.591721> linearMapping[119]  :  0  0  0  0  0  0
+[slm] <873.591725> linearMapping[120]  :  0  0  0  0  0  0
+[slm] <873.591729> linearMapping[121]  :  0  0  0  0  0  0
+[slm] <873.591734> linearMapping[122]  :  0  0  0  0  0  0
+[slm] <873.591739> linearMapping[123]  :  0  0  0  0  0  0
+[slm] <873.591743> linearMapping[124]  :  0  0  0  0  0  0
+[slm] <873.591748> linearMapping[125]  :  0  0  0  0  0  0
+[slm] <873.591752> linearMapping[126]  :  0  0  0  0  0  0
+[slm] <873.591756> linearMapping[127]  :  0  0  0  0  0  0
+[slm] <873.591760> ------------------------------------------------------
+[slm] <873.591780> V90Demodulator: Dil study Terminated. Enter error relaxation period.
+[slm] <873.591789> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477H:7>@:=8@7G96>C669=7::7=;:>997>:8>?665D395@;?7=4E49668D4@????
+[slm] <873.591797> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477?9>>E:78C39:;>8;87;7A:7><;98?396B:76A5<4965:E76571F3?????
+[slm] <873.591803> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C2D1C????
+[slm] <873.591808> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@477E9>>E:;888;7B>8;6977B9C>>9<888;55?9:;977H:7?;7@2D1C????
+[slm] <873.591815> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>586F55;D66594A3B8A????
+[slm] <873.591820> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>596F55;D66594B3B8A????
+[slm] <873.591826> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5:6F55;D665:4:3B8A????
+[slm] <873.591832> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5;6F55;D665:4A3B8A????
+[slm] <873.591837> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5<6F55;D665:4>3B8A????
+[slm] <873.591842> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5=6F55;D665:4@3B8A????
+[slm] <873.591848> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5>6F55;D665:4?3B8A????
+[slm] <873.591853> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5?6F55;D665:4B3B8A????
+[slm] <873.591858> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7>5@6F55;D665;4<3B8A????
+[slm] <873.591863> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?576F55;D66594<3B8A????
+[slm] <873.591869> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?586F55;D665:4?3B8A????
+[slm] <873.591874> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?596F55;D665:4?3B8A????
+[slm] <873.591880> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5:6F55;D665:4;3B8A????
+[slm] <873.591885> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5;6F55;D665:4>3B8A????
+[slm] <873.591890> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5<6F55;D665:4<3B8A????
+[slm] <873.591895> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5=6F55;D665;493B8A????
+[slm] <873.591901> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5>6F55;D66584@3B8A????
+[slm] <873.591906> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5?6F55;D665:493B8A????
+[slm] <873.591911> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7?5@6F55;D665:4>3B8A????
+[slm] <873.591917> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7757498B:77C474<688D4@????
+[slm] <873.591922> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574:8B:77C474:678D4@????
+[slm] <873.591928> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574;8B:77C474<698D4@????
+[slm] <873.591933> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574<8B:77C474:698D4@????
+[slm] <873.591938> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574=8B:77C474;678D4@????
+[slm] <873.591943> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574>8B:77C474=688D4@????
+[slm] <873.591949> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574?8B:77C474=6;8D4@????
+[slm] <873.591954> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574@8B:77C474:6;8D4@????
+[slm] <873.591959> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574A8B:77C474<698D4@????
+[slm] <873.591965> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77574B8B:77C474=6>8D4@????
+[slm] <873.591970> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B7758498B:77C474;658D4@????
+[slm] <873.591978> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584:8B:77C474<668D4@????
+[slm] <873.591984> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584;8B:77C474:65;<4C2A????
+[slm] <873.591989> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584<8B:77C474:6=;<4C2A????
+[slm] <873.591995> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584=8B:77C474:6;;94C2A????
+[slm] <873.592000> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584>8B:77C474;66;977584=68;?4C2A????
+[slm] <873.592006> $!$ :B8@7G9:>8;86D7::5?7:?8E7@8;>8;87B498B=B77584?8B:77C474;69;@775?4<6:;=4C2A????
+[slm] <873.592012> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C2D1C????
+[slm] <873.592024> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3965:7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592030> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3966:7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592036> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3967:7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592042> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3968:7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592048> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<3969:7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592054> $!$ 9<5@4976?<;:8F5=9>>>:?9;7:9A<@:C975=9:?;:;8:8=9D?97@47899=>8;98<396::7:C888A8:>::E8;7>55>@;9474:66;;4C2A????
+[slm] <873.592058> -------------------------------------------------------------------------
+[slm] <873.592061> V90AutoDigitalImpDetector::findPadGain() Report :
+[slm] <873.592064> -------------------------------------------------------------------------
+[slm] <873.592067> Codec type 0
+[slm] <873.592070> projectionBaseUcode = 95 minUcodeForCodecProjection = 64
+[slm] <873.592077> error = 1059558, gain = +4.07
+[slm] <873.592085> error = 762595, gain = +3.83
+[slm] <873.592091> error = 1123843, gain = +3.61
+[slm] <873.592098> error = 1157998, gain = +3.41
+[slm] <873.592105> error = 977413, gain = +3.24
+[slm] <873.592111> error = 923342, gain = +3.08
+[slm] <873.592118> error = 849816, gain = +2.93
+[slm] <873.592124> error = 856265, gain = +2.80
+[slm] <873.592131> error = 849045, gain = +2.68
+[slm] <873.592137> error = 746376, gain = +2.57
+[slm] <873.592143> error = 710284, gain = +2.47
+[slm] <873.592150> error = 709740, gain = +2.38
+[slm] <873.592157> error = 670192, gain = +2.29
+[slm] <873.592163> error = 1127996, gain = +2.21
+[slm] <873.592170> error = 515466, gain = +2.14
+[slm] <873.592176> error = 905794, gain = +2.07
+[slm] <873.592183> error = 1088395, gain = +1.97
+[slm] <873.592189> error = 1000107, gain = +1.85
+[slm] <873.592195> error = 751115, gain = +1.75
+[slm] <873.592202> error = 758896, gain = +1.66
+[slm] <873.592208> error = 732008, gain = +1.57
+[slm] <873.592215> error = 698150, gain = +1.50
+[slm] <873.592221> error = 723857, gain = +1.43
+[slm] <873.592228> error = 666064, gain = +1.37
+[slm] <873.592234> error = 608719, gain = +1.31
+[slm] <873.592241> error = 613040, gain = +1.26
+[slm] <873.592247> error = 636771, gain = +1.21
+[slm] <873.592253> error = 643045, gain = +1.16
+[slm] <873.592260> error = 444715, gain = +1.12
+[slm] <873.592267> error = 745718, gain = +1.08
+[slm] <873.592274> error = 518405, gain = +1.05
+[slm] <873.592280> error = 262469, gain = +1.01
+[slm] <873.592284> Codec type 1
+[slm] <873.592287> projectionBaseUcode = 95 minUcodeForCodecProjection = 63
+[slm] <873.592294> error = 1380, gain = +4.00
+[slm] <873.592301> error = 356234, gain = +3.82
+[slm] <873.592308> error = 498138, gain = +3.60
+[slm] <873.592315> error = 667442, gain = +3.41
+[slm] <873.592322> error = 694651, gain = +3.23
+[slm] <873.592328> error = 688272, gain = +3.07
+[slm] <873.592335> error = 782622, gain = +2.93
+[slm] <873.592341> error = 776297, gain = +2.80
+[slm] <873.592348> error = 771176, gain = +2.68
+[slm] <873.592355> error = 586348, gain = +2.57
+[slm] <873.592361> error = 616973, gain = +2.47
+[slm] <873.592381> error = 629791, gain = +2.38
+[slm] <873.592389> error = 806939, gain = +2.29
+[slm] <873.592395> error = 517916, gain = +2.21
+[slm] <873.592402> error = 644542, gain = +2.13
+[slm] <873.592408> error = 849241, gain = +2.06
+[slm] <873.592415> error = 1372, gain = +2.00
+[slm] <873.592422> error = 355101, gain = +1.91
+[slm] <873.592432> error = 497244, gain = +1.80
+[slm] <873.592439> error = 666584, gain = +1.70
+[slm] <873.592445> error = 696434, gain = +1.61
+[slm] <873.592452> error = 689070, gain = +1.53
+[slm] <873.592459> error = 782430, gain = +1.46
+[slm] <873.592465> error = 776350, gain = +1.40
+[slm] <873.592472> error = 770518, gain = +1.34
+[slm] <873.592478> error = 585990, gain = +1.28
+[slm] <873.592485> error = 615933, gain = +1.23
+[slm] <873.592492> error = 629562, gain = +1.19
+[slm] <873.592498> error = 808018, gain = +1.14
+[slm] <873.592505> error = 518388, gain = +1.10
+[slm] <873.592512> error = 642853, gain = +1.06
+[slm] <873.592519> error = 850166, gain = +1.03
+[slm] <873.592525> error = 1462, gain = +1.00
+[slm] <873.592530> ------ Final conclusions -------
+[slm] <873.592535> $!$ :C8@7G7:?9;88F8;7B?<8B888@55;D664B4;6;;97:5=4B5C;9772D1C????
+[slm] <873.592542> $!$ :=887B9C==:78C8>9:<D;;6C7::<:77C473D66:E76584A67;?762D1C????
+[slm] <873.592547> $!$ :C8@7G7:?9;88F8;76<C:79>396B:76A584=6;;96D5>493B8A????
+[slm] <873.592553> $!$ :=887B9C==:78C8>9:<88B888@55;D664B4:5C;776574965;74C2A????
+[slm] <873.592558> $!$ 8<8@7G96>C668:7H99><:9477B99><:D9;7B9;>@:;8;399>?:66685E96?>4C2A????
+[slm] <873.592565> $!$ 8<8@7G96>C66977:99<>:78@7G55>@::8<7G:9>@:<8@7>99:7:?9:396B:76A583G65;7765749658D4@????
+[slm] <873.592568> -------------------------------------------------------------------------
+[slm] <873.592594> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A66687@98:78=887B9C:77C473D65:E7?5=4=6;;@7=2D1C????
+[slm] <873.619287> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4@69;@7?5@7>5B;8762D1C????
+[slm] <873.619297> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G6;;@7?5@4B9::D7=2D1C????
+[slm] <873.619303> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475=7><C4C2A????
+[slm] <873.619310> $!$ 9<5@497:?8;;887E9>?A:;994C55<;:;8D7H99<;:?8C5B9C>@;:8@7:9A<<;8997H:7=9:;8C7::==;:;997F9>>E:79;7>99:77C5E39::>E:<997>9:?A:?8E7@55<C8;473?55<;8<6<3996>E::476=9>>D:?8E7@5C8D4@????
+[slm] <873.640286> V90Demodulator: Error Energy = +528.059
+[slm] <873.720978> V90Demodulator: Error Energy = +129.955
+[slm] <873.801699> V90Demodulator: Error Energy = +34.006
+[slm] <873.878868> V90Demodulator: Error Energy = +10.492
+[slm] <873.920939> V90Demodulator: Timing Offset [ppm]  = +0.159
+[slm] <873.959562> V90Demodulator: Error Energy = +4.719
+[slm] <873.980625> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A667;6;7C;8::476;7B=:66797::9>@:E474F55:B774E4965;776574965;74C2A????
+[slm] <873.980636> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@477>:=>@;:475=7><C4C2A????
+[slm] <873.980647> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7:C888A55=;9>477B9C>;:;9?396B:7785;3E55>>:?9=7B9C:7;68F8@9:?9668C7B9B>@;:474F55;:7659495A:7:?8D899A?@:?8E7@55>D:79?399A><;<8<7E55;D7:5@4:688D4@????
+[slm] <873.980655> $!$ 9<5@4989=98D595=9:?::?8>7G6?:76D4E3G9=><:D8:7>55>D:79?39::>::E8;7>55:?:78=8=9:?9668=7:98?;:E993B55;D665?4:5A:7:89@39:5>8;8887F:8:7:C888A8:>::E8;7>55;D665@4;3B8A????
+[slm] <873.980665> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;76B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980672> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;86B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980678> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;96B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980684> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;:6B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980690> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;;6B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980696> $!$ 9:997G67:78:8<8<9>>>:D5A39:5>?:79:7>55;<6B477=7B>@:D474F55;?785?3G5C:E4C2A????
+[slm] <873.980708> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <873.980713> $!$ 9<5@4989=98D595=9:?::?8>7G6?8D4@????
+[slm] <873.980719> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7;9988;:9:?;68F8@9:?96?47396B:76A5;4;68;>6D5@4A6:8D4@????
+[slm] <873.980726> $!$ 9<5@4989=98D595=9:?::?8>7G6?:7:?8E7=9:??66594;5A:7;68F8@9:?9668@7G55>;888D4955:77C473F66;86D5<1F3?????
+[slm] <873.980729>
+[slm] --------------------------------------
+[slm] <873.980732> V90TRN2Designer : ADI design report :
+[slm] <873.980735> trn2 size  :  8
+[slm] <873.980738>
+[slm] ------------------------------------------------------------------------------------------------------
+[slm] <873.980741> trn2 constel[0]  :  91 91 91 91 91 91  :  91 91 91 91 91 91  :  7050 7050 7050 7050 7050 7050
+[slm] <873.980750> trn2 constel[1]  :  87 87 87 87 87 87  :  87 87 87 87 87 87  :  6028 6028 6028 6028 6028 6028
+[slm] <873.980757> trn2 constel[2]  :  83 83 83 83 83 83  :  83 83 83 83 83 83  :  5002 5002 5002 5002 5002 5002
+[slm] <873.980765> trn2 constel[3]  :  79 79 79 79 79 79  :  79 79 79 79 79 79  :  4038 4038 4038 4038 4038 4038
+[slm] <873.980772> trn2 constel[4]  :  72 72 72 72 72 72  :  72 72 72 72 72 72  :  3142 3142 3142 3142 3142 3142
+[slm] <873.980780> trn2 constel[5]  :  65 65 65 65 65 65  :  65 65 65 65 65 65  :  2245 2245 2245 2245 2245 2245
+[slm] <873.980787> trn2 constel[6]  :  52 52 52 52 52 52  :  52 52 52 52 52 52  :  1315 1315 1315 1315 1315 1315
+[slm] <873.980795> trn2 constel[7]  :  26 26 26 26 26 26  :  26 26 26 26 26 26  :  426 426 426 426 426 426
+[slm] <873.980803>
+[slm] ------------------------------------------------------------------------------------------------------
+[slm] <873.980808> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A667;6;7C;9::478<:5><:99;8;96>C66977::7>8:C8<8=9:?9;95A1F3?????
+[slm] <873.980814> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3988?9665D39668D4@????
+[slm] <873.980818> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A397>>;665D39668D4@????
+[slm] <873.980824> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;866474F55:B774E4965;77657493B8A????
+[slm] <873.980830> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;966474F55:D764E4965;77657493B8A????
+[slm] <873.980836> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;866474F55:D764E4965;77657493B8A????
+[slm] <873.980842> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;966474F55:D764E4965;77657493B8A????
+[slm] <873.980862> V90Phase4Demodulator: reset called, quickConnect indication is 0
+[slm] <873.980869> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@478=:7>E788;5=79<C:;8E7@:9>?665D3967;;76574955?:;?8D7;9D>C;92D1C????
+[slm] <873.980874> V34Main: IndicateDilReceived - constel size = 1
+[slm] <873.980891> $!$ 9<5@4978=766977:98>B:;8;4C55<:969;3997>@;:9:4C3?????
+[slm] <873.980899> $!$ 76574966;877584965;776574965;876571F3?????
+[slm] <873.980907> $!$ 76584:66;877584:66;877584:66;877571F3?????
+[slm] <873.980915> $!$ 76574965;776574965;776574965;876571F3?????
+[slm] <873.980922> $!$ 76574965;776574:65;776574965;776571F3?????
+[slm] <873.980930> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <873.980937> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <873.980944> $!$ 76574965;776574965;876574965;776571F3?????
+[slm] <873.980948> VPcmFloModem (V90): Building CPt, CPt length = 428
+[slm] <874.012145> $!$ 9<5@4985>?:79:7>68<D:E8;8>9A>8;:8F8;6?:7968?7::8><79476=9:?9:C8@7G96?;:;8;3975:779594>67;74C2A????
+[slm] <874.012157> $!$ 9<5@4985>?:79:7>68<;:;8D7H99?<:B888=9D?97@47699=>8;98<4<55=;:;997F9>>E:79;7>99:786474<68;=762D1C????
+[slm] <874.012164> $!$ 9<5@497:?8;;887E9>?A:;994C55><:D9;7>:7:7968?7::8><665;1F3?????
+[slm] <874.012171> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:D764E4965;776577>5B;8762D1C????
+[slm] <874.012177> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76C573G65;77657499::D7=2D1C????
+[slm] <874.012181> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C475?87<F9@6<5G3B8A????
+[slm] <874.012188> $!$ 9<5@497:?8;;887E9>?A:;994C55?;:?8D7B9C>>668F7?9;?::;9;399D>E668=8;9:><;@8<395=?7:>888<9:;;6?474F55:B764E4:6:;@762D1C????
+[slm] <874.012199> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <874.012203> $!$ 8B8@7G9:>8;8475>:6?<:78C7B:?><;85A1F3?????
+[slm] <874.012210> $!$ :C8@7G7A><898F7>9;==:78C8>9::7665D395@;76D574965;776574:68;=7<2D1C????
+[slm] <874.012216> $!$ :C888A7A><898F7>9;==:78C8>9::7665D395@;76D5<4=66;@7?5:1F3?????
+[slm] <874.012221> $!$ :98F7>9;?:669:8>9B:7665D395B;86D574:69;?795=1F3?????
+[slm] <874.012227> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D6;:E785<4?6;;<782D1C????
+[slm] <874.012232> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <874.012237> $!$ 8:6=5>6?8D4@????
+[slm] <874.012243> $!$ :C8@7G79>=:;6:7H9:>=9<887E::><66474F55:B764E4965;97;5=4A68;:78571F3?????
+[slm] <874.012249> $!$ :C888A79>=:;6:7H9:>=9<887E::><66474F55:B764E4<6;;87?5<4B3B8A????
+[slm] <874.012254> $!$ :98F7>9;?:669:8>9B:7665D395@;86D584>6<;;785>1F3?????
+[slm] <874.012260> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D66:E7:584?65;@782D1C????
+[slm] <874.012265> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <874.012297> V90Demodulator: enter Phase 4
+[slm] <874.040227> V90Demodulator: Error Energy = +2.432
+[slm] <874.061211> End of CP #1 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.099703> End of CP #2 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.120960> V90Demodulator: Error Energy = +0.908
+[slm] <874.131445> End of CP #3 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.159553> End of CP #4 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.180698> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@476;9>:7::8<8=9:>:;:8<7=55<766584<6=;76B47899D>C:7997B:9?@665D39668D4@????
+[slm] <874.180711> vpcm: New status 3
+[slm] <874.201526> End of CP #5 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.201789> V90Demodulator: Error Energy = +0.502
+[slm] <874.229678> End of CP #6 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.261263> End of CP #7 tx.... (terminateCp=0, terminateCpNot=0)
+[slm] <874.271761> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@476;9><E:E9;3999><;:8<7<:9><::475955;=7<573E55><:D9;7>:7:79:795G67>;8A8E7H:<>E8:888=96:7;99;7::9><4C2A????
+[slm] <874.271782> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B774E4965;776577>5B;8762D1C????
+[slm] <874.271791> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;@7?5@4B9::D7=2D1C????
+[slm] <874.271796> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476=87<E78475B7C<@9:6@5:7A8D4@????
+[slm] <874.271833> CPnot Flag set to 1
+[slm] <874.278917> V90Demodulator: Error Energy = +3.553
+[slm] <874.299754> End of CP #8 tx.... (terminateCp=0, terminateCpNot=1)
+[slm] <874.299765> GetV90CpBits: Indicating CP termination !!!!
+[slm] <874.359596> V90Demodulator: Error Energy = +4.700
+[slm] <874.440251> V90Demodulator: Error Energy = +4.373
+[slm] <874.520829> V90Phase4Demodulator reset & enable linear mapping study in TRN2.
+[slm] <874.521020> V90Demodulator: Error Energy = +3.793
+[slm] <874.601638> V90Demodulator: Error Energy = +4.519
+[slm] <874.640194> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4?6>;@7?5@7>5B;8762D1C????
+[slm] <874.640206> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476=87<E78471F3?????
+[slm] <874.678814> V90Demodulator: Error Energy = +3.944
+[slm] <874.759528> V90Demodulator: Error Energy = +3.555
+[slm] <874.840171> V90Demodulator: Error Energy = +3.474
+[slm] <874.920852> V90Demodulator: Error Energy = +3.324
+[slm] <874.920863> V90Demodulator: Timing Offset [ppm]  = +0.157
+[slm] <875.001586> V90Demodulator: Error Energy = +3.217
+[slm] <875.078725> V90Demodulator: Error Energy = +3.504
+[slm] <875.159432> V90Demodulator: Error Energy = +3.497
+[slm] <875.240084> V90Demodulator: Error Energy = +3.411
+[slm] <875.320802> V90Demodulator: Error Energy = +3.365
+[slm] <875.401474> V90Demodulator: Error Energy = +3.606
+[slm] <875.418925> V90Demapper: constelation update !!!
+[slm] <875.418953> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <875.418960> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:78:8<7;::>>7@2D1C????
+[slm] <875.418966> $!$ 9<5@497:?8;;887E9>?A:;994C55>::78C7<::>C:79;7>99:7:E9=7>:7:77:5<399B><:78E399:?9;88F8;:88D4@????
+[slm] <875.418971> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <875.418980> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8<7:9C:7665D395@;:6D5<4A68;?7:5>1F3?????
+[slm] <875.418986> $!$ 9<5@497:?8;;887E9>?A:;994C55>:;;998;9:>E;:477F9:>8:D6<8;:7>F;86<7G9:?9:=9@3955;D664B4<5C;=765=4A66;=4C2A????
+[slm] <875.418992> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <875.419006> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7999;7=55:77C473D65:E7;584@6=;7782D1C????
+[slm] <875.419009> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:79<888;9>>8:D8:7>55:77C473D65:E785=4A66;87?2D1C????
+[slm] <875.419011> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <875.419015> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8@7G55?=:78C8>9::7665D395@;96D5@4?6<;<79591F3?????
+[slm] <875.419018> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C888A55?=:78C8>9::7665D395@;<6D5:4=69;@7=5;1F3?????
+[slm] <875.419020> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <875.478636> V90Demodulator: Error Energy = +3.007
+[slm] <875.559323> V90Demodulator: Error Energy = +2.841
+[slm] <875.640002> V90Demodulator: Error Energy = +3.055
+[slm] <875.720684> V90Demodulator: Error Energy = +3.210
+[slm] <875.801389> V90Demodulator: Error Energy = +2.828
+[slm] <875.882057> V90Demodulator: Error Energy = +2.870
+[slm] <875.920640> V90Demodulator: Timing Offset [ppm]  = +0.156
+[slm] <875.959227> V90Demodulator: Error Energy = +2.894
+[slm] <876.039944> V90Demodulator: Error Energy = +2.989
+[slm] <876.120697> V90Demodulator: Error Energy = +2.821
+[slm] <876.201290> V90Demodulator: Error Energy = +3.371
+[slm] <876.281976> V90Demodulator: Error Energy = +2.872
+[slm] <876.320495> V90Demapper: constelation update !!!
+[slm] <876.320519> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <876.320526> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:78:8<7;::>>7@2D1C????
+[slm] <876.320532> $!$ 9<5@497:?8;;887E9>?A:;994C55>::78C7<::>C:79;7>99:7:E9=7>:7:77:5<399B><:78E399:?9;88F8;:88D4@????
+[slm] <876.320538> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <876.320544> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8<7:9C:7665D395@;96D5@4@66;:785?1F3?????
+[slm] <876.320551> $!$ 9<5@497:?8;;887E9>?A:;994C55>:;;998;9:>E;:477F9:>8:D6<8;:7>F;86<7G9:?9:=9@3955;D664B4;5C;?7=5<4B67;>4C2A????
+[slm] <876.320557> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <876.320563> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7999;7=55:77C473D65:E795@4B65;>7?2D1C????
+[slm] <876.320569> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:79<888;9>>8:D8:7>55:77C473D65:E775<4B67;=7:2D1C????
+[slm] <876.320575> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <876.320581> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8@7G55?=:78C8>9::7665D395@;96D594?67;;7<5<1F3?????
+[slm] <876.320587> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C888A55?=:78C8>9::7665D395@;;6D5:4<66;<7=571F3?????
+[slm] <876.320593> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <876.320596> V90Equalizer: ph4MeanErrorEnergyBeforeToAfterUpdateRatio = +1.206
+[slm] <876.359153> V90Demodulator: Error Energy = +3.014
+[slm] <876.439820> V90Demodulator: Error Energy = +3.012
+[slm] <876.520546> V90Demodulator: Error Energy = +3.061
+[slm] <876.601213> V90Demodulator: Error Energy = +2.573
+[slm] <876.681915> V90Demodulator: Error Energy = +3.451
+[slm] <876.759117> V90Demodulator: Error Energy = +3.223
+[slm] <876.839764> V90Demodulator: Error Energy = +2.929
+[slm] <876.920484> V90Demodulator: Error Energy = +2.671
+[slm] <876.920495> V90Demodulator: Timing Offset [ppm]  = +0.155
+[slm] <877.001123> V90Demodulator: Error Energy = +2.827
+[slm] <877.081817> V90Demodulator: Error Energy = +3.008
+[slm] <877.159020> V90Demodulator: Error Energy = +3.143
+[slm] <877.218553> V90Demapper: constelation update !!!
+[slm] <877.239809> V90Demodulator: Error Energy = +2.900
+[slm] <877.271258> V90Phase4Demodulator: disable linear mapping study
+[slm] <877.271305> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <877.271312> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:78:8<7;::>>7@2D1C????
+[slm] <877.271318> $!$ 9<5@497:?8;;887E9>?A:;994C55>::78C7<::>C:79;7>99:7:E9=7>:7:77?5:399B><:78E399:?9;88F8;:88D4@????
+[slm] <877.271324> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <877.271331> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8<7:9C:7665D395@;96D5@4@66;:7=591F3?????
+[slm] <877.271338> $!$ 9<5@497:?8;;887E9>?A:;994C55>:;;998;9:>E;:477F9:>8:D6<8;:7>F;86<7G9:?9:=9@3955;D664B4;5C;?7?5:4=65;:4C2A????
+[slm] <877.271343> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <877.271350> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7999;7=55:77C473D65:E7:5?4967;@7?2D1C????
+[slm] <877.271356> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:79<888;9>>8:D8:7>55:77C473D65:E785:496;;?7=2D1C????
+[slm] <877.271362> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B8D4@????
+[slm] <877.271385> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C8@7G55?=:78C8>9::7665D395@;96D584<6;;776571F3?????
+[slm] <877.271393> $!$ 9<5@497:?8;;887E9>?A:;994C55>D:;887G7:?9;88F8;7:>E:;997@:>:7:C888A55?=:78C8>9::7665D395@;;6D5?4B66;@7;5>1F3?????
+[slm] <877.271398> $!$ 694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:3<58::694:1F3?????
+[slm] <877.271407> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668;7B9<>@;:887E55?9:79;7>55>D:79:7D55;;775@4=68;7792D1C????
+[slm] <877.271411> V90ConstellationDesigner: noiseEnergy = +2.97
+[slm] <877.271415> V90ConstellationDesigner: dMinHighRates = -32768  dMinLowRates = -32768
+[slm] <877.271419> V90ConstellationDesigner: current dMin = 30
+[slm] <877.271423> V90ConstellationDesigner: dMin calc NoRestriction
+[slm] <877.271428> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668=7B9C>8:B477=7B>@:D474F55;:762D1C????
+[slm] <877.271434> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A667<6<7:=F986<6<89=98?6:5>79=F8:6D5B7C:77C47493B8A????
+[slm] <877.271441> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A66977=88>E;87;7A:7><;98?5?9D?998888=9:=<;6474F55:B774E4<688D4@????
+[slm] <877.271447> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A66977=88>E;87;7A:7><;98?5?9D?998888=9:<;:E9>7G55;D664B4=5C;87?2D1C????
+[slm] <877.271454> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A66977=88>E;87;7A:7><;98?5?9D?9988<8=:7>8:?8E396B:76A584:5C;?7>2D1C????
+[slm] <877.271482>
+[slm] -----------------------------------------------------------------------------------------------------------------
+[slm] <877.271486> V90 Constellation Designer report:
+[slm] <877.271489> constelation size phase[0..5]  :  96  96  96  96  96  96
+[slm] <877.271493> ----------- constel phase 0,1,2,3,4,5	 codec constel phase 0,1,2,3,4,5	linearMapping of constel --------------
+[slm] <877.271496> ucode[0]  :  114  114  114  114  114  114  :  114  114  114  114  114  114  :  18957  18957  18957  18957  18957  18957
+[slm] <877.271504> ucode[1]  :  113  113  113  113  113  113  :  113  113  113  113  113  113  :  17932  17932  17932  17932  17932  17932
+[slm] <877.271512> ucode[2]  :  112  112  112  112  112  112  :  112  112  112  112  112  112  :  16936  16936  16936  16936  16936  16936
+[slm] <877.271519> ucode[3]  :  111  111  111  111  111  111  :  111  111  111  111  111  111  :  16166  16166  16166  16166  16166  16166
+[slm] <877.271527> ucode[4]  :  110  110  110  110  110  110  :  110  110  110  110  110  110  :  15653  15653  15653  15653  15653  15653
+[slm] <877.271535> ucode[5]  :  109  109  109  109  109  109  :  109  109  109  109  109  109  :  15122  15122  15122  15122  15122  15122
+[slm] <877.271543> ucode[6]  :  108  108  108  108  108  108  :  108  108  108  108  108  108  :  14609  14609  14609  14609  14609  14609
+[slm] <877.271551> ucode[7]  :  107  107  107  107  107  107  :  107  107  107  107  107  107  :  14096  14096  14096  14096  14096  14096
+[slm] <877.271558> ucode[8]  :  106  106  106  106  106  106  :  106  106  106  106  106  106  :  13584  13584  13584  13584  13584  13584
+[slm] <877.271566> ucode[9]  :  105  105  105  105  105  105  :  105  105  105  105  105  105  :  13083  13083  13083  13083  13083  13083
+[slm] <877.271574> ucode[10]  :  104  104  104  104  104  104  :  104  104  104  104  104  104  :  12570  12570  12570  12570  12570  12570
+[slm] <877.271581> ucode[11]  :  103  103  103  103  103  103  :  103  103  103  103  103  103  :  12056  12056  12056  12056  12056  12056
+[slm] <877.271589> ucode[12]  :  102  102  102  102  102  102  :  102  102  102  102  102  102  :  11541  11541  11541  11541  11541  11541
+[slm] <877.271597> ucode[13]  :  101  101  101  101  101  101  :  101  101  101  101  101  101  :  11028  11028  11028  11028  11028  11028
+[slm] <877.271604> ucode[14]  :  100  100  100  100  100  100  :  100  100  100  100  100  100  :  10515  10515  10515  10515  10515  10515
+[slm] <877.271612> ucode[15]  :  99  99  99  99  99  99  :  99  99  99  99  99  99  :  10001  10001  10001  10001  10001  10001
+[slm] <877.271620> ucode[16]  :  98  98  98  98  98  98  :  98  98  98  98  98  98  :  9488  9488  9488  9488  9488  9488
+[slm] <877.271628> ucode[17]  :  97  97  97  97  97  97  :  97  97  97  97  97  97  :  8975  8975  8975  8975  8975  8975
+[slm] <877.271635> ucode[18]  :  96  96  96  96  96  96  :  96  96  96  96  96  96  :  8461  8461  8461  8461  8461  8461
+[slm] <877.271642> ucode[19]  :  95  95  95  95  95  95  :  95  95  95  95  95  95  :  8077  8077  8077  8077  8077  8077
+[slm] <877.271650> ucode[20]  :  94  94  94  94  94  94  :  94  94  94  94  94  94  :  7820  7820  7820  7820  7820  7820
+[slm] <877.271657> ucode[21]  :  93  93  93  93  93  93  :  93  93  93  93  93  93  :  7563  7563  7563  7563  7563  7563
+[slm] <877.271664> ucode[22]  :  92  92  92  92  92  92  :  92  92  92  92  92  92  :  7307  7307  7307  7307  7307  7307
+[slm] <877.271672> ucode[23]  :  91  91  91  91  91  91  :  91  91  91  91  91  91  :  7050  7050  7050  7050  7050  7050
+[slm] <877.271679> ucode[24]  :  90  90  90  90  90  90  :  90  90  90  90  90  90  :  6792  6792  6792  6792  6792  6792
+[slm] <877.271686> ucode[25]  :  89  89  89  89  89  89  :  89  89  89  89  89  89  :  6537  6537  6537  6537  6537  6537
+[slm] <877.271693> ucode[26]  :  88  88  88  88  88  88  :  88  88  88  88  88  88  :  6285  6285  6285  6285  6285  6285
+[slm] <877.271701> ucode[27]  :  87  87  87  87  87  87  :  87  87  87  87  87  87  :  6028  6028  6028  6028  6028  6028
+[slm] <877.271708> ucode[28]  :  86  86  86  86  86  86  :  86  86  86  86  86  86  :  5772  5772  5772  5772  5772  5772
+[slm] <877.271715> ucode[29]  :  85  85  85  85  85  85  :  85  85  85  85  85  85  :  5515  5515  5515  5515  5515  5515
+[slm] <877.271723> ucode[30]  :  84  84  84  84  84  84  :  84  84  84  84  84  84  :  5258  5258  5258  5258  5258  5258
+[slm] <877.271730> ucode[31]  :  83  83  83  83  83  83  :  83  83  83  83  83  83  :  5002  5002  5002  5002  5002  5002
+[slm] <877.271737> ucode[32]  :  82  82  82  82  82  82  :  82  82  82  82  82  82  :  4745  4745  4745  4745  4745  4745
+[slm] <877.271745> ucode[33]  :  81  81  81  81  81  81  :  81  81  81  81  81  81  :  4489  4489  4489  4489  4489  4489
+[slm] <877.271752> ucode[34]  :  80  80  80  80  80  80  :  80  80  80  80  80  80  :  4231  4231  4231  4231  4231  4231
+[slm] <877.271759> ucode[35]  :  79  79  79  79  79  79  :  79  79  79  79  79  79  :  4038  4038  4038  4038  4038  4038
+[slm] <877.271767> ucode[36]  :  78  78  78  78  78  78  :  78  78  78  78  78  78  :  3907  3907  3907  3907  3907  3907
+[slm] <877.271774> ucode[37]  :  77  77  77  77  77  77  :  77  77  77  77  77  77  :  3784  3784  3784  3784  3784  3784
+[slm] <877.271782> ucode[38]  :  76  76  76  76  76  76  :  76  76  76  76  76  76  :  3656  3656  3656  3656  3656  3656
+[slm] <877.271790> ucode[39]  :  75  75  75  75  75  75  :  75  75  75  75  75  75  :  3527  3527  3527  3527  3527  3527
+[slm] <877.271797> ucode[40]  :  74  74  74  74  74  74  :  74  74  74  74  74  74  :  3400  3400  3400  3400  3400  3400
+[slm] <877.271809> ucode[41]  :  73  73  73  73  73  73  :  73  73  73  73  73  73  :  3271  3271  3271  3271  3271  3271
+[slm] <877.271816> ucode[42]  :  72  72  72  72  72  72  :  72  72  72  72  72  72  :  3142  3142  3142  3142  3142  3142
+[slm] <877.271824> ucode[43]  :  71  71  71  71  71  71  :  71  71  71  71  71  71  :  3014  3014  3014  3014  3014  3014
+[slm] <877.271832> ucode[44]  :  70  70  70  70  70  70  :  70  70  70  70  70  70  :  2886  2886  2886  2886  2886  2886
+[slm] <877.271839> ucode[45]  :  69  69  69  69  69  69  :  69  69  69  69  69  69  :  2758  2758  2758  2758  2758  2758
+[slm] <877.271846> ucode[46]  :  68  68  68  68  68  68  :  68  68  68  68  68  68  :  2630  2630  2630  2630  2630  2630
+[slm] <877.271853> ucode[47]  :  67  67  67  67  67  67  :  67  67  67  67  67  67  :  2502  2502  2502  2502  2502  2502
+[slm] <877.271860> ucode[48]  :  66  66  66  66  66  66  :  66  66  66  66  66  66  :  2373  2373  2373  2373  2373  2373
+[slm] <877.271867> ucode[49]  :  65  65  65  65  65  65  :  65  65  65  65  65  65  :  2245  2245  2245  2245  2245  2245
+[slm] <877.271875> ucode[50]  :  64  64  64  64  64  64  :  64  64  64  64  64  64  :  2116  2116  2116  2116  2116  2116
+[slm] <877.271882> ucode[51]  :  63  63  63  63  63  63  :  63  63  63  63  63  63  :  2015  2015  2015  2015  2015  2015
+[slm] <877.271889> ucode[52]  :  62  62  62  62  62  62  :  62  62  62  62  62  62  :  1956  1956  1956  1956  1956  1956
+[slm] <877.271897> ucode[53]  :  61  61  61  61  61  61  :  61  61  61  61  61  61  :  1887  1887  1887  1887  1887  1887
+[slm] <877.271905> ucode[54]  :  60  60  60  60  60  60  :  60  60  60  60  60  60  :  1828  1828  1828  1828  1828  1828
+[slm] <877.271912> ucode[55]  :  59  59  59  59  59  59  :  59  59  59  59  59  59  :  1759  1759  1759  1759  1759  1759
+[slm] <877.271920> ucode[56]  :  58  58  58  58  58  58  :  58  58  58  58  58  58  :  1699  1699  1699  1699  1699  1699
+[slm] <877.271927> ucode[57]  :  57  57  57  57  57  57  :  57  57  57  57  57  57  :  1631  1631  1631  1631  1631  1631
+[slm] <877.271935> ucode[58]  :  56  56  56  56  56  56  :  56  56  56  56  56  56  :  1572  1572  1572  1572  1572  1572
+[slm] <877.271942> ucode[59]  :  55  55  55  55  55  55  :  55  55  55  55  55  55  :  1504  1504  1504  1504  1504  1504
+[slm] <877.271949> ucode[60]  :  54  54  54  54  54  54  :  54  54  54  54  54  54  :  1443  1443  1443  1443  1443  1443
+[slm] <877.271957> ucode[61]  :  53  53  53  53  53  53  :  53  53  53  53  53  53  :  1375  1375  1375  1375  1375  1375
+[slm] <877.271964> ucode[62]  :  52  52  52  52  52  52  :  52  52  52  52  52  52  :  1315  1315  1315  1315  1315  1315
+[slm] <877.271971> ucode[63]  :  51  51  51  51  51  51  :  51  51  51  51  51  51  :  1251  1251  1251  1251  1251  1251
+[slm] <877.271979> ucode[64]  :  50  50  50  50  50  50  :  50  50  50  50  50  50  :  1187  1187  1187  1187  1187  1187
+[slm] <877.271986> ucode[65]  :  49  49  49  49  49  49  :  49  49  49  49  49  49  :  1119  1119  1119  1119  1119  1119
+[slm] <877.271993> ucode[66]  :  48  48  48  48  48  48  :  48  48  48  48  48  48  :  1059  1059  1059  1059  1059  1059
+[slm] <877.272001> ucode[67]  :  47  47  47  47  47  47  :  47  47  47  47  47  47  :  1009  1009  1009  1009  1009  1009
+[slm] <877.272008> ucode[68]  :  46  46  46  46  46  46  :  46  46  46  46  46  46  :  978  978  978  978  978  978
+[slm] <877.272016> ucode[69]  :  45  45  45  45  45  45  :  45  45  45  45  45  45  :  946  946  946  946  946  946
+[slm] <877.272023> ucode[70]  :  44  44  44  44  44  44  :  44  44  44  44  44  44  :  914  914  914  914  914  914
+[slm] <877.272031> ucode[71]  :  42  42  42  42  42  42  :  42  42  42  42  42  42  :  851  851  851  851  851  851
+[slm] <877.272038> ucode[72]  :  41  41  41  41  41  41  :  41  41  41  41  41  41  :  817  817  817  817  817  817
+[slm] <877.272045> ucode[73]  :  40  40  40  40  40  40  :  40  40  40  40  40  40  :  786  786  786  786  786  786
+[slm] <877.272053> ucode[74]  :  39  39  39  39  39  39  :  39  39  39  39  39  39  :  753  753  753  753  753  753
+[slm] <877.272060> ucode[75]  :  38  38  38  38  38  38  :  38  38  38  38  38  38  :  722  722  722  722  722  722
+[slm] <877.272069> ucode[76]  :  37  37  37  37  37  37  :  37  37  37  37  37  37  :  689  689  689  689  689  689
+[slm] <877.272077> ucode[77]  :  36  36  36  36  36  36  :  36  36  36  36  36  36  :  658  658  658  658  658  658
+[slm] <877.272084> ucode[78]  :  35  35  35  35  35  35  :  35  35  35  35  35  35  :  626  626  626  626  626  626
+[slm] <877.272091> ucode[79]  :  34  34  34  34  34  34  :  34  34  34  34  34  34  :  594  594  594  594  594  594
+[slm] <877.272098> ucode[80]  :  33  33  33  33  33  33  :  33  33  33  33  33  33  :  561  561  561  561  561  561
+[slm] <877.272106> ucode[81]  :  31  31  31  31  31  31  :  31  31  31  31  31  31  :  505  505  505  505  505  505
+[slm] <877.272113> ucode[82]  :  29  29  29  29  29  29  :  29  29  29  29  29  29  :  473  473  473  473  473  473
+[slm] <877.272121> ucode[83]  :  27  27  27  27  27  27  :  27  27  27  27  27  27  :  442  442  442  442  442  442
+[slm] <877.272128> ucode[84]  :  25  25  25  25  25  25  :  25  25  25  25  25  25  :  409  409  409  409  409  409
+[slm] <877.272135> ucode[85]  :  23  23  23  23  23  23  :  23  23  23  23  23  23  :  378  378  378  378  378  378
+[slm] <877.272143> ucode[86]  :  21  21  21  21  21  21  :  21  21  21  21  21  21  :  345  345  345  345  345  345
+[slm] <877.272150> ucode[87]  :  19  19  19  19  19  19  :  19  19  19  19  19  19  :  314  314  314  314  314  314
+[slm] <877.272158> ucode[88]  :  17  17  17  17  17  17  :  17  17  17  17  17  17  :  282  282  282  282  282  282
+[slm] <877.272165> ucode[89]  :  15  15  15  15  15  15  :  15  15  15  15  15  15  :  250  250  250  250  250  250
+[slm] <877.272172> ucode[90]  :  12  12  12  12  12  12  :  12  12  12  12  12  12  :  203  203  203  203  203  203
+[slm] <877.272179> ucode[91]  :  10  10  10  10  10  10  :  10  10  10  10  10  10  :  169  169  169  169  169  169
+[slm] <877.272187> ucode[92]  :  8  8  8  8  8  8  :  8  8  8  8  8  8  :  138  138  138  138  138  138
+[slm] <877.272194> ucode[93]  :  6  6  6  6  6  6  :  6  6  6  6  6  6  :  107  107  107  107  107  107
+[slm] <877.272202> ucode[94]  :  4  4  4  4  4  4  :  4  4  4  4  4  4  :  75  75  75  75  75  75
+[slm] <877.272209> ucode[95]  :  2  2  2  2  2  2  :  2  2  2  2  2  2  :  43  43  43  43  43  43
+[slm] <877.272216> ---------------------------------------------------------------------------------------------------------------------
+[slm] <877.272249> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <877.272254> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A4C2A????
+[slm] <877.272261> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668@7G9>?;:?887E55?:;7998=5=?7:E9>7>:7:@66474F55:B7<5@4;6>:E7>574?3B8A????
+[slm] <877.272269> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668@7G9>?;:?887E55>@:D8;7>:=:7775:3E55?7:E9>7>:7:7:?8E3999<9:C573955;D664D4@5C;74C2A????
+[slm] <877.272825> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668E7H9;:7;68F7B9C?;;9478;9:>D:E9=7>99:77=5=3E55>E:;9>39:8?8;89;3A:5>F;=8<8;5>:7665D395@;;785;4A5C;779591F3?????
+[slm] <877.272834> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668=7B9C>8:B477B9C>;:;9?3967;96B477?9>>E:78C39:5>F;=8<8;55>@:D477=77>D7647396B:76C584:5C;<4C2A????
+[slm] <877.272840> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <877.272869> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <877.272875> $!$ 9<5@4978>F:D8E7>98?;:?8F7G79><;98@7@9C><;85A39:7><::9<7G99>8:D9;39:5>F:?8E8=:8:7:E978=9>>D:?9A7::9>@:E8E396?8D4@????
+[slm] <877.272882> $!$ 9<5@4978>F:D8E7>98?;:?8F7G79><;98@7@9C><;85A39:7><:78C397@:7:88<7?9D?9:;477H:5?;:?8D7B:?>8;:8@7H9C:7665D395@;:7>4E4;6=;;7=5@1F3?????
+[slm] <877.272886> V90ConstellationDesigner::determineDminForRrn : pParams->m[1..6] = 83 83 83 83 84 84
+[slm] <877.272893> V90ConstellationDesigner:: rrn down maxM too low - probably will cause more then one rate down
+[slm] <877.272897> V90ConstellationDesigner:: increment maxM for one rate down
+[slm] <877.272900> V90ConstellationDesigner:: current maxM = 84  rrn down maxM = 75
+[slm] <877.272908> V90ConstellationDesigner:: rrn down - nofUcodes = 74  prevNofUcodes = 79
+[slm] <877.272911> V90ConstellationDesigner:: rrn down - tempDmin  = 32  prevDmin      = 31
+[slm] <877.272915> V90ConstellationDesigner:: rrnDownDmin = 32
+[slm] <877.272919> V90ConstellationDesigner:: maxM too high - probably will not cause rate up
+[slm] <877.272922> V90ConstellationDesigner:: increment maxM for one rate up
+[slm] <877.272924> V90ConstellationDesigner:: current maxM = 84  rrn up maxM = 92
+[slm] <877.272934> V90ConstellationDesigner:: rrn up nofUcodes = 92
+[slm] <877.272937> V90ConstellationDesigner:: rrn up tempDmin  = 15
+[slm] <877.272940> V90ConstellationDesigner:: rrnUpDmin = 15
+[slm] <877.272960> $!$ 9<5@4978>F:D8E7>98?;:?8F7G79><;98@7@9C><;85A397D?7;:8@7F9>?A:?8E7@55>E:;9>397@;A668E7H9;:7;68F7B9C?;;9478;9:>D:E9=7>99:7775=393B8A????
+[slm] <877.272968> $!$ 9<5@4978>F:D8E7>98?;:?8F7G79><;98@7@9C><;85A39:7><:78C397@:7:78=8=9:?9668F89:9>@:C8@8C96?;:?8F7G55:77C473D68;?6D574968;97;2D1C????
+[slm] <877.272997> $!$ 9<5@4978>F:D8E7>98?;:?8F7G79><;98@7@9C><;85A397D?7;:8@7F9>?A:?8E7@55>E:;9>397@;A668E7>:<:7;9988;:9:?;68F8@9:?96?47396B:76A5:4@6;;76D5:496;8D4@????
+[slm] <877.273005> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668=7B9C>8:B477B9C>;:;9?3967;;6B477?9>>E:78C39:5>F;=8<8;55>@:D477=77>D7647396B:76C584;5C;<4C2A????
+[slm] <877.273011> $!$ 6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F5B:D6C4D3F3B8A????
+[slm] <877.273017> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A667:396B:77;2D1C????
+[slm] <877.273023> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A666B396B:7795>1F3?????
+[slm] <877.273030> $!$ 9<5@4978>F:D9:8=9:>C:B888=9>>F:D6;7>:8>@:=8E7>:7;A668=7B9C>8:B478;96?;:;477<9=>F;98<7G55:D666;396B:77:59395=:77;5=4965;7664@1F3?????
+[slm] <877.273036> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A666;7::9>866777A96?::;478<:5><:99;8;96>C66977::7>8:C8<8=9:?9;95A1F3?????
+[slm] <877.273041> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3988?9665D39668D4@????
+[slm] <877.273047> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A397>>;665D39668D4@????
+[slm] <877.273053> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;866474F55:B774E4965;77657493B8A????
+[slm] <877.273059> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3976;966474F55:D764E4965;77657493B8A????
+[slm] <877.273065> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;866474F55:D764E4965;77657493B8A????
+[slm] <877.273071> $!$ 9<5@497B>8;6977B9C>>96888;96>D;95A3977;966474F55:D764E4965;77657493B8A????
+[slm] <877.273077> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@477>9C?;:;99398<>8:?9;5?9D?98C7739:8?;:79;7>55<766594=65;9772D1C????
+[slm] <877.273086> $!$ 9<5@4978>F:D8E7>98?;:?8F7G7:?=:78C8>96?;:E99398:=78:686=7:;A668:8>:7<;:C8@7G55;D665:495A:777573C:9>?;88<8<9==<;6474F55;8794C3966;76@9;7A:7><;98?5=9D?>:D474F55;;774C3966;76@9;7A:7><;98?6;9:?;;8887B9C:77C474:66;?4C2A????
+[slm] <877.273112> $!$ 9<5@4978=766977:98>B:;8;4C55<:96477;9>?;;95A1C????
+[slm] <877.273121> $!$ 76574:65;877574:65;776574965;876571F3?????
+[slm] <877.273129> $!$ 76584:66;877584:66;877584:66;877571F3?????
+[slm] <877.273137> $!$ 76574965;776574965;776574965;876571F3?????
+[slm] <877.273144> $!$ 76574965;776574:65;776574965;776571F3?????
+[slm] <877.273152> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <877.273160> $!$ 76574965;776574965;876574966;776571F3?????
+[slm] <877.273168> $!$ 76584965;777574965;876574965;776571F3?????
+[slm] <877.273171> VPcmFloModem (V90): Building CP, CP length = 700 (clr=0)
+[slm] <877.273175> IndicateTrn2dReceived called, v90Receiver = 10
+[slm] <877.281807> V90MP: MP detected. Type1,Rate28800,Trellis0,NonLin0,Shaping0,CPack0
+[slm] <877.281819> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@475F85:7::8<8=9:>:;:8<7=55<7665=4B3B8A????
+[slm] <877.281835> $!$ 9<5@4979><:C8F7=::>C:79;7H:7;A667:7B9A><:D8:7>55=9986E399>?:668E7H:9:7:C888<9@><::473A:8>@:B8<7G98><668=7E96>>665D3966:@4C2A????
+[slm] <877.281839> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@477>9C?;:;99398<>8:?9;5?9D?98;8;39:8?;:79;7>55<7665?493B8A????
+[slm] <877.281856> $!$ 9<5@4978=766977:98>B:;8;4C55<:964>3997>@;:9:4C3?????
+[slm] <877.281861> $!$ 76574:65;877574:65;776574965;876581F3?????
+[slm] <877.281866> $!$ 76584:66;877584:66;877584:66;877571F3?????
+[slm] <877.281870> $!$ 76574965;776574965;776574965;876571F3?????
+[slm] <877.281875> $!$ 76574965;776574:65;776574965;776571F3?????
+[slm] <877.281879> $!$ 76574965;776574965;776574965;776571F3?????
+[slm] <877.281883> $!$ 76574965;776574965;876574966;776571F3?????
+[slm] <877.281887> $!$ 76584965;777574965;876574965;776571F3?????
+[slm] <877.281889> VPcmFloModem (V90): Building CPnot on MP receive, CPnot length = 700
+[slm] <877.281891> CP Flag set to 1
+[slm] <877.288829> V90MP: MP detected. Type1,Rate28800,Trellis0,NonLin0,Shaping0,CPack0
+[slm] <877.320467> End of CP #1 tx.... (terminateCp=1, terminateCpNot=0)
+[slm] <877.320477> OK Time to move to CPNot TX...
+[slm] <877.320551> V90Demodulator: Error Energy = +2.953
+[slm] <877.379959> End of CP #1 tx.... (terminateCp=1, terminateCpNot=0)
+[slm] <877.401194> V90Demodulator: Error Energy = +2.874
+[slm] <877.429189> End of CP #2 tx.... (terminateCp=1, terminateCpNot=0)
+[slm] <877.481907> V90Demodulator: Error Energy = +2.617
+[slm] <877.488762> End of CP #3 tx.... (terminateCp=1, terminateCpNot=0)
+[slm] <877.520470> V90MP: MPnot detected. Type1,Rate28800,Trellis0,NonLin0,Shaping0,CPack1
+[slm] <877.520482> V90MP: Rate Mask - 00111111111111
+[slm] <877.520485> V90MP: h1 real = 0, imag = 0
+[slm] <877.520488> V90MP: h2 real = 0, imag = 0
+[slm] <877.520490> V90MP: h3 real = 0, imag = 0
+[slm] <877.520519> VPcmFloModem (V90): Going to terminate CPnot...
+[slm] <877.520523> CPnot Flag set to 1
+[slm] <877.530889> V90MP: MPnot detected. Type1,Rate28800,Trellis0,NonLin0,Shaping0,CPack1
+[slm] <877.530900> V90MP: Rate Mask - 00111111111111
+[slm] <877.530903> V90MP: h1 real = 0, imag = 0
+[slm] <877.530906> V90MP: h2 real = 0, imag = 0
+[slm] <877.530908> V90MP: h3 real = 0, imag = 0
+[slm] <877.541447> End of CP #1 tx.... (terminateCp=1, terminateCpNot=1)
+[slm] <877.541458> GetV90CpBits: Indicating CP termination !!!!
+[slm] <877.541463> V90mp - drn = 12
+[slm] <877.541465> V90mp - type = 1
+[slm] <877.541467> V90mp - trellisState = 0
+[slm] <877.541469> V90mp - nonlinearEncoder = 0
+[slm] <877.541471> V90mp - constellationShaping = 0
+[slm] <877.541473> V90mp - rateMask = 0x1FFE
+[slm] <877.541475> mp->data[0] = 0x8331 , mp->data[1] = 0x9FFE
+[slm] <877.541482> $!$ :E8E399<><;:477F96??669<89:8?;;88<7:9B:7;8888=9::C668F7G55?9:;8>8>9A>8;8475B88=76B478;9:?;;;997G9>>E:=474<68;=76571F3?????
+[slm] <877.541485> V34DATARATE, preliminary txbitrate 28800,rxbitrate 0
+[slm] <877.541488> V34DATARATE, finally txbitrate 28800,rxbitrate 0
+[slm] <877.541490> V34DATARATE, for tx data rate - 12, PTC - 48, setting nofTxBits to 15
+[slm] <877.541495> FATAL ERROR(initdigital) - ZERODIV expected!<877.541507> V34HSHAKE: txstate EXMIT=>DATAXMIT(rx WAIT, mst DET_SYNC, [1]8, [2]0)
+[slm] <877.541511> V34MP- E transmit completed
+[slm] <877.559076> V90Demodulator: Error Energy = +2.781
+[slm] <877.569592> V90MP: Ed detected
+[slm] <877.569600> V90MP: received 36 MP, 8 MPNot
+[slm] <877.569607> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@475>99:7::8<8=9:>:;:8<7=55<766594<67;:6B477>9C?;:;993977;8::478<:9>8;:8<1F3?????
+[slm] <877.569614> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;475;9:?;:7474F55:B764E4:6>;@7?5@7>5B;8762D1C????
+[slm] <877.569618> $!$ 9<5@497:?8;;887E9>?A:;994C55<;8<6<3977><;:88396B:76A573G65;;7?5@4B9::D7=2D1C????
+[slm] <877.569658> VPcmFloModem (V90): Ed Received !!!
+[slm] <877.569661> CPnot Flag set to 1
+[slm] <877.611525> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@47699=>8;98<4=55=;:;997F9>>E:79;7>99:786474;6=;?6B47399C>F:<475;66>;66897B:9?:665D3967;7775=3E55:788587=55=A:;997H:8:76>887?:9><;8477=9:>C:79@3B55;D66571F3?????
+[slm] <877.611536> $!$ 9<5@4985>?:79:7>69<;:;8D7H99?<:B888=9D?97@475;66>;66695>87:77C473F65:E76574965;77657493B8A????
+[slm] <877.611540> $!$ 9<5@497:?8;;887E9>?A:;994C55><:D9;7>:7:78:888=96:7968?7::8><4C2A????
+[slm] <877.611547> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <877.611549> $!$ 8B8@7G9:>8;8475>:6?<:78C7B:?><;85A1F3?????
+[slm] <877.611553> $!$ :C8@7G7A><898F7>9;==:78C8>9::7665D395@;76D574965;776574:6>;87;2D1C????
+[slm] <877.611557> $!$ :C888A7A><898F7>9;==:78C8>9::7665D395@;76D5<4=65;@7?5?1F3?????
+[slm] <877.611560> $!$ :98F7>9;?:669:8>9B:7665D395B;86D57496<;@775=1F3?????
+[slm] <877.611563> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D6;:E7:584@6:;:7<2D1C????
+[slm] <877.611567> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <877.611569> $!$ 8:6=5>6?8D4@????
+[slm] <877.611573> $!$ :C8@7G79>=:;6:7H9:>=9<887E::><66474F55:B764E4965;<795:4:6:;:7;5:1F3?????
+[slm] <877.611576> $!$ :C888A79>=:;6:7H9:>=9<887E::><66474F55:B764E4<6;;=7<5@4<3B8A????
+[slm] <877.611579> $!$ :98F7>9;?:669:8>9B:7665D395@;86D584B6>;97:5@1F3?????
+[slm] <877.611582> $!$ :7898<55>::E8<7?:8:7;99<7F55:77C473D66:E7:5;4:67;97?2D1C????
+[slm] <877.611585> $!$ 7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D7C5D4F6B;D4C2A????
+[slm] <877.611589> $!$ 9<5@497:?8;;887E9>?A:;994C55<C8;473?55<;8<6<39:7?<:D8E7B9C>>668@7G55<=8B6F5:89:7:C8F7=9::E4C2A????
+[slm] <877.611619> $!$ 9<5@4987><;9887F:5>C:;994C55?:;:888=9::77C476<89<<876;6B8D=:9:686=7:8D4@????
+[slm] <877.611621> V90Demodulator: enter Data Phase, Rate = 56000 [bps]
+[slm] <877.611629> V90Demodulator: reset and enable linear mapping study in data
+[slm] <877.611634> VPcmFloModem (V90): Enter Data Phase
+[slm] <877.611738> vpcm: New status 4
+[slm] <877.611741> vpcm: Link: DP is V.90, rate: rx 56000, tx 28800
+[slm] <877.611744> slmodem_bridge: modem_update_status: 256
+[slm] <877.611747> slmodem_bridge: --> DP LINK
+[slm] <877.611749> slmodem_bridge: modem set state: 2 --> 4...
+[slm] <877.611751> slmodem_bridge: new state: EC_ESTAB
+[slm] Current data rate: TX=28800 RX=56000 bit/s
+[slm] <877.618602> vpcm: No symbols Requested!!!
+[slm] <877.618712> vpcm: No symbols Requested!!!
+[slm] <877.629100> vpcm: No symbols Requested!!!
+[slm] <877.629223> vpcm: No symbols Requested!!!
+[slm] <877.639639> vpcm: No symbols Requested!!!
+[slm] <877.639748> vpcm: No symbols Requested!!!
+[slm] <877.650145> vpcm: No symbols Requested!!!
+[slm] <877.660677> slmodem_bridge: detector start...
+[slm] <877.759048> V90Demodulator: Error Energy = +3.575
+[slm] <877.811651> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818549> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818559> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818562> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818564> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818566> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818568> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818570> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818572> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818574> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818576> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818578> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818580> slmodem_bridge: rx pattern: 0xa2.
+[slm] <877.818582> slmodem_bridge: rx pattern: 0xc2.
+[slm] <877.818586> slmodem_bridge: detector finished.
+[slm] <877.818588> slmodem_bridge: modem_update_status: 1024
+[slm] <877.818590> slmodem_bridge: --> PACK LINK
+[slm] <877.818592> slmodem_bridge: hdlc_start...
+[slm] <877.958990> V90Demodulator: Error Energy = +3.693
+[slm] <878.000952> slmodem_bridge: modem update config...
+[slm] <878.000963> slmodem_bridge: ec = 1 (1)
+[slm] <878.000966> slmodem_bridge: ec_detector = 1 (1)
+[slm] <878.000968> slmodem_bridge: ec_tx_win_size = 15 (15)
+[slm] <878.000971> slmodem_bridge: ec_rx_win_size = 15 (15)
+[slm] <878.000973> slmodem_bridge: ec_tx_info_size = 128 (128)
+[slm] <878.000976> slmodem_bridge: ec_rx_info_size = 128 (128)
+[slm] <878.000978> slmodem_bridge: comp = 0 (0)
+[slm] <878.000980> slmodem_bridge: comp_dict_size = 512 (2048)
+[slm] <878.000983> slmodem_bridge: comp_max_string = 6 (34)
+[slm] <878.151893> slmodem_bridge: modem_update_status: 4096
+[slm] <878.151907> slmodem_bridge: --> EC LINK
+[slm] <878.151909> slmodem_bridge: modem set state: 4 --> 5...
+[slm] <878.151913> slmodem_bridge: new state: MODEM_ONLINE
+[slm] <878.151915> slmodem_bridge: modem report result: 1 (CONNECT)
+[pty] waiting 3s after CONNECT
+[slm] <878.158953> V90Demodulator: Error Energy = +3.852
+[slm] <878.358918> V90Demodulator: Error Energy = +3.981
+[slm] <878.558884> V90Demodulator: Error Energy = +3.851
+[slm] <878.758781> V90Demodulator: Error Energy = +3.818
+[slm] <878.920189> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <878.958809> V90Demodulator: Error Energy = +3.953
+[slm] <879.158770> V90Demodulator: Error Energy = +3.861
+[slm] <879.358627> V90Demodulator: Error Energy = +3.849
+[slm] <879.558650> V90Demodulator: Error Energy = +3.774
+[slm] <879.758707> V90Demodulator: Error Energy = +3.924
+[slm] <879.958614> V90Demodulator: Error Energy = +3.848
+[slm] <880.158653> V90Demodulator: Error Energy = +3.757
+[slm] <880.358571> V90Demodulator: Error Energy = +3.641
+[slm] <880.558575> V90Demodulator: Error Energy = +3.925
+[slm] <880.761983> V90Demodulator: Error Energy = +3.642
+[slm] <880.919799> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <880.961925> V90Demodulator: Error Energy = +3.903
+[pty] TX attempt 1/3: show clock
+[slm] PTY input: read 12 byte(s), modem accepted 12
+[slm] <881.161961> V90Demodulator: Error Energy = +3.923
+[slm] <881.361741> V90Demapper: constelation update !!!
+[pty] RX attempt 1/3: Router>show clock | *14:29:47.699 UTC Thu Sep 3 2026 | Router>
+[pty] response 1/3 passed
+[slm] <881.361870> V90Demodulator: Error Energy = +3.706
+[slm] <881.561784> V90Demodulator: Error Energy = +3.315
+[slm] <881.761777> V90Demodulator: Error Energy = +3.083
+[slm] <881.961753> V90Demodulator: Error Energy = +3.162
+[slm] <882.161696> V90Demodulator: Error Energy = +3.241
+[slm] <882.361676> V90Demodulator: Error Energy = +3.064
+[slm] <882.561631> V90Demodulator: Error Energy = +3.172
+[slm] <882.761687> V90Demodulator: Error Energy = +3.020
+[slm] <882.919552> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <882.961621> V90Demodulator: Error Energy = +3.186
+[slm] <883.161572> V90Demodulator: Error Energy = +2.995
+[slm] <883.361520> V90Demodulator: Error Energy = +2.952
+[slm] <883.561501> V90Demodulator: Error Energy = +3.114
+[slm] <883.761462> V90Demodulator: Error Energy = +3.081
+[slm] <883.961445> V90Demodulator: Error Energy = +3.057
+[slm] <884.161352> V90Demodulator: Error Energy = +3.078
+[slm] <884.361313> V90Demodulator: Error Energy = +3.135
+[slm] <884.561241> V90Demodulator: Error Energy = +3.062
+[slm] <884.761149> V90Demodulator: Error Energy = +2.894
+[slm] <884.919029> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <884.961145> V90Demodulator: Error Energy = +2.997
+[slm] <885.108443> V90Demapper: constelation update !!!
+[slm] <885.161122> V90Demodulator: Error Energy = +2.919
+[slm] <885.361073> V90Demodulator: Error Energy = +3.004
+[slm] <885.561028> V90Demodulator: Error Energy = +2.962
+[slm] <885.760991> V90Demodulator: Error Energy = +2.878
+[slm] <885.960948> V90Demodulator: Error Energy = +3.020
+[slm] <886.160903> V90Demodulator: Error Energy = +2.879
+[slm] <886.360859> V90Demodulator: Error Energy = +2.922
+[pty] TX attempt 2/3: show clock
+[slm] PTY input: read 12 byte(s), modem accepted 12
+[slm] <886.560865> V90Demodulator: Error Energy = +2.670
+[pty] RX attempt 2/3: Router>show clock | *14:29:52.915 UTC Thu Sep 3 2026 | Router>
+[pty] response 2/3 passed
+[slm] <886.760777> V90Demodulator: Error Energy = +2.694
+[slm] <886.918650> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <886.960746> V90Demodulator: Error Energy = +2.824
+[slm] <887.160710> V90Demodulator: Error Energy = +2.653
+[slm] <887.360661> V90Demodulator: Error Energy = +3.014
+[slm] <887.560718> V90Demodulator: Error Energy = +2.788
+[slm] <887.760666> V90Demodulator: Error Energy = +2.812
+[slm] <887.960639> V90Demodulator: Error Energy = +2.772
+[slm] <888.160598> V90Demodulator: Error Energy = +2.655
+[slm] <888.360526> V90Demodulator: Error Energy = +2.937
+[slm] <888.560520> V90Demodulator: Error Energy = +2.835
+[slm] <888.760465> V90Demodulator: Error Energy = +2.801
+[slm] <888.858652> V90Demapper: constelation update !!!
+[slm] <888.918336> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <888.960417> V90Demodulator: Error Energy = +2.817
+[slm] <889.160356> V90Demodulator: Error Energy = +2.838
+[slm] <889.360306> V90Demodulator: Error Energy = +2.725
+[slm] <889.560270> V90Demodulator: Error Energy = +2.953
+[slm] <889.760223> V90Demodulator: Error Energy = +2.747
+[slm] <889.960201> V90Demodulator: Error Energy = +2.773
+[slm] <890.160186> V90Demodulator: Error Energy = +2.632
+[slm] <890.360093> V90Demodulator: Error Energy = +2.673
+[slm] <890.560089> V90Demodulator: Error Energy = +2.539
+[slm] <890.760042> V90Demodulator: Error Energy = +2.788
+[slm] <890.921447> V90Demodulator: Timing Offset [ppm]  = +0.154
+[slm] <890.959994> V90Demodulator: Error Energy = +2.668
+[slm] <891.159955> V90Demodulator: Error Energy = +2.704
+[slm] <891.359912> V90Demodulator: Error Energy = +2.526
+[slm] <891.559802> V90Demodulator: Error Energy = +2.613
+[pty] TX attempt 3/3: show clock
+[slm] PTY input: read 12 byte(s), modem accepted 12
+[slm] <891.759821> V90Demodulator: Error Energy = +2.547
+[pty] RX attempt 3/3: Router>show clock | *14:29:58.119 UTC Thu Sep 3 2026 | Router>
+[pty] response 3/3 passed
+[pty] PASS: 3 end-to-end RAS responses
+[slm] shutting down...
+[slm] <891.901322> slmodem_bridge: modem_delete...
+[slm] <891.901327> slmodem_bridge: shutdown modem...
+[slm] <891.901329> slmodem_bridge: modem_stop..
+[slm] <891.901330> slmodem_bridge: modem set hook: 1 --> 0...
+[slm] <891.901333> vpcm: delete...
+[slm] <891.901339> $!$ 9<5@4979><:C8F7=::>C:79;7H:7:7:E8E39:8><;99:7B9D>E9:8<8;9B>@:D888=9>>F:D5A399B><:78E399D>=669;7B9B>@:D8>399D>=:<9:7>:9:78>8@8<:9>F;89@3955;D664B495C;87;5;4=3B8A????
+[slm] <891.901344> $!$ 9<5@4979><:C8F7=::>C:79;7H:7:7:E8E39:8><;99:7B9D>E9:8<8;9B>@:D888=9>>F:D5A39:8?;::477H9;:7;:8@7F9>>E:=477H9;>=;98<8=55<?:?9:8=9D?9;?47396B:76A573G65;7765:1F3?????
+[rtp] RTP TX packets=6092 interval 6..13 ms; intervals-over-ptime=2686 (ptime=10 ms)
+[slm] <891.901347> $!$ 9<5@4979><:C8F7=::>C:79;7H:7:7:E8E39:8><;99:7B9D>E9:8<8;9B>@:D888=9>>F:D5A3966;776573C55?:;:8;396B:7762D1C????
+[rtp] RTP RX pt=8 pkts=6092 payload 80..80 B (méd 80 B) ts_unexpected=0 (esperado +80/pkt)

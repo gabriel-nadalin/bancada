@@ -1,6 +1,6 @@
 # Topology 3 — Direct E1 RAS Validation
 
-This is the direct-digital topology proposed in the original project plan:
+This is the direct-digital topology:
 the bench PC connects through its Sangoma E1 interface directly to the Cisco
 AS5300. It has no Cisco 2911, HT503, SIP/RTP, DAC, or ADC in the modem-audio
 path.

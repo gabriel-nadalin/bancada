@@ -1,0 +1,18 @@
+[connection]
+id=SIP ATA
+uuid=59831540-83e5-31bc-92d9-135b17fd40e8
+type=ethernet
+autoconnect-priority=-999
+interface-name=enp1s0
+
+[ethernet]
+
+[ipv4]
+method=shared
+never-default=true
+
+[ipv6]
+addr-gen-mode=default
+method=disabled
+
+[proxy]

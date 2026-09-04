@@ -115,10 +115,12 @@ Bridge default `-M` = **122 (V.22bis)** — pass an explicit `-M` per test.
 
 ## 5. ATA configuration used by the validated path
 
-- ATA **FXO** → 2911 FXS port (dial-peer 12).
-- SIP peer: `10.42.0.102:5062`; the ATA dials Request-URI number `42` on its
-  FXO port.
-- Audio: PCMA/G.711 at 8 kHz; no compressed voice codec.
+The complete audited FXO profile is in
+[`configs/ht503/`](../../configs/ht503/README.md). The ATA FXO connects to the
+2911 FXS port associated with dial-peer 12. It listens on SIP/UDP port 5062,
+dials Request-URI number 42 on the FXO line, and allows only PCMA/G.711 with
+10 ms packets. VAD and line echo cancellation are disabled.
+
 - The path necessarily contains ATA DAC/ADC conversion and independent ATA
   sample timing. It is therefore distinct from Topology 3 (direct E1) and
   Topology 4 (direct SIP-to-E1).

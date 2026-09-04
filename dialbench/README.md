@@ -11,10 +11,12 @@ python3 -m dialbench --help
 `dialbench` does not ship the modem or the C transports. It launches and wires
 together the compiled tools under `../tools` (`rtp_bridge`,
 `slmodem_bridge`, `pri_call`, `baresip_play`) and, for `pjsua`, an external
-UA installed on the host. Build the C tools first:
+UA installed on the host. Prepare the pinned dependencies and build the C
+tools first:
 
 ```sh
-make -C tools
+make dependencies
+make
 ```
 
 The E1 path (`slmodem_e1`) also needs `pri_call` and root access to the DAHDI
@@ -159,7 +161,7 @@ the profiles here.
   profiles, IODELAY meaning, and the end-to-end data criterion.
 - `../tests/topology1/` … `topology4/` — per-topology procedures and the exact
   reproducible `modem` invocations used for each recorded result.
-- `../docs/relatorio.typ` — the technical report (Portuguese), including the
+- `../docs/relatorio.tex` — the ICTSR final report (Portuguese), including the
   latency measurement methodology.
 - `../tools/` — the C transports (`rtp_bridge`, `slmodem_bridge`,
   `baresip_play`, `pri_call`) that `dialbench` launches.

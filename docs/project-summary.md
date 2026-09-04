@@ -9,9 +9,9 @@ Build a real dial-up test bench using a **Cisco AS5300** (RAS with MICA digital 
 | Equipment | Role |
 |---|---|
 | **Cisco AS5300** | RAS (Remote Access Server); terminates dial-up calls with MICA digital modems; supports V.90 over E1 trunks |
-| **Cisco 2900** | Voice router/gateway; bridges the AS5300 (E1 via VWIC3-1MFT-T1/E1) to analog FXS ports (VIC3-4FXS + PVDM3) |
+| **Cisco 2911** | Voice router/gateway; bridges the AS5300 (E1 via VWIC3-1MFT-T1/E1) to analog FXS ports or to SIP/PCMA (VIC3-4FXS + PVDM3) |
 | **Hardmodem USB Lenovo (Conexant CX93010)** | Hardware reference modem; eliminates software variables during initial validation |
-| **ATA VoIP Grandstream HT503** (1×FXS + 1×FXO) | VoIP↔analog converter; bridges the softmodem (via SIP) to the FXS port on the Cisco 2900 |
+| **ATA VoIP Grandstream HT503** (1×FXS + 1×FXO) | VoIP↔analog converter; bridges the softmodem (via SIP) through its FXO port to an FXS port on the Cisco 2911 |
 | **Linux computer** | Hosts the *slmodem*, data collection tools, and automated tests |
 
 ## Topologies
@@ -19,7 +19,7 @@ Build a real dial-up test bench using a **Cisco AS5300** (RAS with MICA digital 
 ### Topology 1 — Hardmodem Validation
 
 ```
-Computer → USB → Hardmodem CX93010 → analog line → Cisco 2900 (FXS) → E1 → Cisco AS5300 (MICA)
+Computer → USB → Hardmodem CX93010 → analog line → Cisco 2911 (FXS) → E1 → Cisco AS5300 (MICA)
 ```
 
 - **Purpose:** validate RAS configuration and confirm V.90 connectivity with a real hardware modem.
@@ -28,23 +28,31 @@ Computer → USB → Hardmodem CX93010 → analog line → Cisco 2900 (FXS) → 
 ### Topology 2 — VoIP ATA Integration
 
 ```
-Computer (slmodem) → SIP/RTP → Grandstream HT503 → FXS → Cisco 2900 → E1 → Cisco AS5300 (MICA)
+Computer (slmodem) → SIP/RTP → Grandstream HT503 (FXO) → Cisco 2911 (FXS) → E1 → Cisco AS5300 (MICA)
 ```
 
 - **Purpose:** test the *slmodem* as a softmodem over SIP, bridged through the ATA VoIP.
 - The slmodem connects to the HT503 via SIP; the ATA converts digitized audio samples to analog on the FXS port.
 - **Risk:** the ATA's ADC/DAC quality may impact stability of high-speed protocols (V.34, V.90).
 
-### Topology 3 — Direct Digital Connection (advanced phase)
+### Topology 3 — Direct Digital E1
 
 ```
-Computer (slmodem) → E1 PCIe card (Sangoma A102 or FPGA) → E1 → Cisco AS5300 (MICA)
+Computer (slmodem) → Sangoma E1 card → E1 → Cisco AS5300 (MICA)
 ```
 
-- **Purpose:** eliminate the intermediate analog conversion; simulate line conditions (attenuation, distortion, echo) entirely in software.
-- Full control over the test environment. Achievable via a Sangoma A102 card or a student-developed FPGA-based E1 interface.
+- **Purpose:** eliminate the intermediate analog conversion and validate the direct digital path.
+- The deployed implementation uses DAHDI, Wanpipe, and libpri with a Sangoma card.
 
-> **Note:** The AS5300 has up to 8 E1 ports and the 2900 has 4 FXS ports — all three topologies can operate simultaneously.
+### Topology 4 — Direct SIP-to-E1 Control
+
+```
+Computer (slmodem) → SIP/RTP PCMA → Cisco 2911 → E1 → Cisco AS5300 (MICA)
+```
+
+- **Purpose:** retain SIP/RTP while removing the HT503 DAC/ADC segment.
+- This control distinguishes limitations of the ATA analog conversion from
+  behavior inherent to SIP/RTP or the modem implementations.
 
 ## Protocols Tested
 
@@ -65,12 +73,15 @@ Tests always run from simplest to most complex. For each protocol: success/failu
 - The reverse-engineering effort is incremental: each function is rewritten, linked against the original binary, and unit-tested. The test bench enables **integration tests** (end-to-end connections), which are impossible without real server-side hardware for V.90.
 - Relevant voice-band codec patents have expired.
 
-## Timeline (12 months)
+## Validated coverage
 
-| Phase | Activity |
-|---|---|
-| **1 — Foundation** | Study Cisco AS5300, 2900, and E1/E&M signaling documentation |
-| **2 — Topology 1** | Configure Cisco equipment + hardmodem tests (V.34, V.90) |
-| **3 — Topology 2** | ATA VoIP integration + SIP; V.21→V.90 tests over SIP; log collection |
-| **4 — Topology 3** | Direct E1 connection (Sangoma A102 or FPGA), if viable |
-| **Documentation** | Partial report (after Phase 2) + final report + config scripts versioned in Git |
+| Path | Highest validated connection | End-to-end data check |
+|---|---|---|
+| Hardmodem through 2911 FXS/E1 | V.90, 46,667/28,800 bit/s client RX/TX | PPP and ICMP; a session also remained connected for more than 24 hours. |
+| slmodem through HT503 | V.34, 26.4/24.0 kbit/s RX/TX | RAS command/response probe. |
+| slmodem through direct E1 | V.90 | RAS command/response probe. |
+| slmodem through SIP-to-E1 | V.90, up to 56/28.8 kbit/s RX/TX | RAS command/response probe. |
+
+Exact repetitions and rate ranges belong to the matrices under
+[`tests/`](../tests/README.md), while the current equipment settings belong to
+[`configs/`](../configs/README.md).

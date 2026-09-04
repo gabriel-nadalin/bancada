@@ -1,7 +1,7 @@
 # Topology 4 — Direct SIP-to-E1 RAS Validation
 
-This post-project extension removes the HT503 and its analog FXS/FXO segment
-from the slmodem-to-RAS call path. It is intended to distinguish behavior
+This control topology removes the HT503 and its analog FXS/FXO segment from
+the slmodem-to-RAS call path. It is intended to distinguish behavior
 caused by the analog ATA conversion from behavior of the slmodem, SIP/RTP
 transport, or the AS5300.
 
@@ -22,27 +22,11 @@ direction.
 
 ## Cisco 2911 changes
 
-The following additions are persisted in the 2911 startup configuration:
-
-```
-interface GigabitEthernet0/0
- ip address dhcp
- no shutdown
-!
-voice service voip
- ip address trusted list
-  ipv4 10.42.0.1
- sip
-  bind control source-interface GigabitEthernet0/0
-  bind media source-interface GigabitEthernet0/0
-!
-dial-peer voice 142 voip
- incoming called-number 42
- session protocol sipv2
- codec g711alaw
- dtmf-relay rtp-nte
- no vad
-```
+The complete persisted configuration is
+[`configs/cisco2911/running-config.txt`](../../configs/cisco2911/running-config.txt).
+Its VoIP section binds SIP and RTP to the DHCP interface, trusts only
+`10.42.0.1`, accepts called number 42 with PCMA, and routes it to the existing
+PRI POTS dial-peer.
 
 The trusted-address entry is deliberately restricted to the bench host. It is
 required because IOS toll-fraud protection otherwise rejects the SIP INVITE

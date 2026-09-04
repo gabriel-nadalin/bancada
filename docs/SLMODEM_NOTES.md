@@ -228,6 +228,7 @@ The bridge must be compiled as a 32-bit executable because `dsplibs.o` is a
 32-bit x86 object:
 
 ```bash
+make dependencies
 make -C tools slmodem_bridge
 ```
 

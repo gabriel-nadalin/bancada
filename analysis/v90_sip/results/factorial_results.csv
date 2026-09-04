@@ -1,0 +1,6 @@
+case,drop_4000_db,drop_4200_db,severe
+"Digital, synchronous",21.33373847917798,47.802472720376116,False
+Measured digital SIP filter,21.326574245042792,47.791187454772384,False
+"Digital, measured clock offset",19.12200304278882,47.54609123000533,False
+"Measured filter, synchronous",39.8603139293954,58.391929892270554,True
+Measured filter and clock offset,38.05828615917305,58.313787744006795,True

@@ -1,0 +1,10 @@
+--- a/modem/modem_main.c
++++ b/modem/modem_main.c
+@@ -51,6 +51,7 @@
+ #include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sched.h>

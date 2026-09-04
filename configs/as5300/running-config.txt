@@ -1,0 +1,126 @@
+!
+version 12.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router
+!
+boot-start-marker
+boot-end-marker
+!
+spe 1/0 2/9
+ firmware location flash:mica-modem-pw.2.9.5.0.bin
+!
+resource-pool disable
+!
+modem country mica e1-default
+no aaa new-model
+ip subnet-zero
+!
+isdn switch-type primary-net5
+!
+controller E1 0
+ clock source line primary
+ pri-group timeslots 1-10,16
+!
+controller E1 1
+ clock source line secondary 1
+ pri-group timeslots 1-31
+!
+controller E1 2
+ clock source line secondary 2
+!
+controller E1 3
+ clock source line secondary 3
+!
+controller E1 4
+ clock source line secondary 4
+!
+controller E1 5
+ clock source line secondary 5
+!
+controller E1 6
+ clock source line secondary 6
+!
+controller E1 7
+ clock source line secondary 7
+!
+interface Ethernet0
+ no ip address
+ shutdown
+ no clns route-cache
+!
+interface Serial0
+ no ip address
+ shutdown
+ clockrate 2015232
+ no fair-queue
+ no clns route-cache
+!
+interface Serial1
+ no ip address
+ shutdown
+ clockrate 2015232
+ no fair-queue
+ no clns route-cache
+!
+interface Serial2
+ no ip address
+ shutdown
+ clockrate 2015232
+ no fair-queue
+ no clns route-cache
+!
+interface Serial3
+ no ip address
+ shutdown
+ clockrate 2015232
+ no fair-queue
+ no clns route-cache
+!
+interface Serial0:15
+ no ip address
+ isdn switch-type primary-net5
+ isdn incoming-voice modem
+ no cdp enable
+ no clns route-cache
+!
+interface Serial1:15
+ no ip address
+ isdn switch-type primary-net5
+ isdn protocol-emulate network
+ isdn incoming-voice modem
+ no cdp enable
+ no clns route-cache
+!
+interface FastEthernet0
+ ip address 192.168.7.25 255.255.255.0
+ duplex auto
+ speed auto
+ no clns route-cache
+!
+interface Group-Async1
+ description "Agrega os canais MICA e negocia o PPP de dados"
+ ip unnumbered FastEthernet0
+ encapsulation ppp
+ async mode interactive
+ peer default ip address pool DIALUP_POOL
+ no clns route-cache
+ group-range 1 240
+!
+ip local pool DIALUP_POOL 192.168.7.100 192.168.7.150
+ip classless
+no ip http server
+!
+line con 0
+line 1 240
+ modem InOut
+ transport input all
+ autoselect during-login
+ autoselect ppp
+line aux 0
+line vty 0 4
+ login
+!
+end

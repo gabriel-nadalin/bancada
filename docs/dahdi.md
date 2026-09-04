@@ -1,258 +1,102 @@
-# DAHDI / Wanpipe E1 Test Bench
+# DAHDI/Wanpipe E1 bench
 
-Servidor: `bancada-dialup`
-Data: 2026-05-09
+Host: `bancada-dialup`
 
-## Objetivo
+The Sangoma PCI card connects the Linux host directly to AS5300 controller
+E1 1. The link carries EuroISDN PRI with CCS/HDB3/CRC4 framing, D-channel in
+timeslot 16, and no echo cancellation on the B-channels.
 
-Configurar a placa Sangoma PCI E1 da bancada para conectar em um RAS Cisco AS5300 usando DAHDI/Wanpipe, com E1 CCS/HDB3/CRC4 e canal D no timeslot 16.
+## Canonical configuration
 
-A bancada será usada para testes com modems/V.90, portanto a configuração deve evitar cancelamento de eco nos canais B.
+The active files are versioned once under [`configs/linux/`](../configs/linux/README.md):
 
-## Hardware Detectado
+| Live path | Repository copy |
+|---|---|
+| `/etc/wanpipe/wanpipe1.conf` | [`configs/linux/wanpipe1.conf`](../configs/linux/wanpipe1.conf) |
+| `/etc/wanpipe/wanrouter.rc` | [`configs/linux/wanrouter.rc`](../configs/linux/wanrouter.rc) |
+| `/etc/dahdi/system.conf` | [`configs/linux/system.conf`](../configs/linux/system.conf) |
 
-Placa PCI detectada:
+The matching AS5300 configuration is in
+[`configs/as5300/running-config.txt`](../configs/as5300/running-config.txt).
+Do not duplicate these stanzas in experiment notes; link to the canonical
+files so that configuration audits remain mechanical.
 
-```text
-04:02.0 Network controller [0280]: Sangoma Technologies Corp. A200/Remora FXO/FXS Analog AFT card [1923:0040]
-```
+## Hardware and packages
 
-O `dahdi_hardware` reportou:
-
-```text
-pci:0000:04:02.0     wanpipe-     1923:0040 Sangoma Technologies Corp. A200/Remora FXO/FXS Analog AFT card
-```
-
-Durante o carregamento, o driver identificou a placa como E1/T1 Sangoma AFT:
-
-```text
-wanpipe: AFT-A101-SH PCI T1/E1 card found (HDLC (DS) rev.34), cpu(s) 1, bus #4, slot #2
-```
-
-## Pacotes Instalados
-
-Pacotes relevantes instalados:
+PCI enumeration reports `1923:0040`, and Wanpipe identifies the board as an
+`AFT-A101-SH PCI T1/E1` card at bus 4, slot 2. The audited software versions
+were:
 
 ```text
 dahdi-tools 3.4.0-2
-dahdi-linux-git 3.4.0.rc1.r20.gd1c842a-2
-wanpipe 7.0.38-6
+dahdi-linux-git 3.4.0.rc1.r21.g276c914-1.2
+wanpipe 7.0.38-9.26
+libpri 1.6.1-3
 ```
 
-## Configuração Wanpipe
+`wanpipe.service` and `dahdi.service` were enabled and active. They are the
+units supplied by the packages; the first runs `wanrouter start`, and the
+second runs `dahdi_cfg`.
 
-Arquivo: `/etc/wanpipe/wanpipe1.conf`
+## Configuration rationale
 
-```ini
-[devices]
-wanpipe1 = WAN_AFT_TE1, Cisco AS5300 E1
+- `FE_MEDIA = E1`, `FE_LCODE = HDB3`, and `FE_FRAME = CRC4` match the AS5300.
+- `TE_SIG_MODE = CCS` and `TDMV_DCHAN = 16` provide the PRI D-channel.
+- `ACTIVE_CH = ALL` exposes all 31 E1 timeslots to DAHDI.
+- `TDMV_ECHO_OFF = YES`, together with the absence of a DAHDI
+  `echocanceller` stanza, keeps modem samples out of voice enhancement paths.
+- `TE_CLOCK = NORMAL` makes the Sangoma recover timing from the line. The live
+  AS5300 controller also selects line timing; see the clocking note in
+  [`configs/README.md`](../configs/README.md).
 
-[interfaces]
-w1g1 = wanpipe1, , TDM_VOICE, Cisco AS5300 E1
+## Startup and verification
 
-[wanpipe1]
-CARD_TYPE = AFT
-S514CPU = A
-CommPort = PRI
-AUTO_PCISLOT = NO
-PCISLOT = 2
-PCIBUS = 4
-FE_MEDIA = E1
-FE_LCODE = HDB3
-FE_FRAME = CRC4
-FE_LINE = 1
-TE_CLOCK = NORMAL
-TE_REF_CLOCK = 0
-TE_SIG_MODE = CCS
-TE_HIGHIMPEDANCE = NO
-LBO = 120OH
-FE_TXTRISTATE = NO
-MTU = 1500
-UDPPORT = 9000
-TTL = 255
-IGNORE_FRONT_END = NO
-TDMV_SPAN = 1
-TDMV_DCHAN = 16
-TDMV_HW_DTMF = NO
-TDMV_HW_FAX_DETECT = NO
-
-[w1g1]
-ACTIVE_CH = ALL
-TDMV_ECHO_OFF = YES
-```
-
-Notas:
-
-- `PCIBUS = 4` e `PCISLOT = 2` correspondem ao barramento PCI detectado.
-- `TE_CLOCK = NORMAL` faz a Sangoma recuperar clock do E1; o Cisco AS5300 é o master.
-- `FE_FRAME = CRC4` corresponde a E1 CCS com CRC4.
-- `TDMV_DCHAN = 16` define o timeslot 16 como canal D.
-- `TDMV_ECHO_OFF = YES` desliga o controle de eco no lado Wanpipe para a interface.
-
-## Configuração DAHDI
-
-Arquivo: `/etc/dahdi/system.conf`
-
-```ini
-span=1,1,0,ccs,hdb3,crc4
-bchan=1-15,17-31
-hardhdlc=16
-loadzone=br
-defaultzone=br
-```
-
-Notas:
-
-- `span=1,1,0,ccs,hdb3,crc4`: span 1, clock vindo do remoto, E1 CCS/HDB3/CRC4.
-- `bchan=1-15,17-31`: canais B.
-- `hardhdlc=16`: canal D ISDN PRI com HDLC/FCS assistido pelo driver Sangoma/Wanpipe.
-- Não há `echocanceller` configurado; o `dahdi_cfg -vv` deve reportar `Echo Canceler: none` nos canais.
-
-## Comandos Para Subir o Link
-
-Sequência usada:
+Normal startup is persistent through systemd:
 
 ```sh
-sudo wanrouter stop || true
-sudo modprobe -r wanpipe wan_aften wanec wanrouter sdladrv dahdi 2>/dev/null || true
-sudo modprobe dahdi
+sudo systemctl enable --now wanpipe.service dahdi.service
+```
+
+The same configuration can be reapplied manually with:
+
+```sh
 sudo wanrouter start
 sudo dahdi_cfg -vv
 ```
 
-Resultado esperado:
-
-- `wanrouter start` deve carregar `wanpipe` e iniciar `wanpipe1`.
-- `dahdi_cfg -vv` deve aplicar o span e canais sem erro.
-
-## Estado Atual Verificado
-
-### DAHDI Scan
-
-Comando:
+Check the resulting state with:
 
 ```sh
 sudo dahdi_scan
+sudo sed -n '1,80p' /proc/dahdi/1
+sudo wanrouter status
 ```
 
-Saída relevante:
+The audited state was:
 
 ```text
-[1]
 active=yes
 alarms=OK
-description=wanpipe1 card 0
 name=WPE1/0
-manufacturer=Sangoma Technologies
 devicetype=A101
-location=SLOT=2, BUS=4
-basechan=1
-totchans=31
-type=digital-E1
 coding=HDB3
 framing=CCS/CRC4
+totchans=31
 ```
 
-### /proc/dahdi/1
+`/proc/dahdi/1` showed clear B-channels in 1–15 and 17–31, a
+hardware-assisted D-channel in 16, and no attached echo canceller. The Cisco
+reported no framing, CRC, code-violation, or slip increments.
 
-Comando:
+## PRI test tool
+
+[`tools/pri_call.c`](../tools/pri_call.c) opens DAHDI channel 16 through
+libpri as the EuroISDN CPE/TE side, originates the call, then bridges the
+selected B-channel as A-law samples.
+
+For current command-line options and call-state details, see
+[`docs/pri_call.md`](pri_call.md). A minimal signaling-only check is:
 
 ```sh
-sudo sed -n '1,120p' /proc/dahdi/1
+sudo tools/pri_call -k
 ```
-
-Saída relevante:
-
-```text
-Span 1: WPE1/0 "wanpipe1 card 0" (MASTER) CCS/HDB3/CRC4
-
-   1 WPE1/0/1 Clear
-   2 WPE1/0/2 Clear
-   ...
-  15 WPE1/0/15 Clear
-  16 WPE1/0/16 Hardware assisted D-channel
-  17 WPE1/0/17 Clear
-   ...
-  31 WPE1/0/31 Clear
-```
-
-### Kernel Log
-
-Comando:
-
-```sh
-sudo dmesg | grep -iE 'wanpipe|WPE1|red alarm|yellow alarm|blue alarm|alarm|los|crc|dahdi' | tail -n 100
-```
-
-Saída relevante:
-
-```text
-wanpipe1: Wanpipe device is registered to Zaptel span # 1!
-wanpipe1: RED : OFF
-wanpipe1: LOF alarm is 2 OFF
-wanpipe1: E1 connected!
-wanpipe1: AFT communications enabled
-```
-
-## Resultado Atual
-
-Layer 1 E1: OK
-
-DAHDI span/canais: OK
-
-Clock:
-
-- Wanpipe configurado com `TE_CLOCK = NORMAL`, recuperando clock da linha E1.
-- DAHDI configurado com `span=1,1,0,ccs,hdb3,crc4`, usando o remoto como fonte preferida de clock.
-- Contadores de manutenção sem erros de framing, CRC, code violations ou slips observados no Cisco.
-
-Configuração atual:
-
-- E1 CCS/HDB3/CRC4
-- Canal D no timeslot 16 com `hardhdlc`
-- Canais B em 1-15 e 17-31
-- Sem echo canceller anexado pelo DAHDI
-- Echo control desligado no Wanpipe (`TDMV_ECHO_OFF = YES`)
-
-## ISDN / Q.931
-
-Foi criado um utilitário mínimo de teste em `/usr/local/bin/pri-call-test` usando DAHDI + libpri.
-
-Arquivos fonte no servidor:
-
-```text
-/home/matias/pri-call-test/pri-call-test.c
-/home/matias/pri-call-test/Makefile
-```
-
-Uso básico:
-
-```sh
-sudo pri-call-test -t 3 -b 2 -
-```
-
-Manter apenas Q.921 ativo, sem originar chamada:
-
-```sh
-sudo pri-call-test -k
-```
-
-Estado validado:
-
-- `libpri 1.6.1-3` instalado.
-- O utilitário abre o D-channel DAHDI 16 via `/dev/dahdi/channel`.
-- Q.921 sobe com `PRI_EVENT_DCHAN_UP`.
-- O utilitário envia `SETUP` como CPE/TE EuroISDN E1.
-- O Cisco AS5300 atua como network side; rodar o utilitário como `network` reporta erro de configuração porque os dois lados tentam ser network.
-- No AS5300, `Serial1:15` fica em `MULTIPLE_FRAME_ESTABLISHED` enquanto o utilitário mantém o D-channel aberto.
-
-Resultado atual da chamada de teste:
-
-- Com B-channel 2 explícito e número chamado vazio, o AS5300 responde `CALL_PROCEEDING`, `ALERTING` e `CONNECT`.
-- A chamada conectada foi encerrada pelo utilitário após o tempo configurado com `-t`.
-- O B-channel selecionado no teste foi o canal 2.
-
-Próximo passo:
-
-- abrir o B-channel selecionado após `CONNECT`;
-- acoplar a biblioteca userspace de softmodem para troca de amostras de áudio.

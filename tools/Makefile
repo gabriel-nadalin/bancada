@@ -1,7 +1,7 @@
 # Build the bench's C transport tools (rtp_bridge, slmodem_bridge, baresip_play).
 #
-# Run from tools/. Vendor trees (re/, baresip/, slmodem-*) are at the repo
-# root (REPO_DIR = ..). Binaries build into this directory.
+# Run from tools/. Dependencies re/, baresip/, and slmodem-* live at the
+# repository root (REPO_DIR = ..). Binaries are generated here.
 
 REPO_DIR := ..
 
@@ -17,6 +17,7 @@ LDFLAGS = -L$(REPO_DIR)/baresip/build \
           -lbaresip -lre -lpthread -lm -lssl -lcrypto
 
 SLMODEM_DIR = $(REPO_DIR)/slmodem-2.9.11-20110321/modem
+SLMODEM_STAMP = $(REPO_DIR)/slmodem-2.9.11-20110321/.bench-prepared
 SLMODEM_DSP_OBJ = $(SLMODEM_DIR)/dsplibs.o
 SLMODEM_BRIDGE_DSP_OBJ = dsplibs_bridge.o
 SLMODEM_OBJS = $(SLMODEM_DIR)/modem.o $(SLMODEM_DIR)/modem_datafile.o \
@@ -53,7 +54,10 @@ baresip_play.o: baresip_play.c
 rtp_bridge: rtp_bridge.c build_re
 	$(CC) $(CFLAGS) -g -o $@ $< -L$(REPO_DIR)/re/build -Wl,-rpath,'$$ORIGIN/../re/build' -lre -lm -lpthread
 
-build_slmodem:
+$(SLMODEM_STAMP):
+	$(MAKE) -C $(REPO_DIR) slmodem
+
+build_slmodem: $(SLMODEM_STAMP)
 	$(MAKE) -C $(SLMODEM_DIR)
 
 # SnrToRetrainTable is local in the vendor object.  Export it only in a

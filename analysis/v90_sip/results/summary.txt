@@ -1,0 +1,28 @@
+Reproducible numerical summary
+==============================
+
+E1 verifier powers at 3600/4000/4200 Hz: 96.220338, 76.184626, 47.501111 dB
+E1 drops: 20.035712, 48.719227 dB; severe = False
+Digital SIP verifier powers at 3600/4000/4200 Hz: 96.229092, 76.198367, 47.501511 dB
+Digital SIP drops: 20.030726, 48.727581 dB; severe = False
+D/A-A/D SIP verifier powers at 3600/4000/4200 Hz: 92.197290, 52.006265, 33.762567 dB
+D/A-A/D SIP drops: 40.191025, 58.434723 dB; severe = True
+TRN1d generator offset: 135 symbols; normalized correlation: 1.000000000
+Digital SIP TRN1d offset: 125 symbols; normalized correlation after polarity normalization: 1.000000000
+Measured clock offset: -114.072 ppm; delay-fit RMSE: 0.058216 sample
+Digital SIP clock offset relative to E1: 0.000000 ppm; delay-fit RMSE: 0.000000000 sample
+Local 80-tap FIR validation R^2: median 0.981099, range 0.961776 to 0.988577
+Additional measured loss relative to 3600 Hz: 10.065 dB at 3800 Hz and 21.025 dB at 3996 Hz
+Digital SIP loss relative to 3600 Hz: 0.013 dB at 3800 Hz and 0.032 dB at 3996 Hz
+RcFixed prototype response relative to DC at 3600/4000/4200 Hz: -2.150, -20.525, -48.332 dB
+
+Exact avePdsnr receiver-core simulation (final 1600-symbol evaluation):
+  Digital, synchronous: 0.000 (threshold 180.0)
+  Measured SIP digital capture: 0.000
+  Digital, residual clock only: 258.926
+  Measured FIR, synchronous: 178.844
+  Measured FIR plus residual clock: 507.402
+  Measured SIP capture, clock corrected: 397.319
+  Measured SIP capture: 417.710
+  Controlled binary run, measured avePdsnr: 359.076
+  Residual clock used after the modem's acquired estimate: -111.674 ppm

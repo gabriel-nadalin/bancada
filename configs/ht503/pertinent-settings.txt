@@ -1,0 +1,48 @@
+# Basic network: address assigned by DHCP.
+P8=0
+
+# FXO profile enabled, without SIP registration; calls allowed unregistered.
+P401=1
+P731=0
+P813=1
+P747=10.42.0.1
+P830=0
+P730=0
+P740=5062
+P739=5012
+P778=0
+
+# PCMA is the only codec preference; one G.711 frame per packet (10 ms).
+P757=8
+P758=8
+P759=8
+P760=8
+P761=8
+P762=8
+P814=8
+P815=8
+P737=1
+
+# Modem-oriented media path.
+P750=0
+P460=1
+P710=1
+P831=0
+P832=0
+P248=0
+P283=0
+P825=1
+
+# Effective FXO electrical profile: country-based selection, USA.
+P899=0
+P864=0
+P849=30
+
+# One-stage dialing of the number carried by the SIP URI.
+P3300=100
+P3302=100
+P840=10
+P292=4
+P3303=1
+P3304=1
+P3206=500

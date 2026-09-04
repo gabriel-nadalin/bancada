@@ -1,0 +1,20 @@
+#!/bin/bash
+# Wanpipe meta-configuration used by the bench.
+ROUTER_BOOT=YES
+WAN_CONF_DIR=/etc/wanpipe
+WAN_INTR_DIR=/etc/wanpipe/interfaces
+WAN_BIN_DIR=/usr/sbin
+WAN_LOG=/var/log/wanrouter
+WAN_LOCK=/var/lock/wanrouter
+WAN_LOCK_DIR=/var/lock
+WAN_IP_FORWARD=NO
+NEW_IF_TYPE=NO
+WAN_LIB_DIR=/etc/wanpipe/lib
+WAN_ADSL_LIST=/etc/wanpipe/wan_adsl.list
+WAN_ANNEXG_LOAD=NO
+WAN_LIP_LOAD=YES
+WAN_DYN_WANCONFIG=NO
+WAN_SCRIPTS_DIR=/etc/wanpipe/scripts
+WAN_FIRMWARE_DIR=/etc/wanpipe/firmware
+WAN_DEVICES_REV_STOP_ORDER=YES
+WAN_DEVICES="wanpipe1 "

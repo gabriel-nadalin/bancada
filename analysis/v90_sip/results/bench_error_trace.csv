@@ -1,0 +1,115 @@
+path,seconds_after_trn1d_dd,logged_filtered_mean_error
+E1 digital,0.040091,961.081
+E1 digital,0.120091,324.288
+E1 digital,0.20009100000000002,120.404
+E1 digital,0.280091,75.929
+E1 digital,0.360091,51.752
+E1 digital,0.440091,49.466
+E1 digital,0.520091,43.226
+E1 digital,0.600091,45.374
+E1 digital,0.680091,48.504
+E1 digital,0.760091,41.445
+E1 digital,0.840091,27.963
+E1 digital,0.920091,22.151
+E1 digital,1.000091,20.363
+E1 digital,1.0800910000000001,17.555
+E1 digital,1.1600910000000002,16.863
+E1 digital,1.240091,17.188
+E1 digital,1.3200910000000001,15.653
+E1 digital,1.4000910000000002,14.264
+E1 digital,1.480091,13.765
+E1 digital,1.5600910000000001,14.081
+E1 digital,1.6400910000000002,11.978
+E1 digital,1.720091,12.221
+E1 digital,1.800091,12.214
+E1 digital,1.8800910000000002,12.164
+E1 digital,1.960091,12.021
+E1 digital,2.040091,12.238
+E1 digital,2.120091,11.12
+E1 digital,2.200091,11.942
+E1 digital,2.280091,12.041
+E1 digital,2.3600909999999997,11.812
+E1 digital,2.440091,12.169
+E1 digital,2.520091,12.108
+E1 digital,2.600091,10.86
+E1 digital,2.680091,10.013
+E1 digital,2.760091,11.451
+E1 digital,2.840091,11.118
+E1 digital,2.9200909999999998,9.51
+E1 digital,3.000091,11.826
+E1 digital,3.080091,11.452
+E1 digital,3.160091,11.752
+E1 digital,3.240091,9.853
+E1 digital,3.320091,10.822
+E1 digital,3.4000909999999998,11.305
+E1 digital,3.480091,10.881
+E1 digital,3.560091,11.236
+E1 digital,3.640091,9.823
+E1 digital,3.720091,11.107
+E1 digital,3.800091,9.901
+SIP digital,0.04,528.059
+SIP digital,0.12,129.955
+SIP digital,0.2,34.006
+SIP digital,0.27999999999999997,10.492
+SIP digital,0.36,4.719
+SIP digital,0.44,2.432
+SIP digital,0.52,0.908
+SIP digital,0.6000000000000001,0.502
+SIP digital,0.68,3.553
+SIP digital,0.76,4.7
+SIP digital,0.8400000000000001,4.373
+SIP digital,0.92,3.793
+SIP digital,1.0,4.519
+SIP digital,1.08,3.944
+SIP digital,1.1600000000000001,3.555
+SIP digital,1.24,3.474
+SIP digital,1.32,3.324
+SIP digital,1.4000000000000001,3.217
+SIP digital,1.48,3.504
+SIP digital,1.56,3.497
+SIP digital,1.6400000000000001,3.411
+SIP digital,1.72,3.365
+SIP digital,1.8,3.606
+SIP digital,1.8800000000000001,3.007
+SIP digital,1.96,2.841
+SIP digital,2.04,3.055
+SIP digital,2.12,3.21
+SIP digital,2.2,2.828
+SIP digital,2.2800000000000002,2.87
+SIP digital,2.36,2.894
+SIP digital,2.44,2.989
+SIP digital,2.52,2.821
+SIP digital,2.6,3.371
+SIP digital,2.68,2.872
+"SIP D/A-A/D, verifier bypassed",0.070019,948.323
+"SIP D/A-A/D, verifier bypassed",0.150019,509.662
+"SIP D/A-A/D, verifier bypassed",0.230019,391.813
+"SIP D/A-A/D, verifier bypassed",0.310019,358.101
+"SIP D/A-A/D, verifier bypassed",0.390019,336.701
+"SIP D/A-A/D, verifier bypassed",0.470019,344.376
+"SIP D/A-A/D, verifier bypassed",0.550019,328.955
+"SIP D/A-A/D, verifier bypassed",0.6300190000000001,342.838
+"SIP D/A-A/D, verifier bypassed",0.710019,338.279
+"SIP D/A-A/D, verifier bypassed",0.790019,330.968
+"SIP D/A-A/D, verifier bypassed",0.8700190000000001,344.541
+"SIP D/A-A/D, verifier bypassed",0.950019,347.932
+"SIP D/A-A/D, verifier bypassed",1.030019,346.828
+"SIP D/A-A/D, verifier bypassed",1.110019,338.239
+"SIP D/A-A/D, verifier bypassed",1.1900190000000002,333.195
+"SIP D/A-A/D, verifier bypassed",1.270019,357.007
+"SIP D/A-A/D, verifier bypassed",1.350019,346.329
+"SIP D/A-A/D, verifier bypassed",1.4300190000000002,348.827
+"SIP D/A-A/D, verifier bypassed",1.510019,358.448
+"SIP D/A-A/D, verifier bypassed",1.590019,337.461
+"SIP D/A-A/D, verifier bypassed",1.6700190000000001,335.607
+"SIP D/A-A/D, verifier bypassed",1.750019,329.089
+"SIP D/A-A/D, verifier bypassed",1.830019,329.934
+"SIP D/A-A/D, verifier bypassed",1.9100190000000001,355.457
+"SIP D/A-A/D, verifier bypassed",1.990019,349.698
+"SIP D/A-A/D, verifier bypassed",2.070019,339.143
+"SIP D/A-A/D, verifier bypassed",2.150019,353.412
+"SIP D/A-A/D, verifier bypassed",2.230019,354.631
+"SIP D/A-A/D, verifier bypassed",2.310019,359.749
+"SIP D/A-A/D, verifier bypassed",2.3900189999999997,346.482
+"SIP D/A-A/D, verifier bypassed",2.4700189999999997,356.336
+"SIP D/A-A/D, verifier bypassed",2.550019,356.313

@@ -16,8 +16,7 @@ the PTY-based RAS probe; it is not equivalent to a modern data-path pass.
 | `topology1` | Hardmodem validation | USB Conexant → analog FXS → 2911 → E1 → AS5300 |
 | `topology2` | VoIP ATA integration | slmodem → SIP/RTP → HT503 → analog FXS → 2911 → E1 → AS5300 |
 | `topology3` | Direct digital E1 | slmodem → Sangoma E1 → AS5300 |
-| `topology4` | Direct SIP-to-E1 extension | slmodem → SIP/RTP → 2911 → E1 → AS5300 |
+| `topology4` | Direct SIP-to-E1 control | slmodem → SIP/RTP → 2911 → E1 → AS5300 |
 
-Topologies 1--3 are the three configurations proposed in the original
-project plan. Topology 4 is a later extension that isolates the HT503 from
-the SIP path while retaining the 2911 E1 gateway.
+Topology 4 isolates the HT503 while retaining the 2911 E1 gateway, making it
+the control path for separating ATA conversion effects from SIP/RTP effects.

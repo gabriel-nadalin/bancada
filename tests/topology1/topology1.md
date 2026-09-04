@@ -44,7 +44,7 @@ USB-serial adapter (AS5300).
 |---|---|
 | Modem → 2911 | Analog, FXS port 0/1/1 (from call trace; confirm cabling) |
 | 2911 → AS5300 | E1 0/0/0, ISDN PRI, `pri-group timeslots 1-10,16` |
-| AS5300 side | E1 controller 1, `pri-group timeslots 1-31` (MICA slot 2) |
+| AS5300 side | E1 controller 0, `pri-group timeslots 1-10,16` |
 
 Dialed number: **42** (dial-peer 42 → `port 0/0/0:15`, the PRI D-channel).
 Number 666 routes identically.
@@ -53,46 +53,11 @@ Number 666 routes identically.
 
 ## 4. Cisco 2911 configuration
 
-Restored from `backup_cisco2911.txt`. This is the working PRI config.
-
-```text
-version 15.1
-hostname Router
-isdn switch-type primary-net5
-card type e1 0 0
-!
-controller E1 0/0/0
- clock source internal
- pri-group timeslots 1-10,16
-!
-interface Serial0/0/0:15
- isdn switch-type primary-net5
- isdn protocol-emulate network
- isdn incoming-voice voice
-!
-voice-port 0/0/0:15
- no echo-cancel enable
- no non-linear
- no vad
- cptone BR
-!
-voice-port 0/1/0 | 0/1/1 | 0/1/2 | 0/1/3      (FXS)
- no echo-cancel enable
- no non-linear
- no vad
- compand-type a-law
- cptone BR
-!
-dial-peer voice 42 pots
- destination-pattern 42
- port 0/0/0:15
-!
-dial-peer voice 666 pots
- destination-pattern 666
- port 0/0/0:15
-!
-dial-peer voice 10/11/12/13 pots   (FXS 0/1/0..0/1/3)
-```
+The complete audited configuration is
+[`configs/cisco2911/running-config.txt`](../../configs/cisco2911/running-config.txt).
+The relevant path is FXS `0/1/0`–`0/1/3` → POTS dial-peer 42 or 666 → PRI
+`0/0/0:15`. The controller selects E1 as its network clock and exposes ten
+B-channels plus the D-channel.
 
 Notes:
 - `:15` in `0/0/0:15` is the PRI **D-channel** (E1 timeslot 16, 0-indexed),
@@ -105,16 +70,11 @@ Notes:
 
 ## 5. Cisco AS5300 configuration (relevant)
 
-```text
-controller E1 1
- pri-group timeslots 1-31        ! the E1 trunk from the 2911 (MICA slot 2)
-isdn incoming-voice modem
-!
-async mode interactive
-modem InOut
-modem country mica e1-default
-```
-Firmware: `flash:mica-modem-pw.2.9.5.0.bin`.
+The complete audited configuration is
+[`configs/as5300/running-config.txt`](../../configs/as5300/running-config.txt).
+Controller E1 0 terminates this trunk with the same `1-10,16` timeslot group;
+`Serial0:15` delivers incoming voice calls to the MICA pool. The active modem
+firmware is `flash:mica-modem-pw.2.9.5.0.bin`.
 
 ---
 
@@ -174,15 +134,15 @@ rate across all calls.
 
 ## 9. Findings / issues encountered
 
-- **E&M vs PRI mismatch (root cause of initial `NO CARRIER`).** The 2911's E1
-  was previously configured as an E&M voice-port (`voice-port 0/0/0:1`); the
-  call trace showed `em_send_digits nothing to dial!!` — E&M CAS carries no
-  called-number, and the AS5300 (PRI) never received a SETUP. Fixed by
-  restoring the PRI config (`backup_cisco2911.txt`). Both ends of an E1 must
-  use the same signaling.
+- **PRI was the practical signaling choice once the E1 card became
+  available.** E&M had only been considered as a fallback because it would
+  have been simpler to implement in FPGA, building on an earlier prototype.
+  With a supported E1 interface available, CCS/PRI was both native to the
+  Linux telephony stack and simpler to implement in software. The deployed
+  path therefore uses EuroISDN PRI end to end.
 - **DSP resource limit on the 2911.** A full `pri-group timeslots 1-31`
   was rejected ("Not enough DSP resources... enough for 12 time slots").
-  `timeslots 1-10,16` fits and matches the AS5300's smaller group.
+  `timeslots 1-10,16` fits and matches AS5300 controller E1 0.
 - **Line quality scales down with speed (expected).** `Line QUALITY`/`Rx LEVEL`
   dropped from 127/041 (V.22) to 002/014 (V.32bis), 017/017 (V.34), 042/013
   (V.90) — the higher-modulation protocols require more SNR margin, yet all
@@ -196,11 +156,12 @@ rate across all calls.
 
 ## 10. Artifacts
 
-- `backup_cisco2911.txt` — the working 2911 PRI config (restore point).
+- `configs/cisco2911/` and `configs/as5300/` — canonical configuration and
+  restoration checks.
 - `tests/topology1/*.log` — per-protocol run logs (modem session + AS5300
   `debug modem csm` + `show modem`, verbatim).
 - `tests/topology1/results.csv` — consolidated connectivity matrix.
 - `tests/topology1/t1-TEMPLATE.log` — blank template for future runs.
 
-Open items: confirm exact FXS port (trace shows 0/1/1) and AS5300 E1 number
-(inferred E1 1 from MICA slot 2).
+The captured call trace used FXS `0/1/1`; the live AS5300 audit confirmed
+controller E1 0 for the 2911 trunk.

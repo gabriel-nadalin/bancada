@@ -1,0 +1,8 @@
+case,coarse_delay_samples,final_1600_symbol_ave_pdsnr,threshold,fallback
+"Digital, synchronous",0,7.611452213001257e-08,180.0,False
+Measured SIP digital capture,10,7.611452213001257e-08,180.0,False
+"Digital, residual clock only",0,258.92554578721433,180.0,True
+"Measured FIR, synchronous",20,178.84359961427324,180.0,False
+Measured FIR plus residual clock,20,507.4016277303446,180.0,True
+"Measured SIP capture, clock corrected",21,397.3191589975683,180.0,True
+Measured SIP capture,21,417.7098965263228,180.0,True

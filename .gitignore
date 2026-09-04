@@ -1,10 +1,11 @@
 # ---- vendor / third-party ----
 # re/ and baresip/ are git submodules (see .gitmodules).
-slmodem-*
+/slmodem-*
 
 # ---- python ----
 __pycache__/
 *.pyc
+.venv/
 
 # ---- build outputs ----
 *.o
@@ -20,3 +21,29 @@ debug.wav
 
 # ---- tooling ----
 .vscode/
+
+# ---- LaTeX auxiliary files ----
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.xdv
+
+# ---- local caches ----
+.pytest_cache/
+
+# Captures that belong to the public, reproducible data sets.
+!analysis/**/*.wav
+!analysis/**/*.log
+!tests/**/*.log
